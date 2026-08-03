@@ -8,6 +8,7 @@ import FormError from "../common/FormError";
 import { ApiSignUpPayload } from "@/types/auth";
 import { authService } from "@/services/auth.service";
 import { toast } from "react-toastify";
+import { FaEye, FaEyeSlash } from "react-icons/fa6";
 
 interface SignUpFormProps {
   onSwitchToSignIn: () => void;
@@ -15,6 +16,7 @@ interface SignUpFormProps {
 
 const SignUpForm = ({ onSwitchToSignIn }: SignUpFormProps) => {
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
@@ -96,12 +98,21 @@ const SignUpForm = ({ onSwitchToSignIn }: SignUpFormProps) => {
           </label>
           <label className="block">
             <span className="text-xs font-medium">Password</span>
-            <input
-              type="password"
-              {...register("password")}
-              className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-3 text-sm outline-none focus:border-accent"
-              placeholder="At least 8 characters"
-            />
+            <div className="flex items-center mt-1 w-full rounded-lg border border-border bg-background px-3 py-3 text-sm focus-within:border-accent">
+              <input
+                type={showPassword ? "text" : "password"}
+                {...register("password")}
+                className="flex-1 outline-none"
+                placeholder="••••••••"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="opacity-50 hover:opacity-100 cursor-pointer transition-all"
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
             <FormError message={errors.password?.message} />
           </label>
           <label className="block">

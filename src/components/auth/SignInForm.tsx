@@ -10,12 +10,14 @@ import FormError from "../common/FormError";
 import { authService } from "@/services/auth.service";
 import { setSession } from "@/lib/session";
 import { toast } from "react-toastify";
+import { FaEye, FaEyeSlash } from "react-icons/fa6";
 
 const SignInForm = () => {
   const router = useRouter();
   const setUser = useAuthStore((state) => state.setUser);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
@@ -70,12 +72,21 @@ const SignInForm = () => {
           </label>
           <label className="block">
             <span className="text-xs font-medium">Password</span>
-            <input
-              type="password"
-              {...register("password")}
-              className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-3 text-sm outline-none focus:border-accent"
-              placeholder="••••••••"
-            />
+            <div className="flex items-center mt-1 w-full rounded-lg border border-border bg-background px-3 py-3 text-sm focus-within:border-accent">
+              <input
+                type={showPassword ? "text" : "password"}
+                {...register("password")}
+                className="flex-1 outline-none"
+                placeholder="••••••••"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="opacity-50 hover:opacity-100 cursor-pointer transition-all"
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
             <FormError message={errors.password?.message} />
           </label>
           <button
