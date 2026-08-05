@@ -117,6 +117,18 @@
   --sidebar-ring: #6a7282;
 }
 
+@layer utilities {
+  ::-webkit-scrollbar {
+    @apply w-1.5;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-primary-foreground/30 rounded-full cursor-pointer;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-accent rounded-full cursor-pointer;
+  }
+}
+
 @layer base {
   * {
     border-color: var(--color-border);
