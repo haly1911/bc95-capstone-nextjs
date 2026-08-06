@@ -35,7 +35,7 @@ const Category = () => {
           <Link
             key={c.slug}
             href="/"
-            className="group rounded-2xl border border-border bg-card p-6 transition hover:-translate-y-1 hover:border-accent hover:shadow-lg hover:shadow-accent/10]:"
+            className="group rounded-2xl border border-border bg-card p-6 transition hover:-translate-y-1 hover:border-accent hover:shadow-xl hover:shadow-accent/10"
           >
             <div className="text-3xl group-hover:text-accent">{c.icon}</div>
             <h3 className="mt-4 text-sm font-semibold group-hover:text-accent">{c.name}</h3>

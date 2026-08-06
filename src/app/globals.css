@@ -139,3 +139,23 @@
     color: var(--color-foreground);
   }
 }
+
+@layer components {
+  .testimonial-swiper {
+    --swiper-navigation-size: 20px;
+    --swiper-navigation-color: #00d0ec;
+    @apply w-full relative px-6;
+  }
+  .testimonial-swiper .swiper-button-next {
+    @apply right-4;
+  }
+  .testimonial-swiper .swiper-button-prev {
+    @apply left-4;
+  }
+  @media (max-width: 768px) {
+    .testimonial-swiper .swiper-button-next,
+    .testimonial-swiper .swiper-button-prev {
+      @apply hidden!;
+    }
+  }
+}

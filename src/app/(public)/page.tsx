@@ -2,6 +2,7 @@ import Category from "@/components/home/Category";
 import CtaSection from "@/components/home/CtaSection";
 import Hero from "@/components/home/Hero";
 import PopularServices from "@/components/home/PopularServices";
+import Testimonial from "@/components/home/Testimonial";
 
 export default function Home() {
   return (
@@ -9,6 +10,7 @@ export default function Home() {
       <Hero />
       <Category />
       <PopularServices />
+      <Testimonial />
       <CtaSection />
     </div>
   );

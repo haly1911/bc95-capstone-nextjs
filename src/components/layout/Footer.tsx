@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FaInstagram, FaLinkedin, FaXTwitter } from "react-icons/fa6";
+import { FaInstagram, FaLinkedin, FaStackExchange, FaXTwitter } from "react-icons/fa6";
 
 const Footer = () => {
   return (
@@ -9,10 +9,7 @@ const Footer = () => {
           <div>
             <div className="flex items-center gap-2">
               <span className="grid h-9 w-9 place-items-center rounded-lg bg-linear-to-br from-primary to-accent text-primary-foreground">
-                <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2.4">
-                  <path d="M4 14c3-6 13-6 16 0" strokeLinecap="round" />
-                  <circle cx="12" cy="10" r="2.2" fill="currentColor" stroke="none" />
-                </svg>
+                <FaStackExchange />
               </span>
               <span className="text-lg font-extrabold">
                 Skill<span className="text-accent">ora</span>
