@@ -2,12 +2,22 @@
 
 import Link from "next/link";
 import { useTheme } from "./ThemeProvider";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { FaMagnifyingGlass, FaMoon, FaRegSun, FaStackExchange, FaSun } from "react-icons/fa6";
+import { useRouter } from "next/navigation";
 
 const Header = () => {
   const { theme, toggle } = useTheme();
   const [showSearch, setShowSearch] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const router = useRouter();
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!searchTerm.trim()) return null;
+    router.push(`/gigs?keyword=${encodeURIComponent(searchTerm.trim())}`);
+    setSearchTerm("");
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -42,23 +52,25 @@ const Header = () => {
             }`}
           >
             <form
-              onSubmit={(e) => e.preventDefault()}
+              onSubmit={handleSearch}
               className="flex items-center rounded-full border border-border bg-card px-4 py-2"
             >
               <FaMagnifyingGlass className="text-muted-foreground" />
               <input
                 type="search"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Search for any service…"
                 className="ml-3 w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground"
               />
-              <button className="ml-2 rounded-full bg-primary px-4 py-1.5 text-xs font-semibold text-primary-foreground">
+              <button type="submit" className="ml-2 rounded-full bg-primary px-4 py-1.5 text-xs font-semibold text-primary-foreground">
                 Search
               </button>
             </form>
           </div>
           <div className="flex items-center gap-8">
             <nav className="flex items-center gap-8 text-sm font-medium">
-              <Link href="/" className="hover:text-accent">
+              <Link href="/gigs" className="hover:text-accent">
                 Explore
               </Link>
               <Link href="/" className="hover:text-accent">

@@ -1,5 +1,18 @@
 "use client";
+
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
 const Hero = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const router = useRouter();
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!searchTerm.trim()) return;
+    router.push(`/gigs?keyword=${encodeURIComponent(searchTerm.trim())}`);
+  };
+
   return (
     <section>
       <div className="relative overflow-hidden border-b border-border/60">
@@ -27,15 +40,20 @@ const Hero = () => {
           </p>
 
           <form
-            onSubmit={(e) => e.preventDefault()}
+            onSubmit={handleSearch}
             className="mt-8 flex items-center rounded-2xl border border-border bg-card p-2 shadow-lg shadow-accent/5"
           >
             <input
               type="search"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Try 'brand logo design' or 'React developer'"
               className="flex-1 bg-transparent px-4 py-3 text-sm outline-none placeholder:text-muted-foreground"
             />
-            <button className="rounded-xl bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground hover:opacity-90">
+            <button
+              type="submit"
+              className="rounded-xl bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground hover:opacity-90"
+            >
               Search
             </button>
           </form>
@@ -44,6 +62,7 @@ const Hero = () => {
             {["Logo Design", "Website Design", "Articles & Blog Posts", "Short Video Ads", "Video Editing"].map((t) => (
               <span
                 key={t}
+                onClick={() => router.push(`/gigs/${encodeURIComponent(t)}`)}
                 className="rounded-full border border-border lg:border-foreground px-3 py-1.5 hover:border-accent hover:text-accent"
               >
                 {t}
@@ -52,7 +71,6 @@ const Hero = () => {
           </div>
         </div>
       </div>
-      {/* Trusted by */}
       <div className="border-b border-border/60 bg-card/30">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-6 px-4 py-6 text-xs uppercase tracking-widest text-muted-foreground sm:px-6 lg:px-8">
           <span>Trusted by teams at</span>
