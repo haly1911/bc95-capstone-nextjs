@@ -59,11 +59,11 @@ const Hero = () => {
           </form>
           <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-muted-foreground lg:text-foreground">
             <span>Popular:</span>
-            {["Logo Design", "Website Design", "Articles & Blog Posts", "Short Video Ads", "Video Editing"].map((t) => (
+            {["Logo Design", "Ads Campaign", "Social Media", "SEO", "Video Editing"].map((t) => (
               <span
                 key={t}
-                onClick={() => router.push(`/gigs/${encodeURIComponent(t)}`)}
-                className="rounded-full border border-border lg:border-foreground px-3 py-1.5 hover:border-accent hover:text-accent"
+                onClick={() => router.push(`/gigs?keyword=${encodeURIComponent(t)}`)}
+                className="rounded-full border border-border lg:border-foreground px-3 py-1.5 hover:border-accent hover:text-accent cursor-pointer"
               >
                 {t}
               </span>

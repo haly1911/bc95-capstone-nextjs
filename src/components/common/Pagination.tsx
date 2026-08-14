@@ -33,7 +33,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="p-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
+        className="p-3 text-sm font-medium bg-muted border border-border rounded-md hover:bg-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
       >
         <FaArrowLeft />
       </button>
@@ -42,7 +42,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
       {getPaginationPages().map((page, index) => {
         if (page === "...") {
           return (
-            <span key={`ellipsis-${index}`} className="p-3 text-gray-500">
+            <span key={`ellipsis-${index}`} className="p-3">
               ...
             </span>
           );
@@ -57,8 +57,8 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
             onClick={() => onPageChange(pageNumber)}
             className={`px-3.5 py-2 text-sm font-medium rounded-md transition-colors cursor-pointer ${
               isActive
-                ? "bg-accent text-white border border-accent"
-                : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
+                ? "bg-accent text-black border border-accent"
+                : "bg-background border border-border"
             }`}
           >
             {pageNumber}
@@ -70,7 +70,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="p-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
+        className="p-3 text-sm font-medium bg-muted border border-border rounded-md hover:bg-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
       >
         <FaArrowRight />
       </button>

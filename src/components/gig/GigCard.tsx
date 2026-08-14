@@ -10,7 +10,7 @@ const GigCard = ({ gig }: GigCardProps) => {
   return (
     <Link
       key={gig.id}
-      href={`/gig/${gig.id}`}
+      href={`/gigs/${gig.id}`}
       className="group overflow-hidden rounded-2xl border border-border bg-card transition hover:-translate-y-1 hover:border-accent hover:shadow-xl hover:shadow-accent/10"
     >
       <div className="aspect-video overflow-hidden bg-muted">

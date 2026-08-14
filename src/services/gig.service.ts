@@ -1,8 +1,10 @@
 import { axiosClient } from "@/lib/axiosClient";
+import { ApiComment } from "@/types/comment";
 import { BaseApiResponse } from "@/types/common";
-import { ApiGig, ApiGigWithUser } from "@/types/gig";
+import { ApiGigWithUser } from "@/types/gig";
+import { ApiUser } from "@/types/user";
 import { attachUserToGig } from "@/utils/attachUserToGig";
-import { da } from "zod/locales";
+import { parseDateToTimestamp } from "@/utils/date";
 
 export const gigService = {
   getGigList: async (): Promise<BaseApiResponse<ApiGigWithUser[]>> => {
@@ -24,5 +26,30 @@ export const gigService = {
       ...gigRes.data,
       content: topGigsWithUser,
     };
+  },
+  getGigDetail: async (gigId: number): Promise<BaseApiResponse<ApiGigWithUser>> => {
+    const [gigDetailRes, userRes] = await Promise.all([
+      axiosClient.get(`/cong-viec/${gigId}`),
+      axiosClient.get("/users"),
+    ]);
+    const gig: ApiGigWithUser = gigDetailRes.data.content;
+    const users: ApiUser[] = userRes.data.content;
+    const creator = users.find((user) => user.id === gig.nguoiTao);
+    return {
+      ...gigDetailRes.data,
+      content: {
+        ...gig,
+        user: creator,
+      },
+    };
+  },
+  getGigComment: async (gigId: number): Promise<BaseApiResponse<ApiComment[]>> => {
+    const { data } = await axiosClient.get(`/binh-luan/lay-binh-luan-theo-cong-viec/${gigId}`);
+    if (Array.isArray(data?.content)) {
+      data.content.sort(
+        (a: ApiComment, b: ApiComment) => parseDateToTimestamp(b.ngayBinhLuan) - parseDateToTimestamp(a.ngayBinhLuan),
+      );
+    }
+    return data;
   },
 };

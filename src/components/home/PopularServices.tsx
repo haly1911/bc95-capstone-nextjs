@@ -10,7 +10,7 @@ const PopularServices = async () => {
     <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8">
       <div className="mb-8 flex items-end justify-between">
         <h2 className="text-2xl font-bold sm:text-3xl">Most popular services</h2>
-        <Link href="/explore" className="text-sm font-medium text-accent hover:underline">
+        <Link href="/gigs" className="text-sm font-medium text-accent hover:underline">
           Browse all →
         </Link>
       </div>
@@ -18,7 +18,7 @@ const PopularServices = async () => {
         {topGigs.map((g) => (
           <Link
             key={g.id}
-            href="/"
+            href={`/gigs/${g.id}`}
             className="group overflow-hidden rounded-2xl border border-border bg-card transition hover:-translate-y-1 hover:border-accent hover:shadow-xl hover:shadow-accent/10"
           >
             <div className="aspect-video overflow-hidden bg-muted">
