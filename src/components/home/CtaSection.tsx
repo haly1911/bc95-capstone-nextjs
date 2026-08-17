@@ -1,9 +1,14 @@
+"use client";
+
+import { useAuthStore } from "@/store/useAuthStore";
 import Link from "next/link";
 import { FaCheck } from "react-icons/fa6";
 
 const CtaSection = () => {
+  const { isAuthenticated } = useAuthStore();
+  if (isAuthenticated) return null;
   return (
-    <section className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section className="w-full wrapper pb-20">
       <div className="flex flex-col lg:flex-row items-center justify-between gap-10 overflow-hidden rounded-3xl border border-border bg-linear-to-br from-primary/90 to-accent p-8 text-primary-foreground sm:p-14">
         <div className="w-full flex flex-col items-start gap-4 text-left">
           <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl">Skillora</h2>

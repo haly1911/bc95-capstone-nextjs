@@ -9,7 +9,7 @@ const Category = async () => {
   if (!categories || categories.length === 0) return null;
 
   return (
-    <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+    <section className="wrapper py-20">
       <div className="mb-8 flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold sm:text-3xl">Browse categories</h2>

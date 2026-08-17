@@ -24,7 +24,7 @@ const Hero = () => {
           </video>
           <div className="absolute inset-0 bg-background/30" />
         </div>
-        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:pt-28">
+        <div className="wrapper py-20 lg:pt-28">
           <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground">
             <span className="h-2 w-2 rounded-full bg-accent" /> Trusted by 2M+ businesses
           </p>
@@ -72,7 +72,7 @@ const Hero = () => {
         </div>
       </div>
       <div className="border-b border-border/60 bg-card/30">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-6 px-4 py-6 text-xs uppercase tracking-widest text-muted-foreground sm:px-6 lg:px-8">
+        <div className="wrapper flex flex-wrap items-center justify-between gap-6 py-6 text-xs uppercase tracking-widest text-muted-foreground">
           <span>Trusted by teams at</span>
           {["Meta", "Netflix", "P&G", "PayPal", "Google", "Shopify"].map((b) => (
             <span key={b} className="text-base font-bold italic text-foreground/70">

@@ -35,7 +35,7 @@ const GigComment = ({ gigComments }: GigCommentProps) => {
     resetPage,
   } = usePagination({ data: sortedComments, itemsPerPage: 5, scrollToRef: commentSectionRef });
   return (
-    <div ref={commentSectionRef} className="scroll-mt-10">
+    <div ref={commentSectionRef} className="scroll-mt-10 pb-20">
       <div className=" flex items-center justify-between">
         <h2 className="mt-10 text-lg font-bold">Reviews · {sortedComments.length}</h2>
         <select

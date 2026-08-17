@@ -5,12 +5,16 @@ import { useTheme } from "./ThemeProvider";
 import React, { useState, useEffect } from "react";
 import { FaMagnifyingGlass, FaMoon, FaRegSun, FaStackExchange, FaSun } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/store/useAuthStore";
+import Image from "next/image";
 
 const Header = () => {
   const { theme, toggle } = useTheme();
   const [showSearch, setShowSearch] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const router = useRouter();
+  const { isAuthenticated, user, initializeAuth, signout } = useAuthStore();
+  const [isMounted, setIsMounted] = useState(false);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,6 +22,11 @@ const Header = () => {
     router.push(`/gigs?keyword=${encodeURIComponent(searchTerm.trim())}`);
     setSearchTerm("");
   };
+
+  useEffect(() => {
+    setIsMounted(true);
+    initializeAuth();
+  }, [initializeAuth]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -34,7 +43,7 @@ const Header = () => {
 
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur">
-      <div className="mx-auto flex max-w-7xl items-center gap-4 px-4 py-4 sm:px-6 lg:px-8">
+      <div className="wrapper flex items-center gap-4 py-4">
         <Link href="/" className="flex items-center gap-2 shrink-0">
           <span className="grid h-9 w-9 place-items-center rounded-lg bg-linear-to-br from-primary to-accent text-primary-foreground shadow-lg shadow-accent/20">
             <FaStackExchange />
@@ -63,7 +72,10 @@ const Header = () => {
                 placeholder="Search for any service…"
                 className="ml-3 w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground"
               />
-              <button type="submit" className="ml-2 rounded-full bg-primary px-4 py-1.5 text-xs font-semibold text-primary-foreground">
+              <button
+                type="submit"
+                className="ml-2 rounded-full bg-primary px-4 py-1.5 text-xs font-semibold text-primary-foreground"
+              >
                 Search
               </button>
             </form>
@@ -80,16 +92,46 @@ const Header = () => {
             <button
               onClick={toggle}
               aria-label="Toggle theme"
-              className="grid h-9 w-9 place-items-center rounded-full border border-border bg-card text-foreground hover:border-accent cursor-pointer"
+              className="grid h-9 w-9 place-items-center rounded-full border border-border bg-card text-foreground hover:border-accent hover:text-accent cursor-pointer"
             >
               {theme === "dark" ? <FaSun /> : <FaMoon />}
             </button>
-            <Link
-              href="/auth"
-              className="rounded-full bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground shadow shadow-accent/20 hover:opacity-90"
-            >
-              Join
-            </Link>
+            {isMounted && isAuthenticated && user ? (
+              <div className="flex items-center gap-6">
+                <div>
+                  {!!user.avatar ? (
+                    <>
+                      <Image
+                        loading="eager"
+                        src={user.avatar}
+                        alt="user-avatar"
+                        width={36}
+                        height={36}
+                        className="rounded-full"
+                      />
+                      <span className="text-sm font-medium hidden md:inline-block">{user.name}</span>
+                    </>
+                  ) : (
+                    <div className="h-9 w-9 rounded-full bg-linear-to-br from-primary to-accent text-black flex items-center justify-center">
+                      <span>{user.name.slice(0, 1).toUpperCase()}</span>
+                    </div>
+                  )}
+                </div>
+                <button
+                  onClick={signout}
+                  className="rounded-full border border-border px-6 py-3 text-xs font-semibold bg-card text-foreground hover:border-accent hover:text-accent cursor-pointer"
+                >
+                  Sign out
+                </button>
+              </div>
+            ) : (
+              <Link
+                href="/auth"
+                className="rounded-full bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground shadow shadow-accent/20 hover:opacity-90"
+              >
+                Join
+              </Link>
+            )}
           </div>
         </div>
       </div>

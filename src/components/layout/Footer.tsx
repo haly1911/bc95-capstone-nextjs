@@ -3,8 +3,8 @@ import { FaInstagram, FaLinkedin, FaStackExchange, FaXTwitter } from "react-icon
 
 const Footer = () => {
   return (
-    <footer className="mt-24 border-t border-border/60 bg-card/40">
-      <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+    <footer className="border-t border-border/60 bg-card/40">
+      <div className="wrapper py-14">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-5">
           <div>
             <div className="flex items-center gap-2">

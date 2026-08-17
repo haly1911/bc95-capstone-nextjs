@@ -39,10 +39,10 @@ const SignInForm = () => {
       const res = await authService.signIn(data);
       setSession(res);
       setUser(res.content.user);
-      toast.success("Đăng nhập thành công!");
+      toast.success("Signed in successfully!");
       router.push("/");
     } catch (error: any) {
-      const errorMsg = error?.response?.data?.message || "Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin!";
+      const errorMsg = error?.response?.data?.message || "Sign in failed. Please check your information!";
       toast.error(errorMsg);
     } finally {
       setLoading(false);

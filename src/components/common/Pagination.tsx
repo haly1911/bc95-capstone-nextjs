@@ -33,7 +33,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="p-3 text-sm font-medium bg-muted border border-border rounded-md hover:bg-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+        className="p-3 text-sm font-medium bg-muted border border-border rounded-md hover:bg-background disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
       >
         <FaArrowLeft />
       </button>
@@ -70,7 +70,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="p-3 text-sm font-medium bg-muted border border-border rounded-md hover:bg-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+        className="p-3 text-sm font-medium bg-muted border border-border rounded-md hover:bg-background disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
       >
         <FaArrowRight />
       </button>

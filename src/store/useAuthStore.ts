@@ -1,5 +1,6 @@
 import { clearSession, getSession } from "@/lib/session";
 import { ApiUser } from "@/types/user";
+import { toast } from "react-toastify";
 import { create } from "zustand";
 
 type AuthState = {
@@ -7,7 +8,7 @@ type AuthState = {
   isAuthenticated: boolean;
   setUser: (user: ApiUser | null) => void;
   initializeAuth: () => void;
-  logout: () => void;
+  signout: () => void;
 };
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -23,8 +24,13 @@ export const useAuthStore = create<AuthState>((set) => ({
       });
     }
   },
-  logout: () => {
+  signout: () => {
     clearSession();
     set({ user: null, isAuthenticated: false });
+    toast.info("Signed out successfully!");
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   },
 }));

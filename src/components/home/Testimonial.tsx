@@ -49,7 +49,7 @@ const testimonials = [
 const Testimonial = () => {
   const [activeVideo, setActiveVideo] = useState<string | null>(null);
   return (
-    <section className="mx-auto w-full max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
+    <section className="w-full wrapper pb-20">
       <h2 className="mb-8 text-2xl font-bold sm:text-3xl">Trusted by the best</h2>
       <Swiper
         modules={[Navigation, Autoplay]}

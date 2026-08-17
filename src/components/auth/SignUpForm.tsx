@@ -56,11 +56,11 @@ const SignUpForm = ({ onSwitchToSignIn }: SignUpFormProps) => {
         certification: data.certification,
       };
       await authService.signUp(payload);
-      toast.success("Đăng ký tài khoản thành công!");
+      toast.success("Account created successfully!");
       reset();
       onSwitchToSignIn();
     } catch (error: any) {
-      const errorMsg = error?.response?.data?.message || "Đăng ký thất bại. Email có thể đã tồn tại!";
+      const errorMsg = error?.response?.data?.message || "Sign up failed. Email might already exist!";
       toast.error(errorMsg);
     } finally {
       setLoading(false);

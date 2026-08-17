@@ -12,7 +12,7 @@ const GigDetailPage = async ({ params }: { params: Promise<{ id: number }> }) =>
 
   return (
     <main>
-      <div className="mx-auto max-w-7xl px-4 pt-10 sm:px-6 lg:px-8">
+      <div className="wrapper pt-10">
         <GigDetail gig={gigDetail} />
         <GigComment gigComments={gigComments} />
       </div>

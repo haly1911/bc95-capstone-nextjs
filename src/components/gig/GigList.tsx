@@ -36,7 +36,7 @@ const GigList = ({ gigList, searchKeyword }: GigListProps) => {
   } = usePagination({ data: sortedGigs, itemsPerPage: 12 });
 
   return (
-    <div>
+    <div className="pb-20">
       <div className="text-xs text-muted-foreground">
         <Link href="/" className="hover:text-accent">
           Home

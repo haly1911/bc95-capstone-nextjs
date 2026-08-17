@@ -7,7 +7,7 @@ const PopularServices = async () => {
   const topGigs = response.content || [];
   if (!topGigs || topGigs.length === 0) return null;
   return (
-    <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8">
+    <section className="wrapper pb-16">
       <div className="mb-8 flex items-end justify-between">
         <h2 className="text-2xl font-bold sm:text-3xl">Most popular services</h2>
         <Link href="/gigs" className="text-sm font-medium text-accent hover:underline">
