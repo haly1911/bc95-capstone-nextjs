@@ -4,6 +4,7 @@ import { ApiGigWithUser } from "@/types/gig";
 import { useMemo, useState } from "react";
 import GigCard from "../gig/GigCard";
 import Pagination from "../common/Pagination";
+import { usePagination } from "@/hooks/usePagination";
 
 interface CategoryDetailListProps {
   groups: any[];
@@ -12,9 +13,7 @@ interface CategoryDetailListProps {
 
 const CategoryDetailList = ({ groups, gigList }: CategoryDetailListProps) => {
   const [selectedSubDetail, setSelectedSubDetail] = useState<string>("all");
-  const [currentPage, setCurrentPage] = useState<number>(1);
   const [sortBy, setSortBy] = useState<string>("recommended");
-  const ITEMS_PER_PAGE = 12;
 
   const filteredGigs = useMemo(() => {
     if (selectedSubDetail === "all") return gigList;
@@ -33,10 +32,13 @@ const CategoryDetailList = ({ groups, gigList }: CategoryDetailListProps) => {
     return list;
   }, [filteredGigs, sortBy]);
 
-  const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
-  const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
-  const currentGigs = sortedGigs.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(sortedGigs.length / ITEMS_PER_PAGE);
+  const {
+    currentPage,
+    currentData: currentGigs,
+    totalPages,
+    handlePageChange,
+    resetPage,
+  } = usePagination({ data: sortedGigs, itemsPerPage: 12 });
 
   return (
     <div>
@@ -44,7 +46,7 @@ const CategoryDetailList = ({ groups, gigList }: CategoryDetailListProps) => {
         <button
           onClick={() => {
             setSelectedSubDetail("all");
-            setCurrentPage(1);
+            resetPage();
           }}
           className={`rounded-full px-4 py-2 text-xs font-medium transition cursor-pointer ${
             selectedSubDetail === "all"
@@ -60,7 +62,7 @@ const CategoryDetailList = ({ groups, gigList }: CategoryDetailListProps) => {
               key={sub.id}
               onClick={() => {
                 setSelectedSubDetail(sub.tenChiTiet);
-                setCurrentPage(1);
+                resetPage();
               }}
               className={`rounded-full px-4 py-2 text-xs font-medium transition cursor-pointer ${
                 selectedSubDetail === sub.tenChiTiet
@@ -79,7 +81,7 @@ const CategoryDetailList = ({ groups, gigList }: CategoryDetailListProps) => {
           value={sortBy}
           onChange={(e) => {
             setSortBy(e.target.value);
-            setCurrentPage(1);
+            resetPage();
           }}
           className="rounded-full border border-border bg-card px-4 py-2 text-xs font-medium hover:border-accent focus:outline-none cursor-pointer"
         >
@@ -99,14 +101,7 @@ const CategoryDetailList = ({ groups, gigList }: CategoryDetailListProps) => {
             ))}
           </div>
           <div className="mt-10">
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={(p) => {
-                setCurrentPage(p);
-                window.scrollTo({ top: 0, behavior: "smooth" });
-              }}
-            />
+            <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
           </div>
         </>
       )}

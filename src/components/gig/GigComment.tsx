@@ -5,15 +5,14 @@ import Image from "next/image";
 import { useMemo, useRef, useState } from "react";
 import Pagination from "../common/Pagination";
 import { formatDate, parseDateToTimestamp } from "@/utils/date";
+import { usePagination } from "@/hooks/usePagination";
 
 interface GigCommentProps {
   gigComments: ApiComment[];
 }
 
 const GigComment = ({ gigComments }: GigCommentProps) => {
-  const [currentPage, setCurrentPage] = useState<number>(1);
   const [sortBy, setSortBy] = useState<string>("latest");
-  const ITEMS_PER_PAGE = 5;
   const commentSectionRef = useRef<HTMLDivElement>(null);
 
   const sortedComments = useMemo(() => {
@@ -28,18 +27,13 @@ const GigComment = ({ gigComments }: GigCommentProps) => {
     return list;
   }, [gigComments, sortBy]);
 
-  const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
-  const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
-  const currentComments = sortedComments.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(sortedComments.length / ITEMS_PER_PAGE);
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-    commentSectionRef.current?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
-  };
+  const {
+    currentPage,
+    currentData: currentComments,
+    totalPages,
+    handlePageChange,
+    resetPage,
+  } = usePagination({ data: sortedComments, itemsPerPage: 5, scrollToRef: commentSectionRef });
   return (
     <div ref={commentSectionRef} className="scroll-mt-10">
       <div className=" flex items-center justify-between">
@@ -48,7 +42,7 @@ const GigComment = ({ gigComments }: GigCommentProps) => {
           value={sortBy}
           onChange={(e) => {
             setSortBy(e.target.value);
-            setCurrentPage(1);
+            resetPage();
           }}
           className="rounded-full border border-border bg-card px-4 py-2 text-xs font-medium hover:border-accent focus:outline-none cursor-pointer"
         >

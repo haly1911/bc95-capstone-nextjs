@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import GigCard from "./GigCard";
 import Pagination from "../common/Pagination";
 import Link from "next/link";
+import { usePagination } from "@/hooks/usePagination";
 
 interface GigListProps {
   gigList: ApiGigWithUser[];
@@ -12,9 +13,7 @@ interface GigListProps {
 }
 
 const GigList = ({ gigList, searchKeyword }: GigListProps) => {
-  const [currentPage, setCurrentPage] = useState<number>(1);
   const [sortBy, setSortBy] = useState<string>("recommended");
-  const ITEMS_PER_PAGE = 12;
 
   const sortedGigs = useMemo(() => {
     let list = [...gigList];
@@ -28,15 +27,14 @@ const GigList = ({ gigList, searchKeyword }: GigListProps) => {
     return list;
   }, [gigList, sortBy]);
 
-  const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
-  const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
-  const currentGigs = sortedGigs.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(sortedGigs.length / ITEMS_PER_PAGE);
+  const {
+    currentPage,
+    currentData: currentGigs,
+    totalPages,
+    handlePageChange,
+    resetPage,
+  } = usePagination({ data: sortedGigs, itemsPerPage: 12 });
 
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
   return (
     <div>
       <div className="text-xs text-muted-foreground">
@@ -65,7 +63,7 @@ const GigList = ({ gigList, searchKeyword }: GigListProps) => {
           value={sortBy}
           onChange={(e) => {
             setSortBy(e.target.value);
-            setCurrentPage(1);
+            resetPage();
           }}
           className="rounded-full border border-border bg-card px-4 py-2 text-xs font-medium hover:border-accent focus:outline-none cursor-pointer"
         >
