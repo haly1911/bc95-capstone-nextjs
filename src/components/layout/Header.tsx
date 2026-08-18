@@ -98,25 +98,22 @@ const Header = () => {
             </button>
             {isMounted && isAuthenticated && user ? (
               <div className="flex items-center gap-6">
-                <div>
+                <Link href="/profile">
                   {!!user.avatar ? (
-                    <>
-                      <Image
-                        loading="eager"
-                        src={user.avatar}
-                        alt="user-avatar"
-                        width={36}
-                        height={36}
-                        className="rounded-full"
-                      />
-                      <span className="text-sm font-medium hidden md:inline-block">{user.name}</span>
-                    </>
+                    <Image
+                      loading="eager"
+                      src={user.avatar}
+                      alt="user-avatar"
+                      width={36}
+                      height={36}
+                      className="rounded-full hover:scale-102"
+                    />
                   ) : (
-                    <div className="h-9 w-9 rounded-full bg-linear-to-br from-primary to-accent text-black flex items-center justify-center">
-                      <span>{user.name.slice(0, 1).toUpperCase()}</span>
+                    <div className="h-9 w-9 grid place-items-center rounded-full bg-linear-to-br from-primary to-accent text-xs font-bold text-primary-foreground ring-offset-2 ring-offset-background hover:ring-2 hover:ring-accent">
+                      <span>{user.name[0].toUpperCase()}</span>
                     </div>
                   )}
-                </div>
+                </Link>
                 <button
                   onClick={signout}
                   className="rounded-full border border-border px-6 py-3 text-xs font-semibold bg-card text-foreground hover:border-accent hover:text-accent cursor-pointer"

@@ -5,6 +5,7 @@ import { create } from "zustand";
 
 type AuthState = {
   user: ApiUser | null;
+  token: string | null;
   isAuthenticated: boolean;
   setUser: (user: ApiUser | null) => void;
   initializeAuth: () => void;
@@ -13,20 +14,22 @@ type AuthState = {
 
 export const useAuthStore = create<AuthState>((set) => ({
   user: null,
+  token: null,
   isAuthenticated: false,
-  setUser: (user) => set({ user, isAuthenticated: !!user }),
+  setUser: (user, token = null) => set({ user, token, isAuthenticated: !!user }),
   initializeAuth: () => {
     const session = getSession();
     if (session?.content?.user) {
       set({
         user: session.content.user,
+        token: session.content.token,
         isAuthenticated: true,
       });
     }
   },
   signout: () => {
     clearSession();
-    set({ user: null, isAuthenticated: false });
+    set({ user: null, token: null, isAuthenticated: false });
     toast.info("Signed out successfully!");
     window.scrollTo({
       top: 0,
