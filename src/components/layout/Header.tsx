@@ -100,14 +100,16 @@ const Header = () => {
               <div className="flex items-center gap-6">
                 <Link href="/profile">
                   {!!user.avatar ? (
-                    <Image
-                      loading="eager"
-                      src={user.avatar}
-                      alt="user-avatar"
-                      width={36}
-                      height={36}
-                      className="rounded-full hover:scale-102"
-                    />
+                    <div className="w-9 h-9 rounded-full overflow-hidden shrink-0 relative flex items-center justify-center hover:scale-105">
+                      <Image
+                        loading="eager"
+                        src={user.avatar}
+                        alt="user-avatar"
+                        width={36}
+                        height={36}
+                        className="object-cover h-full w-full"
+                      />
+                    </div>
                   ) : (
                     <div className="h-9 w-9 grid place-items-center rounded-full bg-linear-to-br from-primary to-accent text-xs font-bold text-primary-foreground ring-offset-2 ring-offset-background hover:ring-2 hover:ring-accent">
                       <span>{user.name[0].toUpperCase()}</span>

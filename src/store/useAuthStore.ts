@@ -7,7 +7,7 @@ type AuthState = {
   user: ApiUser | null;
   token: string | null;
   isAuthenticated: boolean;
-  setUser: (user: ApiUser | null) => void;
+  setUser: (user: ApiUser | null, token?: string | null) => void;
   initializeAuth: () => void;
   signout: () => void;
 };
@@ -16,7 +16,12 @@ export const useAuthStore = create<AuthState>((set) => ({
   user: null,
   token: null,
   isAuthenticated: false,
-  setUser: (user, token = null) => set({ user, token, isAuthenticated: !!user }),
+  setUser: (user, token = null) =>
+    set((state) => ({
+      user,
+      token: token !== null ? token : state.token,
+      isAuthenticated: !!user,
+    })),
   initializeAuth: () => {
     const session = getSession();
     if (session?.content?.user) {

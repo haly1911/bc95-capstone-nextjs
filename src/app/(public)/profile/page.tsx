@@ -1,6 +1,7 @@
 import OrderHistory from "@/components/profile/OrderHistory";
 import UserInfo from "@/components/profile/UserInfo";
 import { orderService } from "@/services/order.service";
+import { skillService } from "@/services/skill.service";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -10,11 +11,13 @@ const ProfilePage = async () => {
   if (!token) {
     redirect("/auth");
   }
-  const orderRes = orderService.getOrderHistory(token);
-  const orders = (await orderRes).content;
+  const orderRes = await orderService.getOrderHistory(token);
+  const orders = orderRes.content;
+  const skillRes = await skillService.getSkillList();
+  const skills = skillRes.content;
   return (
     <main className="wrapper">
-      <UserInfo />
+      <UserInfo skills={skills}/>
       <OrderHistory orders={orders} />
     </main>
   );
