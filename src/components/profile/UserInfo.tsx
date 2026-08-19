@@ -4,29 +4,25 @@ import { useAuthStore } from "@/store/useAuthStore";
 import { formatDate } from "@/utils/date";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { FaPenToSquare } from "react-icons/fa6";
 
 const UserInfo = () => {
   const { user, initializeAuth } = useAuthStore();
+  const router = useRouter();
+
   useEffect(() => {
     initializeAuth();
   }, [initializeAuth]);
 
-  if (!user) {
-    return (
-      <div className="wrapper">
-        <h1 className="text-2xl font-extrabold">You're signed out</h1>
-        <p className="mt-2 text-sm text-muted-foreground">Sign in to view your Skillora profile and orders.</p>
-        <Link
-          href="/auth"
-          className="mt-6 inline-flex rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground"
-        >
-          Sign in
-        </Link>
-      </div>
-    );
-  }
+  useEffect(() => {
+    if (!user) {
+      router.push("/auth");
+    }
+  }, [user, router]);
+
+  if (!user) return null;
 
   return (
     <div className="w-full wrapper pt-10">
@@ -42,7 +38,7 @@ const UserInfo = () => {
               className="rounded-full"
             />
           ) : (
-            <div className="h-18 w-18 rounded-full bg-linear-to-br from-primary to-accent text-black text-3xl flex items-center justify-center">
+            <div className="h-18 w-18 rounded-full bg-linear-to-br from-primary to-accent text-primary-foreground text-3xl flex items-center justify-center">
               <span>{user.name[0].toUpperCase()}</span>
             </div>
           )}
