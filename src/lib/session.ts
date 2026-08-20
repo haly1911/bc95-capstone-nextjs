@@ -6,6 +6,7 @@ import { ApiUser } from "@/types/user";
 export const setSession = (session: ApiSignInResponse) => {
   localStorage.setItem("user", JSON.stringify(session));
   document.cookie = `token=${session.content.token}; path=/; max-age=3600`;
+  document.cookie = `userId=${session.content.user.id}; path=/; max-age=3600`;
 };
 
 export const clearSession = (): void => {

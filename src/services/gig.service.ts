@@ -1,7 +1,7 @@
 import { axiosClient } from "@/lib/axiosClient";
 import { ApiComment } from "@/types/comment";
 import { BaseApiResponse } from "@/types/common";
-import { ApiGigWithUser } from "@/types/gig";
+import { ApiGig, ApiGigWithUser } from "@/types/gig";
 import { ApiUser } from "@/types/user";
 import { attachUserToGig } from "@/utils/attachUserToGig";
 import { parseDateToTimestamp } from "@/utils/date";
@@ -25,6 +25,14 @@ export const gigService = {
     return {
       ...gigRes.data,
       content: topGigsWithUser,
+    };
+  },
+  getGigByCreator: async (userId: number): Promise<BaseApiResponse<ApiGig[]>> => {
+    const { data } = await axiosClient.get("/cong-viec");
+    const userGigs = data.content.filter((gig: ApiGig) => gig.nguoiTao === userId);
+    return {
+      ...data,
+      content: userGigs,
     };
   },
   getGigDetail: async (gigId: number): Promise<BaseApiResponse<ApiGigWithUser>> => {

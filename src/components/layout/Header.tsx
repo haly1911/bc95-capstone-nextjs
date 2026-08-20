@@ -85,9 +85,11 @@ const Header = () => {
               <Link href="/gigs" className="hover:text-accent">
                 Explore
               </Link>
-              <Link href="/" className="hover:text-accent">
-                Become a seller
-              </Link>
+              {isMounted && isAuthenticated && user && (
+                <Link href="/seller-dashboard" className="hover:text-accent">
+                  Switch to Selling
+                </Link>
+              )}
             </nav>
             <button
               onClick={toggle}
