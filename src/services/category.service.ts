@@ -9,14 +9,24 @@ export const categoryService = {
     const { data } = await axiosClient.get("/loai-cong-viec");
     return data;
   },
-  getCategoryDetails: async (slug: string) => {
-    const [categoryRes, detailRes, gigRes] = await Promise.all([
+  getCategoryWithDetailGroups: async () => {
+    const [categoryRes, detailRes] = await Promise.all([
       axiosClient.get("/loai-cong-viec"),
       axiosClient.get("/chi-tiet-loai-cong-viec"),
+    ]);
+
+    return {
+      categories: categoryRes.data.content || [],
+      subcategories: detailRes.data.content || [],
+    };
+  },
+  getCategoryDetails: async (slug: string) => {
+    const [categoryData, gigRes] = await Promise.all([
+      categoryService.getCategoryWithDetailGroups(),
       gigService.getGigList(),
     ]);
-    const categories = categoryRes.data.content || [];
-    const allDetails = detailRes.data.content || [];
+    const categories = categoryData.categories;
+    const allDetails = categoryData.subcategories;
     const allGigs = gigRes.content || [];
 
     const currentCategory = categories.find((c: any) => createSlug(c.tenLoaiCongViec) === slug);

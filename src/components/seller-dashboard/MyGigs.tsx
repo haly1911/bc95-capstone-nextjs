@@ -1,18 +1,30 @@
 "use client";
 
-import { useAuthStore } from "@/store/useAuthStore";
 import { ApiGig } from "@/types/gig";
-import Link from "next/link";
+import { useState } from "react";
 import { FaPen, FaStar, FaTrash } from "react-icons/fa6";
+import GigModal from "./GigModal";
+import { ApiCategory, ApiCategoryDetailGroup } from "@/types/category";
+import { useRouter } from "next/navigation";
 
 interface MyGigsProps {
   gigs: ApiGig[];
+  categories: ApiCategory[];
+  subcategories: ApiCategoryDetailGroup[];
+  token: string;
 }
 
-const MyGigs = ({ gigs }: MyGigsProps) => {
-  const { user } = useAuthStore();
+const MyGigs = ({ gigs, categories, subcategories, token }: MyGigsProps) => {
+  const router = useRouter();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingGig, setEditingGig] = useState<ApiGig | null>(null);
+
+  const handleOpenModal = (gig?: ApiGig) => {
+    setEditingGig(gig ? gig : null);
+    setIsModalOpen(true);
+  };
   return (
-    <div className="wrapper pt-10">
+    <section className="wrapper pt-10">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Seller dashboard</h1>
         <p className="text-sm text-muted-foreground mt-1">Manage your gigs, deliveries and earnings</p>
@@ -23,12 +35,13 @@ const MyGigs = ({ gigs }: MyGigsProps) => {
           <div className="rounded-xl border bg-card text-card-foreground shadow">
             <div className="flex items-center justify-between px-6 pt-4">
               <h3 className="font-semibold leading-none tracking-tight">My Gigs</h3>
-              <Link
-                href="/gig-create"
-                className="mt-4 inline-flex items-center rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground hover:opacity-90"
+              <button
+                type="button"
+                onClick={() => handleOpenModal()}
+                className="mt-4 inline-flex items-center rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground hover:opacity-90 cursor-pointer"
               >
                 Create a new gig
-              </Link>
+              </button>
             </div>
             <div className="p-6">
               <div className="relative w-full overflow-auto">
@@ -68,6 +81,8 @@ const MyGigs = ({ gigs }: MyGigsProps) => {
                         <td className="p-4 align-middle text-right">
                           <div className="flex items-center justify-center gap-3">
                             <button
+                              type="button"
+                              onClick={() => handleOpenModal(g)}
                               className="rounded-lg text-muted-foreground hover:text-accent transition-colors cursor-pointer"
                               title="Edit Gig"
                             >
@@ -90,7 +105,16 @@ const MyGigs = ({ gigs }: MyGigsProps) => {
           </div>
         </div>
       </div>
-    </div>
+      <GigModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        initialData={editingGig}
+        categories={categories}
+        subcategories={subcategories}
+        token={token}
+        onSuccess={() => router.refresh()}
+      />
+    </section>
   );
 };
 

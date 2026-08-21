@@ -78,7 +78,7 @@ const UserInfo = ({ skills }: UserInfoProps) => {
           </div>
         </div>
         <div>
-          <div className="w-full grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6 pt-6 border-t border-border">
+          <div className="w-full grid grid-cols-2 lg:grid-cols-4 gap-4 mt-6 pt-6 border-t border-border">
             <div>
               <p className="text-muted-foreground text-xs uppercase tracking-wider mb-1">Email</p>
               <p className="text-sm font-medium truncate">{user.email}</p>

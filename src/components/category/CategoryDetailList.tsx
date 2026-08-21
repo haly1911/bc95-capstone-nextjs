@@ -12,16 +12,12 @@ interface CategoryDetailListProps {
 }
 
 const CategoryDetailList = ({ groups, gigList }: CategoryDetailListProps) => {
-  const [selectedSubDetail, setSelectedSubDetail] = useState<string>("all");
+  const [selectedSubDetail, setSelectedSubDetail] = useState<number | "all">("all");
   const [sortBy, setSortBy] = useState<string>("recommended");
 
   const filteredGigs = useMemo(() => {
     if (selectedSubDetail === "all") return gigList;
-    return gigList.filter(
-      (gig: any) =>
-        gig.tenChiTietLoaiCongViec === selectedSubDetail ||
-        gig.moTa?.toLowerCase().includes(selectedSubDetail.toLowerCase()),
-    );
+    return gigList.filter((gig: any) => gig.maChiTietLoaiCongViec === selectedSubDetail);
   }, [gigList, selectedSubDetail]);
 
   const sortedGigs = useMemo(() => {
@@ -61,11 +57,11 @@ const CategoryDetailList = ({ groups, gigList }: CategoryDetailListProps) => {
             <button
               key={sub.id}
               onClick={() => {
-                setSelectedSubDetail(sub.tenChiTiet);
+                setSelectedSubDetail(sub.id);
                 resetPage();
               }}
               className={`rounded-full px-4 py-2 text-xs font-medium transition cursor-pointer ${
-                selectedSubDetail === sub.tenChiTiet
+                selectedSubDetail === sub.id
                   ? "bg-accent text-accent-foreground"
                   : "border border-border bg-card hover:border-accent"
               }`}

@@ -1,0 +1,276 @@
+"use client";
+
+import { GigFormData, gigSchema } from "@/lib/schemas";
+import { gigService } from "@/services/gig.service";
+import { ApiCategory, ApiCategoryDetailGroup } from "@/types/category";
+import { ApiGig } from "@/types/gig";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+import FormError from "../common/FormError";
+import Image from "next/image";
+
+interface GigModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  initialData?: ApiGig | null;
+  categories: ApiCategory[];
+  subcategories: ApiCategoryDetailGroup[];
+  token: string;
+  onSuccess: () => void;
+}
+
+const MAX_FILE_SIZE = 2 * 1024 * 1024;
+
+const GigModal = ({ isOpen, onClose, initialData, categories, subcategories, token, onSuccess }: GigModalProps) => {
+  const [loading, setLoading] = useState(false);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState(initialData?.hinhAnh || "");
+  const [imageError, setImageError] = useState<string>("");
+  const isEditMode = !!initialData;
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<GigFormData>({
+    resolver: zodResolver(gigSchema),
+    defaultValues: {
+      tenCongViec: "",
+      giaTien: 0,
+      maChiTietLoaiCongViec: 1,
+      moTaNgan: "",
+      moTa: "",
+      hinhAnh: "",
+    },
+  });
+
+  useEffect(() => {
+    if (initialData) {
+      reset({
+        tenCongViec: initialData.tenCongViec,
+        giaTien: initialData.giaTien,
+        maChiTietLoaiCongViec: initialData.maChiTietLoaiCongViec,
+        moTaNgan: initialData.moTaNgan,
+        moTa: initialData.moTa,
+        hinhAnh: initialData.hinhAnh,
+      });
+      setImagePreview(initialData.hinhAnh || "");
+      setSelectedFile(null);
+      setImageError("");
+      const foundGroup = subcategories.find((group) =>
+        group.dsChiTietLoai?.some((sub: any) => sub.id === initialData.maChiTietLoaiCongViec),
+      );
+      if (foundGroup) {
+        setSelectedCategoryId(foundGroup.maLoaiCongviec);
+      }
+    } else {
+      reset({
+        tenCongViec: "",
+        giaTien: 0,
+        maChiTietLoaiCongViec: 1,
+        moTaNgan: "",
+        moTa: "",
+        hinhAnh: "",
+      });
+      setSelectedCategoryId(null);
+      setImagePreview("");
+      setSelectedFile(null);
+      setImageError("");
+    }
+  }, [initialData, reset, subcategories]);
+
+  if (!isOpen) return null;
+
+  const filteredGroups = selectedCategoryId
+    ? subcategories.filter((group) => group.maLoaiCongviec === selectedCategoryId)
+    : [];
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      setImageError("Please select a valid image file (PNG, JPG, JPEG)...");
+      return;
+    }
+    if (file.size > MAX_FILE_SIZE) {
+      setImageError(`Image size must be less than ${MAX_FILE_SIZE / (1024 * 1024)}MB`);
+      return;
+    }
+    setImageError("");
+    setSelectedFile(file);
+    setImagePreview(URL.createObjectURL(file));
+  };
+
+  const onSubmit = async (data: GigFormData) => {
+    console.log("Form data submit:", data)
+    setLoading(true);
+    let gigId: number | null = null;
+    try {
+      if (isEditMode && initialData) {
+        const payload: ApiGig = { ...initialData, ...data };
+        await gigService.updateGig(token, initialData.id, payload);
+        gigId = initialData.id;
+        toast.success("Gig updated successfully!");
+      } else {
+        const payload = { ...data, danhGia: 0, saoCongViec: 5 };
+        const res = await gigService.createGig(token, payload);
+        gigId = res?.content?.id;
+        toast.success("Gig created successfully!");
+      }
+      if (selectedFile && gigId) {
+        if (!token) throw new Error("Token missing");
+        await gigService.uploadGigImage(token, gigId, selectedFile);
+      }
+      onSuccess();
+      onClose();
+    } catch (error: any) {
+      console.error("Failed to save gig:", error);
+      toast.error(error?.response?.data?.message || "Failed to save gig. Please try again!");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div
+      onClick={() => onClose()}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4 overflow-y-auto"
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="w-full max-w-xl rounded-2xl bg-card border border-border p-6 shadow-xl my-8 max-h-[90vh] overflow-y-auto"
+      >
+        <div className="flex items-center justify-between border-b border-border pb-4">
+          <h3 className="text-lg font-bold text-foreground">{isEditMode ? "Edit Gig" : "Create New Gig"}</h3>
+          <button
+            type="button"
+            onClick={onClose}
+            className="text-muted-foreground hover:text-foreground cursor-pointer"
+          >
+            ✕
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit(onSubmit)} className="mt-4 space-y-4">
+          <div>
+            <label className="text-xs font-medium uppercase text-muted-foreground">Gig title</label>
+            <input
+              type="text"
+              {...register("tenCongViec")}
+              placeholder="e.g. I will build a professional website using React"
+              className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-accent"
+            />
+            <FormError message={errors.tenCongViec?.message} />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="text-xs font-medium uppercase text-muted-foreground">Category</label>
+              <select
+                onChange={(e) => setSelectedCategoryId(Number(e.target.value))}
+                value={selectedCategoryId || ""}
+                className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-accent cursor-pointer"
+              >
+                <option value="" disabled>
+                  Select category
+                </option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.tenLoaiCongViec}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="text-xs font-medium uppercase text-muted-foreground">Subcategory</label>
+              <select
+                {...register("maChiTietLoaiCongViec", { valueAsNumber: true })}
+                disabled={!selectedCategoryId}
+                className={`mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-accent disabled:opacity-50 ${!selectedCategoryId ? "cursor-not-allowed" : "cursor-pointer"} `}
+              >
+                <option value={0} disabled>
+                  {selectedCategoryId ? "Select subcategory" : "Choose category first"}
+                </option>
+                {filteredGroups.map((group) =>
+                  group.dsChiTietLoai?.map((sub: any) => (
+                    <option key={sub.id} value={sub.id}>
+                      {sub.tenChiTiet || sub.tenChiTietLoai}
+                    </option>
+                  )),
+                )}
+              </select>
+              <FormError message={errors.maChiTietLoaiCongViec?.message} />
+            </div>
+          </div>
+          <div>
+            <label className="text-xs font-medium uppercase text-muted-foreground">Price ($)</label>
+            <input
+              type="number"
+              placeholder="50"
+              {...register("giaTien", { valueAsNumber: true })}
+              className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-accent"
+            />
+            <FormError message={errors.giaTien?.message} />
+          </div>
+          <div>
+            <label className="text-xs font-medium uppercase text-muted-foreground">Short Description</label>
+            <input
+              type="text"
+              {...register("moTaNgan")}
+              placeholder="Briefly describe what you will do..."
+              className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-accent"
+            />
+            <FormError message={errors.moTaNgan?.message} />
+          </div>
+          <div>
+            <label className="text-xs font-medium uppercase text-muted-foreground">Description</label>
+            <textarea
+              rows={4}
+              {...register("moTa")}
+              placeholder="Detailed description of your service..."
+              className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-accent"
+            />
+            <FormError message={errors.moTa?.message} />
+          </div>
+          <div>
+            <label className="text-xs font-medium uppercase text-muted-foreground">Gig Image (Max 2MB)</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground file:mr-4 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-accent file:text-accent-foreground hover:file:opacity-90 cursor-pointer"
+            />
+            <FormError message={imageError} />
+            {imagePreview && (
+              <div className="mt-3 relative w-full h-80 rounded-lg border border-border overflow-hidden bg-muted/50 flex items-center justify-center">
+                <Image src={imagePreview} alt="Gig Preview" width={425} height={320} className="w-full h-full object-cover" />
+              </div>
+            )}
+          </div>
+          <div className="flex justify-end gap-3 pt-4 border-t border-border">
+            <button
+              type="button"
+              onClick={onClose}
+              className="rounded-lg border border-border px-4 py-2 text-sm font-semibold hover:bg-muted cursor-pointer"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground hover:opacity-90 disabled:opacity-50 cursor-pointer"
+            >
+              {loading ? "Saving..." : isEditMode ? "Update Gig" : "Create Gig"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default GigModal;

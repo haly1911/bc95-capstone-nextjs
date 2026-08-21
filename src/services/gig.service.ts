@@ -60,4 +60,30 @@ export const gigService = {
     }
     return data;
   },
+  createGig: async (token: string, gigData: Partial<ApiGig>): Promise<BaseApiResponse<ApiGig>> => {
+    const { data } = await axiosClient.post("/cong-viec", gigData, {
+      headers: {
+        token: token,
+      },
+    });
+    return data;
+  },
+  updateGig: async (token: string, gigId: number, gigData: ApiGig): Promise<BaseApiResponse<ApiGig>> => {
+    const { data } = await axiosClient.put(`/cong-viec/${gigId}`, gigData, {
+      headers: {
+        token: token,
+      },
+    });
+    return data;
+  },
+  uploadGigImage: async (token: string, gigId: number, file: File) => {
+    const formData = new FormData();
+    formData.append("formFile", file);
+    const { data } = await axiosClient.post(`/cong-viec/upload-hinh-cong-viec/${gigId}`, formData, {
+      headers: {
+        token: token,
+      },
+    });
+    return data;
+  },
 };

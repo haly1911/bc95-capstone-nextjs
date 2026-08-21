@@ -28,6 +28,16 @@ export const updateProfileSchema = z.object({
   certification: z.string().optional(),
 });
 
+export const gigSchema = z.object({
+  tenCongViec: z.string().min(3, "Gig title must be at least 3 characters"),
+  giaTien: z.number().min(1, "Price must be greater than 0"),
+  maChiTietLoaiCongViec: z.number().min(1, "Please select a subcategory"),
+  moTaNgan: z.string().min(5, "Short description is required"),
+  moTa: z.string().min(10, "Detailed description is required"),
+  hinhAnh: z.string().url("Please enter a valid image URL"),
+});
+
 export type SignInFormData = z.infer<typeof signInSchema>;
 export type SignUpFormData = z.infer<typeof signUpSchema>;
 export type UpdateProfileFormData = z.infer<typeof updateProfileSchema>;
+export type GigFormData = z.infer<typeof gigSchema>;

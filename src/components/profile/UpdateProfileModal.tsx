@@ -72,6 +72,10 @@ const UpdateProfileModal = ({ isOpen, onClose, user, skills }: UpdateProfileModa
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      setAvatarError("Please select a valid image file (PNG, JPG, JPEG)...");
+      return;
+    }
     if (file.size > MAX_FILE_SIZE) {
       setAvatarError("Image size must be less than 2MB");
       return;
