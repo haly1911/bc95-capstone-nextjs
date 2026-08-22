@@ -18,12 +18,13 @@ interface GigModalProps {
   categories: ApiCategory[];
   subcategories: ApiCategoryDetailGroup[];
   token: string;
+  userId: number;
   onSuccess: () => void;
 }
 
-const MAX_FILE_SIZE = 2 * 1024 * 1024;
+const MAX_FILE_SIZE = 1 * 1024 * 1024;
 
-const GigModal = ({ isOpen, onClose, initialData, categories, subcategories, token, onSuccess }: GigModalProps) => {
+const GigModal = ({ isOpen, onClose, initialData, categories, subcategories, token, userId, onSuccess }: GigModalProps) => {
   const [loading, setLoading] = useState(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -49,39 +50,41 @@ const GigModal = ({ isOpen, onClose, initialData, categories, subcategories, tok
   });
 
   useEffect(() => {
-    if (initialData) {
-      reset({
-        tenCongViec: initialData.tenCongViec,
-        giaTien: initialData.giaTien,
-        maChiTietLoaiCongViec: initialData.maChiTietLoaiCongViec,
-        moTaNgan: initialData.moTaNgan,
-        moTa: initialData.moTa,
-        hinhAnh: initialData.hinhAnh,
-      });
-      setImagePreview(initialData.hinhAnh || "");
-      setSelectedFile(null);
-      setImageError("");
-      const foundGroup = subcategories.find((group) =>
-        group.dsChiTietLoai?.some((sub: any) => sub.id === initialData.maChiTietLoaiCongViec),
-      );
-      if (foundGroup) {
-        setSelectedCategoryId(foundGroup.maLoaiCongviec);
+    if (isOpen) {
+      if (initialData) {
+        reset({
+          tenCongViec: initialData.tenCongViec,
+          giaTien: initialData.giaTien,
+          maChiTietLoaiCongViec: initialData.maChiTietLoaiCongViec,
+          moTaNgan: initialData.moTaNgan,
+          moTa: initialData.moTa,
+          hinhAnh: initialData.hinhAnh,
+        });
+        setImagePreview(initialData.hinhAnh || "");
+        setSelectedFile(null);
+        setImageError("");
+        const foundGroup = subcategories.find((group) =>
+          group.dsChiTietLoai?.some((sub: any) => sub.id === initialData.maChiTietLoaiCongViec),
+        );
+        if (foundGroup) {
+          setSelectedCategoryId(foundGroup.maLoaiCongviec);
+        }
+      } else {
+        reset({
+          tenCongViec: "",
+          giaTien: 0,
+          maChiTietLoaiCongViec: 1,
+          moTaNgan: "",
+          moTa: "",
+          hinhAnh: "",
+        });
+        setSelectedCategoryId(null);
+        setImagePreview("");
+        setSelectedFile(null);
+        setImageError("");
       }
-    } else {
-      reset({
-        tenCongViec: "",
-        giaTien: 0,
-        maChiTietLoaiCongViec: 1,
-        moTaNgan: "",
-        moTa: "",
-        hinhAnh: "",
-      });
-      setSelectedCategoryId(null);
-      setImagePreview("");
-      setSelectedFile(null);
-      setImageError("");
     }
-  }, [initialData, reset, subcategories]);
+  }, [isOpen, initialData, reset, subcategories]);
 
   if (!isOpen) return null;
 
@@ -106,7 +109,6 @@ const GigModal = ({ isOpen, onClose, initialData, categories, subcategories, tok
   };
 
   const onSubmit = async (data: GigFormData) => {
-    console.log("Form data submit:", data)
     setLoading(true);
     let gigId: number | null = null;
     try {
@@ -116,11 +118,12 @@ const GigModal = ({ isOpen, onClose, initialData, categories, subcategories, tok
         gigId = initialData.id;
         toast.success("Gig updated successfully!");
       } else {
-        const payload = { ...data, danhGia: 0, saoCongViec: 5 };
+        const payload = { ...data, danhGia: 0, nguoiTao: userId, saoCongViec: 5 };
         const res = await gigService.createGig(token, payload);
         gigId = res?.content?.id;
         toast.success("Gig created successfully!");
       }
+      console.log("new gigId", gigId);
       if (selectedFile && gigId) {
         if (!token) throw new Error("Token missing");
         await gigService.uploadGigImage(token, gigId, selectedFile);
@@ -247,7 +250,13 @@ const GigModal = ({ isOpen, onClose, initialData, categories, subcategories, tok
             <FormError message={imageError} />
             {imagePreview && (
               <div className="mt-3 relative w-full h-80 rounded-lg border border-border overflow-hidden bg-muted/50 flex items-center justify-center">
-                <Image src={imagePreview} alt="Gig Preview" width={425} height={320} className="w-full h-full object-cover" />
+                <Image
+                  src={imagePreview}
+                  alt="Gig Preview"
+                  width={425}
+                  height={320}
+                  className="w-full h-full object-cover"
+                />
               </div>
             )}
           </div>

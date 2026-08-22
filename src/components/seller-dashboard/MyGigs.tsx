@@ -6,15 +6,18 @@ import { FaPen, FaStar, FaTrash } from "react-icons/fa6";
 import GigModal from "./GigModal";
 import { ApiCategory, ApiCategoryDetailGroup } from "@/types/category";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
+import { gigService } from "@/services/gig.service";
 
 interface MyGigsProps {
   gigs: ApiGig[];
   categories: ApiCategory[];
   subcategories: ApiCategoryDetailGroup[];
   token: string;
+  userId: number;
 }
 
-const MyGigs = ({ gigs, categories, subcategories, token }: MyGigsProps) => {
+const MyGigs = ({ gigs, categories, subcategories, token, userId }: MyGigsProps) => {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingGig, setEditingGig] = useState<ApiGig | null>(null);
@@ -22,6 +25,19 @@ const MyGigs = ({ gigs, categories, subcategories, token }: MyGigsProps) => {
   const handleOpenModal = (gig?: ApiGig) => {
     setEditingGig(gig ? gig : null);
     setIsModalOpen(true);
+  };
+
+  const handleDeleteGig = async (gigId: number) => {
+    if (!window.confirm("Are you sure you want to delete this gig?")) return;
+
+    try {
+      await gigService.deleteGig(token, gigId);
+      toast.success("Gig deleted successfully!");
+      router.refresh();
+    } catch (error: any) {
+      console.error("Failed to delete gig:", error);
+      toast.error(error?.response?.data?.message || "Failed to delete gig. Please try again!");
+    }
   };
   return (
     <section className="wrapper pt-10">
@@ -89,6 +105,8 @@ const MyGigs = ({ gigs, categories, subcategories, token }: MyGigsProps) => {
                               <FaPen className="w-4 h-4" />
                             </button>
                             <button
+                              type="button"
+                              onClick={() => handleDeleteGig(g.id)}
                               className="rounded-lg text-muted-foreground hover:text-destructive transition-colors cursor-pointer"
                               title="Delete Gig"
                             >
@@ -112,6 +130,7 @@ const MyGigs = ({ gigs, categories, subcategories, token }: MyGigsProps) => {
         categories={categories}
         subcategories={subcategories}
         token={token}
+        userId={userId}
         onSuccess={() => router.refresh()}
       />
     </section>

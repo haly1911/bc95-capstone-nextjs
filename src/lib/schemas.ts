@@ -29,12 +29,27 @@ export const updateProfileSchema = z.object({
 });
 
 export const gigSchema = z.object({
-  tenCongViec: z.string().min(3, "Gig title must be at least 3 characters"),
+  tenCongViec: z
+    .string()
+    .min(1, "Gig title is required")
+    .refine((val) => !val.includes("'"), {
+      message: "Gig title cannot contain single quotes (')",
+    }),
   giaTien: z.number().min(1, "Price must be greater than 0"),
   maChiTietLoaiCongViec: z.number().min(1, "Please select a subcategory"),
-  moTaNgan: z.string().min(5, "Short description is required"),
-  moTa: z.string().min(10, "Detailed description is required"),
-  hinhAnh: z.string().url("Please enter a valid image URL"),
+  moTaNgan: z
+    .string()
+    .min(1, "Short description is required")
+    .refine((val) => !val.includes("'"), {
+      message: "Short description cannot contain single quotes (')",
+    }),
+  moTa: z
+    .string()
+    .min(1, "Description is required")
+    .refine((val) => !val.includes("'"), {
+      message: "Description cannot contain single quotes (')",
+    }),
+  hinhAnh: z.string().optional().or(z.literal("")),
 });
 
 export type SignInFormData = z.infer<typeof signInSchema>;

@@ -25,6 +25,7 @@ const SellerDashboardPage = async () => {
       <MyGigs
         gigs={gigs}
         token={token}
+        userId={userId}
         categories={categoryData.categories}
         subcategories={categoryData.subcategories}
       />

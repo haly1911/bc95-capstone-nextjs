@@ -76,6 +76,14 @@ export const gigService = {
     });
     return data;
   },
+  deleteGig: async (token: string, gigId: number): Promise<BaseApiResponse<ApiGig>> => {
+    const { data } = await axiosClient.delete(`/cong-viec/${gigId}`, {
+      headers: {
+        token: token,
+      },
+    });
+    return data;
+  },
   uploadGigImage: async (token: string, gigId: number, file: File) => {
     const formData = new FormData();
     formData.append("formFile", file);
