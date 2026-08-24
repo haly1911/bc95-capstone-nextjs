@@ -245,7 +245,7 @@ const GigModal = ({
             <FormError message={errors.moTa?.message} />
           </div>
           <div>
-            <label className="text-xs font-medium uppercase text-muted-foreground">Gig Image (Max 2MB)</label>
+            <label className="text-xs font-medium uppercase text-muted-foreground">Gig Image (Max 1MB)</label>
             <input
               type="file"
               accept="image/*"
