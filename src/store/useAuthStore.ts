@@ -36,9 +36,8 @@ export const useAuthStore = create<AuthState>((set) => ({
     clearSession();
     set({ user: null, token: null, isAuthenticated: false });
     toast.info("Signed out successfully!");
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+    if (typeof window !== "undefined") {
+      window.location.href = "/";
+    }
   },
 }));

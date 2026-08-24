@@ -24,12 +24,11 @@ const SellerDashboardPage = async () => {
     <main className="wrapper">
       <MyGigs
         gigs={gigs}
-        token={token}
         userId={userId}
         categories={categoryData.categories}
         subcategories={categoryData.subcategories}
       />
-      <ManageOrders orders={sellerOrders} token={token} />
+      <ManageOrders orders={sellerOrders} />
     </main>
   );
 };

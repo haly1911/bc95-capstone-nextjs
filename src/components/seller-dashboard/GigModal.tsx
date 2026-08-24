@@ -17,14 +17,21 @@ interface GigModalProps {
   initialData?: ApiGig | null;
   categories: ApiCategory[];
   subcategories: ApiCategoryDetailGroup[];
-  token: string;
   userId: number;
   onSuccess: () => void;
 }
 
 const MAX_FILE_SIZE = 1 * 1024 * 1024;
 
-const GigModal = ({ isOpen, onClose, initialData, categories, subcategories, token, userId, onSuccess }: GigModalProps) => {
+const GigModal = ({
+  isOpen,
+  onClose,
+  initialData,
+  categories,
+  subcategories,
+  userId,
+  onSuccess,
+}: GigModalProps) => {
   const [loading, setLoading] = useState(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -114,19 +121,17 @@ const GigModal = ({ isOpen, onClose, initialData, categories, subcategories, tok
     try {
       if (isEditMode && initialData) {
         const payload: ApiGig = { ...initialData, ...data };
-        await gigService.updateGig(token, initialData.id, payload);
+        await gigService.updateGig(initialData.id, payload);
         gigId = initialData.id;
         toast.success("Gig updated successfully!");
       } else {
         const payload = { ...data, danhGia: 0, nguoiTao: userId, saoCongViec: 5 };
-        const res = await gigService.createGig(token, payload);
+        const res = await gigService.createGig(payload);
         gigId = res?.content?.id;
         toast.success("Gig created successfully!");
       }
-      console.log("new gigId", gigId);
       if (selectedFile && gigId) {
-        if (!token) throw new Error("Token missing");
-        await gigService.uploadGigImage(token, gigId, selectedFile);
+        await gigService.uploadGigImage(gigId, selectedFile);
       }
       onSuccess();
       onClose();

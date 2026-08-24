@@ -1,9 +1,9 @@
 "use client";
 
-import { ApiOrder } from "@/types/order";
+import { ApiOrderHistory } from "@/types/order";
 
 interface OrderHistoryProps {
-  orders: ApiOrder[];
+  orders: ApiOrderHistory[];
 }
 
 const OrderHistory = ({ orders }: OrderHistoryProps) => {

@@ -13,3 +13,10 @@ export interface ApiOrderWithDetails extends ApiOrder {
   congViec?: ApiGig;
   buyer?: ApiUser;
 }
+
+export interface ApiOrderHistory {
+  id: number;
+  ngayThue: string;
+  hoanThanh: boolean;
+  congViec: ApiGig;
+}

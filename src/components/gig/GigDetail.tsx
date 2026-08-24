@@ -1,38 +1,45 @@
 "use client";
 
+import { orderService } from "@/services/order.service";
+import { useAuthStore } from "@/store/useAuthStore";
 import { ApiGigWithUser } from "@/types/gig";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "react-toastify";
 
 interface GigDetailProps {
   gig: ApiGigWithUser;
 }
 
-const packages = [
-  {
-    name: "Basic",
-    price: 45,
-    delivery: "3 days",
-    revisions: 1,
-    features: ["1 concept", "Logo transparency", "Vector file"],
-  },
-  {
-    name: "Standard",
-    price: 95,
-    delivery: "5 days",
-    revisions: 3,
-    features: ["3 concepts", "Source file", "Social kit", "Vector file"],
-  },
-  {
-    name: "Premium",
-    price: 220,
-    delivery: "7 days",
-    revisions: "Unlimited",
-    features: ["5 concepts", "Full brand kit", "Stationery", "Social kit", "Source + vector"],
-  },
-];
-
 const GigDetail = ({ gig }: GigDetailProps) => {
+  const { isAuthenticated, user } = useAuthStore();
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+
+  const handleOrder = async () => {
+    if (!isAuthenticated || !user) {
+      toast.warning("Please sign in to continue ordering");
+      router.push("/auth");
+      return;
+    }
+    try {
+      setLoading(true);
+      await orderService.orderGig({
+        maCongViec: gig.id,
+        maNguoiThue: user.id,
+        ngayThue: new Date().toISOString(),
+        hoanThanh: false,
+      });
+      toast.success("Order placed successfully");
+      router.refresh();
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || "Failed to place order!");
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <main>
       <div className="wrapper py-10">
@@ -76,8 +83,13 @@ const GigDetail = ({ gig }: GigDetailProps) => {
               <h2 className="text-xl font-bold border-b pb-3">About this gig</h2>
               <p className="mt-3 text-sm leading-relaxed text-justify text-muted-foreground">{gig.moTa}</p>
               <div className="p-6">
-                <button className="w-full rounded-xl bg-accent px-5 py-3 text-sm font-semibold text-accent-foreground hover:opacity-90 cursor-pointer">
-                  Continue (${gig.giaTien})
+                <button
+                  type="button"
+                  onClick={handleOrder}
+                  disabled={loading}
+                  className={`w-full rounded-xl bg-accent px-5 py-3 text-sm font-semibold text-accent-foreground hover:opacity-90 ${loading ? "cursor-not-allowed" : "cursor-pointer"}`}
+                >
+                  {loading ? "Processing..." : `Continue (${gig.giaTien})`}
                 </button>
                 <button className="mt-2 w-full rounded-xl border border-border px-5 py-3 text-sm font-semibold hover:border-accent cursor-pointer">
                   Contact seller

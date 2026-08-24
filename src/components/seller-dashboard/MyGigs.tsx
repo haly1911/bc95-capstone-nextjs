@@ -13,11 +13,10 @@ interface MyGigsProps {
   gigs: ApiGig[];
   categories: ApiCategory[];
   subcategories: ApiCategoryDetailGroup[];
-  token: string;
   userId: number;
 }
 
-const MyGigs = ({ gigs, categories, subcategories, token, userId }: MyGigsProps) => {
+const MyGigs = ({ gigs, categories, subcategories, userId }: MyGigsProps) => {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingGig, setEditingGig] = useState<ApiGig | null>(null);
@@ -31,7 +30,7 @@ const MyGigs = ({ gigs, categories, subcategories, token, userId }: MyGigsProps)
     if (!window.confirm("Are you sure you want to delete this gig?")) return;
 
     try {
-      await gigService.deleteGig(token, gigId);
+      await gigService.deleteGig(gigId);
       toast.success("Gig deleted successfully!");
       router.refresh();
     } catch (error: any) {
@@ -61,63 +60,69 @@ const MyGigs = ({ gigs, categories, subcategories, token, userId }: MyGigsProps)
             </div>
             <div className="p-6">
               <div className="relative w-full overflow-auto">
-                <table className="w-full caption-bottom text-sm">
-                  <thead className="[&_tr]:border-b">
-                    <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
-                      <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Gig</th>
-                      <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-                        Description
-                      </th>
-                      <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Reviews</th>
-                      <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Rating</th>
-                      <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Price</th>
-                      <th className="h-12 px-4 text-right align-middle font-medium text-muted-foreground">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody className="[&_tr:last-child]:border-0">
-                    {gigs.map((g, index) => (
-                      <tr
-                        key={index}
-                        className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
-                      >
-                        <td className="p-4 align-middle">
-                          <span className="font-medium">{g.tenCongViec}</span>
-                        </td>
-                        <td className="p-4 align-middle">{g.moTa}</td>
-                        <td className="p-4 align-middle">{g.danhGia}</td>
-                        <td className="p-4 align-middle">
-                          <div className="flex items-center gap-1">
-                            {g.saoCongViec}
-                            <FaStar className="text-accent" />
-                          </div>
-                        </td>
-                        <td className="p-4 align-middle">
-                          <span className="font-semibold">${g.giaTien}</span>
-                        </td>
-                        <td className="p-4 align-middle text-right">
-                          <div className="flex items-center justify-center gap-3">
-                            <button
-                              type="button"
-                              onClick={() => handleOpenModal(g)}
-                              className="rounded-lg text-muted-foreground hover:text-accent transition-colors cursor-pointer"
-                              title="Edit Gig"
-                            >
-                              <FaPen className="w-4 h-4" />
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => handleDeleteGig(g.id)}
-                              className="rounded-lg text-muted-foreground hover:text-destructive transition-colors cursor-pointer"
-                              title="Delete Gig"
-                            >
-                              <FaTrash className="w-4 h-4" />
-                            </button>
-                          </div>
-                        </td>
+                {gigs.length === 0 ? (
+                  <div className="py-10 text-center text-sm text-muted-foreground">
+                    You haven't created any gigs yet. Click "Create a new gig" to get started!
+                  </div>
+                ) : (
+                  <table className="w-full caption-bottom text-sm">
+                    <thead className="[&_tr]:border-b">
+                      <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Gig</th>
+                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
+                          Description
+                        </th>
+                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Reviews</th>
+                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Rating</th>
+                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Price</th>
+                        <th className="h-12 px-4 text-right align-middle font-medium text-muted-foreground">Actions</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody className="[&_tr:last-child]:border-0">
+                      {gigs.map((g, index) => (
+                        <tr
+                          key={index}
+                          className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+                        >
+                          <td className="p-4 align-middle">
+                            <span className="font-medium">{g.tenCongViec}</span>
+                          </td>
+                          <td className="p-4 align-middle">{g.moTa}</td>
+                          <td className="p-4 align-middle">{g.danhGia}</td>
+                          <td className="p-4 align-middle">
+                            <div className="flex items-center gap-1">
+                              {g.saoCongViec}
+                              <FaStar className="text-accent" />
+                            </div>
+                          </td>
+                          <td className="p-4 align-middle">
+                            <span className="font-semibold">${g.giaTien}</span>
+                          </td>
+                          <td className="p-4 align-middle text-right">
+                            <div className="flex items-center justify-center gap-3">
+                              <button
+                                type="button"
+                                onClick={() => handleOpenModal(g)}
+                                className="rounded-lg text-muted-foreground hover:text-accent transition-colors cursor-pointer"
+                                title="Edit Gig"
+                              >
+                                <FaPen className="w-4 h-4" />
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteGig(g.id)}
+                                className="rounded-lg text-muted-foreground hover:text-destructive transition-colors cursor-pointer"
+                                title="Delete Gig"
+                              >
+                                <FaTrash className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
               </div>
             </div>
           </div>
@@ -129,7 +134,6 @@ const MyGigs = ({ gigs, categories, subcategories, token, userId }: MyGigsProps)
         initialData={editingGig}
         categories={categories}
         subcategories={subcategories}
-        token={token}
         userId={userId}
         onSuccess={() => router.refresh()}
       />

@@ -15,14 +15,10 @@ export const userService = {
     const { data } = await axiosClient.put(`/users/${userId}`, userData);
     return data;
   },
-  uploadAvatar: async (token: string, file: File): Promise<BaseApiResponse<{ avatar: string }>> => {
+  uploadAvatar: async (file: File): Promise<BaseApiResponse<{ avatar: string }>> => {
     const formData = new FormData();
     formData.append("formFile", file);
-    const { data } = await axiosClient.post("/users/upload-avatar", formData, {
-      headers: {
-        token: token,
-      },
-    });
+    const { data } = await axiosClient.post("/users/upload-avatar", formData);
     return data;
   },
 };

@@ -26,7 +26,7 @@ const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
 
 const UpdateProfileModal = ({ isOpen, onClose, user, skills }: UpdateProfileModalProps) => {
   const router = useRouter();
-  const { setUser, token } = useAuthStore();
+  const { setUser } = useAuthStore();
   const [loading, setLoading] = useState(false);
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
   const [avatarPreview, setAvatarPreview] = useState(user.avatar || "");
@@ -96,8 +96,7 @@ const UpdateProfileModal = ({ isOpen, onClose, user, skills }: UpdateProfileModa
     try {
       let avatarUrl = avatarPreview;
       if (selectedFile) {
-        if (!token) throw new Error("Token missing");
-        const uploadRes = await userService.uploadAvatar(token, selectedFile);
+        const uploadRes = await userService.uploadAvatar(selectedFile);
         avatarUrl = uploadRes.content.avatar;
       }
       const certArray = data.certification

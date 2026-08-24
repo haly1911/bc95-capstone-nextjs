@@ -60,38 +60,22 @@ export const gigService = {
     }
     return data;
   },
-  createGig: async (token: string, gigData: Partial<ApiGig>): Promise<BaseApiResponse<ApiGig>> => {
-    const { data } = await axiosClient.post("/cong-viec", gigData, {
-      headers: {
-        token: token,
-      },
-    });
+  createGig: async (gigData: Partial<ApiGig>): Promise<BaseApiResponse<ApiGig>> => {
+    const { data } = await axiosClient.post("/cong-viec", gigData);
     return data;
   },
-  updateGig: async (token: string, gigId: number, gigData: ApiGig): Promise<BaseApiResponse<ApiGig>> => {
-    const { data } = await axiosClient.put(`/cong-viec/${gigId}`, gigData, {
-      headers: {
-        token: token,
-      },
-    });
+  updateGig: async (gigId: number, gigData: ApiGig): Promise<BaseApiResponse<ApiGig>> => {
+    const { data } = await axiosClient.put(`/cong-viec/${gigId}`, gigData);
     return data;
   },
-  deleteGig: async (token: string, gigId: number): Promise<BaseApiResponse<ApiGig>> => {
-    const { data } = await axiosClient.delete(`/cong-viec/${gigId}`, {
-      headers: {
-        token: token,
-      },
-    });
+  deleteGig: async (gigId: number): Promise<BaseApiResponse<ApiGig>> => {
+    const { data } = await axiosClient.delete(`/cong-viec/${gigId}`);
     return data;
   },
-  uploadGigImage: async (token: string, gigId: number, file: File) => {
+  uploadGigImage: async (gigId: number, file: File) => {
     const formData = new FormData();
     formData.append("formFile", file);
-    const { data } = await axiosClient.post(`/cong-viec/upload-hinh-cong-viec/${gigId}`, formData, {
-      headers: {
-        token: token,
-      },
-    });
+    const { data } = await axiosClient.post(`/cong-viec/upload-hinh-cong-viec/${gigId}`, formData);
     return data;
   },
 };

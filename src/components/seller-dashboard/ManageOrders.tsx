@@ -2,16 +2,16 @@
 
 import { orderService } from "@/services/order.service";
 import { ApiOrderWithDetails } from "@/types/order";
+import { formatDate } from "@/utils/date";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
 interface ManageOrdersProps {
   orders: ApiOrderWithDetails[];
-  token: string;
 }
 
-const ManageOrders = ({ orders, token }: ManageOrdersProps) => {
+const ManageOrders = ({ orders }: ManageOrdersProps) => {
   const router = useRouter();
   const [loading, setLoading] = useState<number | null>(null);
   const totalOrders = orders.length;
@@ -35,7 +35,7 @@ const ManageOrders = ({ orders, token }: ManageOrdersProps) => {
   const handleCompleteOrder = async (id: number) => {
     try {
       setLoading(id);
-      await orderService.completeOrder(id, token);
+      await orderService.completeOrder(id);
       toast.success("Order marked as completed successfully!");
       router.refresh();
     } catch (error: any) {
@@ -87,7 +87,7 @@ const ManageOrders = ({ orders, token }: ManageOrdersProps) => {
                         <span className="font-mono text-xs text-muted-foreground">#{o.id}</span>
                       </td>
                       <td className="p-4 align-middle font-medium">{o.congViec ? o.congViec.tenCongViec : "N/A"}</td>
-                      <td className="p-4 align-middle text-muted-foreground">{o.ngayThue}</td>
+                      <td className="p-4 align-middle text-muted-foreground">{formatDate(o.ngayThue)}</td>
                       <td className="p-4 align-middle font-semibold">${o.congViec ? o.congViec.giaTien : 0}</td>
                       <td className="p-4 align-middle">
                         <span
@@ -98,12 +98,13 @@ const ManageOrders = ({ orders, token }: ManageOrdersProps) => {
                           {o.hoanThanh ? "Completed" : "In progress"}
                         </span>
                       </td>
-                      <td className="p-4 align-middle text-right">
+                      <td className="p-4 align-middle text-center">
                         {!o.hoanThanh ? (
                           <button
+                            type="button"
                             onClick={() => handleCompleteOrder(o.id)}
                             disabled={loading === o.id}
-                            className="inline-flex items-center justify-center rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground shadow hover:bg-primary/90 disabled:opacity-50 transition-colors"
+                            className={`inline-flex items-center justify-center rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground shadow hover:bg-primary/90 disabled:opacity-50 transition-colors ${loading ? "cursor-not-allowed" : "cursor-pointer"}`}
                           >
                             {loading === o.id ? "Processing..." : "Mark Complete"}
                           </button>
