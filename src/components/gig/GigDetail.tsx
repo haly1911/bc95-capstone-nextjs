@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import ConfirmModal from "../common/ConfirmModal";
 
 interface GigDetailProps {
   gig: ApiGigWithUser;
@@ -17,13 +18,19 @@ const GigDetail = ({ gig }: GigDetailProps) => {
   const { isAuthenticated, user } = useAuthStore();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
 
-  const handleOrder = async () => {
+  const handleOrder = () => {
     if (!isAuthenticated || !user) {
       toast.warning("Please sign in to continue ordering");
       router.push("/auth");
       return;
     }
+    setIsOrderModalOpen(true);
+  };
+
+  const executeOrder = async () => {
+    if (!user) return;
     try {
       setLoading(true);
       await orderService.orderGig({
@@ -89,7 +96,7 @@ const GigDetail = ({ gig }: GigDetailProps) => {
                   disabled={loading}
                   className={`w-full rounded-xl bg-accent px-5 py-3 text-sm font-semibold text-accent-foreground hover:opacity-90 ${loading ? "cursor-not-allowed" : "cursor-pointer"}`}
                 >
-                  {loading ? "Processing..." : `Continue (${gig.giaTien})`}
+                  {loading ? "Processing..." : `Continue ($${gig.giaTien})`}
                 </button>
                 <button className="mt-2 w-full rounded-xl border border-border px-5 py-3 text-sm font-semibold hover:border-accent cursor-pointer">
                   Contact seller
@@ -99,6 +106,15 @@ const GigDetail = ({ gig }: GigDetailProps) => {
           </aside>
         </div>
       </div>
+      <ConfirmModal
+        isOpen={isOrderModalOpen}
+        title="Confirm Order"
+        message={`Are you sure you want to place an order for "${gig.tenCongViec}" with a total of $${gig.giaTien}?`}
+        confirmText="Confirm & Pay"
+        type="primary"
+        onConfirm={executeOrder}
+        onClose={() => setIsOrderModalOpen(false)}
+      />
     </main>
   );
 };

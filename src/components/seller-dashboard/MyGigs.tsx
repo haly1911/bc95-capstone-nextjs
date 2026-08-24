@@ -8,6 +8,7 @@ import { ApiCategory, ApiCategoryDetailGroup } from "@/types/category";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { gigService } from "@/services/gig.service";
+import ConfirmModal from "../common/ConfirmModal";
 
 interface MyGigsProps {
   gigs: ApiGig[];
@@ -20,17 +21,23 @@ const MyGigs = ({ gigs, categories, subcategories, userId }: MyGigsProps) => {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingGig, setEditingGig] = useState<ApiGig | null>(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [selectedGigId, setSelectedGigId] = useState<number | null>(null);
 
   const handleOpenModal = (gig?: ApiGig) => {
     setEditingGig(gig ? gig : null);
     setIsModalOpen(true);
   };
 
-  const handleDeleteGig = async (gigId: number) => {
-    if (!window.confirm("Are you sure you want to delete this gig?")) return;
+  const confirmDeleteGig = (gigId: number) => {
+    setSelectedGigId(gigId);
+    setIsDeleteModalOpen(true);
+  };
 
+  const handleDeleteGig = async () => {
+    if (!selectedGigId) return;
     try {
-      await gigService.deleteGig(gigId);
+      await gigService.deleteGig(selectedGigId);
       toast.success("Gig deleted successfully!");
       router.refresh();
     } catch (error: any) {
@@ -110,7 +117,7 @@ const MyGigs = ({ gigs, categories, subcategories, userId }: MyGigsProps) => {
                               </button>
                               <button
                                 type="button"
-                                onClick={() => handleDeleteGig(g.id)}
+                                onClick={() => confirmDeleteGig(g.id)}
                                 className="rounded-lg text-muted-foreground hover:text-destructive transition-colors cursor-pointer"
                                 title="Delete Gig"
                               >
@@ -136,6 +143,15 @@ const MyGigs = ({ gigs, categories, subcategories, userId }: MyGigsProps) => {
         subcategories={subcategories}
         userId={userId}
         onSuccess={() => router.refresh()}
+      />
+      <ConfirmModal
+        isOpen={isDeleteModalOpen}
+        title="Delete Gig"
+        message="Are you sure you want to delete this gig? This action cannot be undone"
+        confirmText="Delete"
+        type="danger"
+        onConfirm={handleDeleteGig}
+        onClose={() => setIsDeleteModalOpen(false)}
       />
     </section>
   );
