@@ -22,7 +22,7 @@ axiosClient.interceptors.request.use((config) => {
 axiosClient.interceptors.response.use(
   (response) => response,
   (error) => {
-    if ((error.response && error.response.status === 401) || error.response.status === 403) {
+    if (error.response?.status === 401 || error.response?.status === 403) {
       if (typeof window !== "undefined") {
         useAuthStore.getState().signout();
         window.location.href = "/auth";

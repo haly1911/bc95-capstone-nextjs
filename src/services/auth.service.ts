@@ -3,20 +3,30 @@ import { ApiSignInPayload, ApiSignInResponse, ApiSignUpPayload, ApiSignUpRespons
 
 export const authService = {
   signIn: async (payload: ApiSignInPayload): Promise<ApiSignInResponse> => {
-    const { data } = await axiosClient.post("/auth/signin", payload, {
-      headers: {
-        "Content-Type": "application/json-patch+json",
-      },
-    });
-    return data;
+    try {
+      const { data } = await axiosClient.post("/auth/signin", payload, {
+        headers: {
+          "Content-Type": "application/json-patch+json",
+        },
+      });
+      return data;
+    } catch (error) {
+      console.error("Failed to sign in:", error);
+      throw error;
+    }
   },
 
   signUp: async (payload: ApiSignUpPayload): Promise<ApiSignUpResponse> => {
-    const { data } = await axiosClient.post("/auth/signup", payload, {
-      headers: {
-        "Content-Type": "application/json-patch+json",
-      },
-    });
-    return data;
+    try {
+      const { data } = await axiosClient.post("/auth/signup", payload, {
+        headers: {
+          "Content-Type": "application/json-patch+json",
+        },
+      });
+      return data;
+    } catch (error) {
+      console.error("Failed to sign up:", error);
+      throw error;
+    }
   },
 };

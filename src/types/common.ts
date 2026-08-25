@@ -1,7 +1,8 @@
 export interface BaseApiResponse<T> {
   statusCode: number;
+  message?: string;
   content: T;
-  dateTime: string;
+  dateTime?: string;
 }
 
 export interface PaginatedApiResponse<T> {

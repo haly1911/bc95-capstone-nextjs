@@ -4,7 +4,12 @@ import { ApiSkill } from "@/types/skill";
 
 export const skillService = {
   getSkillList: async (): Promise<BaseApiResponse<ApiSkill[]>> => {
-    const { data } = await axiosClient.get("/skill");
-    return data;
+    try {
+      const { data } = await axiosClient.get("/skill");
+      return data;
+    } catch (error) {
+      console.error("Failed to fetch skill list:", error);
+      return { statusCode: 500, message: "Error", content: [] };
+    }
   },
 };
