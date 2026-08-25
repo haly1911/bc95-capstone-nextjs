@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import GigCard from "../gig/GigCard";
 import Pagination from "../common/Pagination";
 import { usePagination } from "@/hooks/usePagination";
+import { useCategoryStore } from "@/store/useCategoryStore";
 
 interface CategoryDetailListProps {
   groups: any[];
@@ -12,13 +13,13 @@ interface CategoryDetailListProps {
 }
 
 const CategoryDetailList = ({ groups, gigList }: CategoryDetailListProps) => {
-  const [selectedSubDetail, setSelectedSubDetail] = useState<number | "all">("all");
+  const { selectedSubId, setSelectedSubId } = useCategoryStore();
   const [sortBy, setSortBy] = useState<string>("recommended");
 
   const filteredGigs = useMemo(() => {
-    if (selectedSubDetail === "all") return gigList;
-    return gigList.filter((gig: any) => gig.maChiTietLoaiCongViec === selectedSubDetail);
-  }, [gigList, selectedSubDetail]);
+    if (selectedSubId === "all") return gigList;
+    return gigList.filter((gig: any) => gig.maChiTietLoaiCongViec === selectedSubId);
+  }, [gigList, selectedSubId]);
 
   const sortedGigs = useMemo(() => {
     let list = [...filteredGigs];
@@ -41,11 +42,11 @@ const CategoryDetailList = ({ groups, gigList }: CategoryDetailListProps) => {
       <div className="mb-8 flex flex-wrap items-center gap-2 border-b border-border/60 pb-6">
         <button
           onClick={() => {
-            setSelectedSubDetail("all");
+            setSelectedSubId("all");
             resetPage();
           }}
           className={`rounded-full px-4 py-2 text-xs font-medium transition cursor-pointer ${
-            selectedSubDetail === "all"
+            selectedSubId === "all"
               ? "bg-accent text-accent-foreground"
               : "border border-border bg-card hover:border-accent"
           }`}
@@ -57,11 +58,11 @@ const CategoryDetailList = ({ groups, gigList }: CategoryDetailListProps) => {
             <button
               key={sub.id}
               onClick={() => {
-                setSelectedSubDetail(sub.id);
+                setSelectedSubId(sub.id);
                 resetPage();
               }}
               className={`rounded-full px-4 py-2 text-xs font-medium transition cursor-pointer ${
-                selectedSubDetail === sub.id
+                selectedSubId === sub.id
                   ? "bg-accent text-accent-foreground"
                   : "border border-border bg-card hover:border-accent"
               }`}

@@ -1,7 +1,6 @@
 "use client";
 
 import { ApiComment } from "@/types/comment";
-import Image from "next/image";
 import React, { useMemo, useRef, useState } from "react";
 import Pagination from "../common/Pagination";
 import { formatDate, parseDateToTimestamp } from "@/utils/date";

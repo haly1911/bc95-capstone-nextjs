@@ -2,18 +2,24 @@
 
 import Link from "next/link";
 import { useTheme } from "./ThemeProvider";
-import React, { useState, useEffect } from "react";
-import { FaMagnifyingGlass, FaMoon, FaRegSun, FaStackExchange, FaSun } from "react-icons/fa6";
+import { useState, useEffect } from "react";
+import { FaMoon, FaStackExchange, FaSun } from "react-icons/fa6";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/useAuthStore";
-import Image from "next/image";
 import SearchInput from "../common/SearchInput";
 import UserAvatar from "../common/UserAvatar";
+import CategoryDropdown from "./CategoryDropdown";
+import { ApiCategory, ApiCategoryDetailGroup } from "@/types/category";
 
-const Header = () => {
+interface HeaderProps {
+  categories: ApiCategory[];
+  subcategories: ApiCategoryDetailGroup[];
+}
+
+const Header = ({ categories, subcategories }: HeaderProps) => {
   const { theme, toggle } = useTheme();
   const [showSearch, setShowSearch] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [showCategory, setShowCategory] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
   const { isAuthenticated, user, initializeAuth, signout } = useAuthStore();
@@ -28,10 +34,16 @@ const Header = () => {
   useEffect(() => {
     if (!isHome) return;
     const handleScroll = () => {
-      if (window.scrollY > 475) {
+      const scrollY = window.scrollY;
+      if (scrollY > 475) {
         setShowSearch(true);
       } else {
         setShowSearch(false);
+      }
+      if (scrollY > 1100) {
+        setShowCategory(true);
+      } else {
+        setShowCategory(false);
       }
     };
 
@@ -40,6 +52,7 @@ const Header = () => {
   }, [isHome]);
 
   const shouldShowSearch = !isHome || showSearch;
+  const shouldShowCategory = !isHome || showCategory;
 
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur">
@@ -108,6 +121,15 @@ const Header = () => {
             )}
           </div>
         </div>
+      </div>
+      <div
+        className={`transition-all duration-300 ease-in-out ${
+          shouldShowCategory
+            ? "opacity-100 translate-y-0 pointer-events-auto max-h-20"
+            : "opacity-0 -translate-y-2 pointer-events-none max-h-0 overflow-hidden"
+        }`}
+      >
+        <CategoryDropdown categories={categories} subcategories={subcategories} />
       </div>
     </header>
   );
