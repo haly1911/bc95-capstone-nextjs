@@ -7,6 +7,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { useState } from "react";
 import VideoPopupModal from "./VideoPopupModal";
+import Image from "next/image";
 
 const testimonials = [
   {
@@ -66,10 +67,11 @@ const Testimonial = () => {
                 onClick={() => setActiveVideo(item.videoSrc)}
                 className="group relative w-full h-64 lg:h-full flex items-center justify-center cursor-pointer"
               >
-                <img
+                <Image
                   src={item.img}
                   alt={`testimonial-pic-${item.id}`}
-                  className="absolute inset-0 rounded-2xl w-full h-full object-cover"
+                  fill
+                  className="absolute inset-0 rounded-2xl object-cover"
                 />
                 <span className="absolute p-6 bg-accent/70 rounded-full opacity-0 group-hover:opacity-100 group-hover:animate-ping transition" />
                 <span className="relative p-4 bg-accent/70 rounded-full transition">
@@ -80,7 +82,9 @@ const Testimonial = () => {
                 <p className="flex items-center gap-4 text-muted-foreground">
                   <span className="text-sm">{item.name}</span>
                   <span>|</span>
-                  <img src={item.logo} alt={`testimonial-logo-${item.id}`} className="w-auto h-8" />
+                  <span className="relative inline-block w-24 h-8">
+                    <Image src={item.logo} alt={`testimonial-logo-${item.id}`} fill className="object-contain" />
+                  </span>
                 </p>
                 <p className="relative py-6 px-4">
                   <FaQuoteLeft className="absolute top-4 left-0" />

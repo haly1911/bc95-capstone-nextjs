@@ -13,6 +13,10 @@ const nextConfig: NextConfig = {
         hostname: "fiverrnew.cybersoft.edu.vn",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "fiverr-res.cloudinary.com",
+      },
     ],
   },
 };

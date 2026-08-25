@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { FaPenToSquare } from "react-icons/fa6";
 import UpdateProfileModal from "./UpdateProfileModal";
 import { ApiSkill } from "@/types/skill";
+import UserAvatar from "../common/UserAvatar";
 
 interface UserInfoProps {
   skills: ApiSkill[];
@@ -38,22 +39,7 @@ const UserInfo = ({ skills }: UserInfoProps) => {
     <div className="w-full wrapper pt-10">
       <div className="bg-card border border-border backdrop-blur-lg rounded-2xl p-10 mb-8">
         <div className="flex items-center gap-6">
-          {!!user.avatar ? (
-            <div className="w-18 h-18 rounded-full overflow-hidden shrink-0 relative flex items-center justify-center">
-              <Image
-                loading="eager"
-                src={user.avatar}
-                alt="user-avatar"
-                width={72}
-                height={72}
-                className="object-cover h-full w-full"
-              />
-            </div>
-          ) : (
-            <div className="h-18 w-18 rounded-full bg-linear-to-br from-primary to-accent text-primary-foreground text-3xl flex items-center justify-center">
-              <span>{user.name[0].toUpperCase()}</span>
-            </div>
-          )}
+          <UserAvatar src={user.avatar} name={user.name} size={72} className="text-3xl" />
           <div className="flex-1 min-w-0">
             <div className="flex flex-wrap items-center gap-3 mb-1">
               <h1 className="text-2xl font-bold tracking-wide">{user.name.toUpperCase()}</h1>

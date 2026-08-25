@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import ConfirmModal from "../common/ConfirmModal";
+import UserAvatar from "../common/UserAvatar";
 
 interface GigDetailProps {
   gig: ApiGigWithUser;
@@ -55,18 +56,7 @@ const GigDetail = ({ gig }: GigDetailProps) => {
             <h1 className="text-2xl font-bold sm:text-3xl">{gig.tenCongViec}</h1>
             <div className="mt-4 flex flex-wrap items-center gap-4 text-sm">
               <Link href="/seller/$username" className="flex items-center gap-3 hover:text-accent">
-                {!!gig.user?.avatar ? (
-                  <Image
-                    loading="eager"
-                    src={gig.user?.avatar}
-                    alt="user-avatar"
-                    width={40}
-                    height={40}
-                    className="rounded-full"
-                  />
-                ) : (
-                  <div className="h-10 w-10 rounded-full bg-linear-to-br from-primary to-accent" />
-                )}
+                <UserAvatar src={gig.user?.avatar} name={gig.user?.name} size={40} />
                 <p className="font-semibold">{gig.user?.name}</p>
               </Link>
               <span className="text-xs">

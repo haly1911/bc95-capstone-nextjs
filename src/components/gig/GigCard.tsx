@@ -1,6 +1,8 @@
 import { ApiGigWithUser } from "@/types/gig";
 import Link from "next/link";
 import { FaStar } from "react-icons/fa6";
+import UserAvatar from "../common/UserAvatar";
+import Image from "next/image";
 
 interface GigCardProps {
   gig: ApiGigWithUser;
@@ -13,16 +15,17 @@ const GigCard = ({ gig }: GigCardProps) => {
       href={`/gigs/${gig.id}`}
       className="group overflow-hidden rounded-2xl border border-border bg-card transition hover:-translate-y-1 hover:border-accent hover:shadow-xl hover:shadow-accent/10"
     >
-      <div className="aspect-video overflow-hidden bg-muted">
-        <img src={gig.hinhAnh} alt="" className="h-full w-full object-cover transition group-hover:scale-105" />
+      <div className="aspect-video overflow-hidden bg-muted relative">
+        <Image
+          src={gig.hinhAnh}
+          alt={gig.tenCongViec || "Gig thumbnail"}
+          fill
+          className="object-cover transition group-hover:scale-105"
+        />
       </div>
       <div className="p-4">
         <div className="flex items-center gap-2">
-          {gig.user?.avatar ? (
-            <img src={gig.user.avatar} alt={gig.user.name} className="h-6 w-6 rounded-full object-cover" />
-          ) : (
-            <div className="h-6 w-6 rounded-full bg-linear-to-br from-primary to-accent" />
-          )}
+          <UserAvatar src={gig.user?.avatar} name={gig.user?.name} size={24} />
           <span className="text-xs font-medium truncate max-w-35">{gig.user?.name || `User #${gig.nguoiTao}`}</span>
         </div>
         <p className="mt-3 line-clamp-2 text-sm group-hover:text-accent">{gig.tenCongViec}</p>

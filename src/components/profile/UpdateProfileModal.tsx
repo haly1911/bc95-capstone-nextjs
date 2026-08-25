@@ -14,6 +14,7 @@ import { useForm } from "react-hook-form";
 import { FaCamera } from "react-icons/fa6";
 import { toast } from "react-toastify";
 import FormError from "../common/FormError";
+import UserAvatar from "../common/UserAvatar";
 
 interface UpdateProfileModalProps {
   isOpen: boolean;
@@ -22,7 +23,7 @@ interface UpdateProfileModalProps {
   skills: ApiSkill[];
 }
 
-const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
+const MAX_FILE_SIZE = 1 * 1024 * 1024; // 1MB
 
 const UpdateProfileModal = ({ isOpen, onClose, user, skills }: UpdateProfileModalProps) => {
   const router = useRouter();
@@ -77,7 +78,7 @@ const UpdateProfileModal = ({ isOpen, onClose, user, skills }: UpdateProfileModa
       return;
     }
     if (file.size > MAX_FILE_SIZE) {
-      setAvatarError("Image size must be less than 2MB");
+      setAvatarError("Image size must be less than 1MB");
       return;
     }
     setAvatarError("");
@@ -179,19 +180,7 @@ const UpdateProfileModal = ({ isOpen, onClose, user, skills }: UpdateProfileModa
           {/* Avatar Upload */}
           <div className="flex flex-col items-center justify-center gap-2">
             <div className="relative group">
-              <div className="h-20 w-20 rounded-full overflow-hidden border-2 border-accent flex items-center justify-center bg-background">
-                {avatarPreview ? (
-                  <Image
-                    src={avatarPreview}
-                    alt="Avatar preview"
-                    width={80}
-                    height={80}
-                    className="object-cover h-full w-full"
-                  />
-                ) : (
-                  <span className="text-2xl font-bold">{user.name[0]?.toUpperCase()}</span>
-                )}
-              </div>
+              <UserAvatar src={avatarPreview} name={user.name} size={80} className="border-2 border-accent text-2xl" />
               <label
                 htmlFor="avatar-upload"
                 className="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-white"
@@ -200,7 +189,6 @@ const UpdateProfileModal = ({ isOpen, onClose, user, skills }: UpdateProfileModa
               </label>
               <input id="avatar-upload" type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
             </div>
-            <span className="text-xs text-muted-foreground">Click image to change (Max 2MB)</span>
             <FormError message={avatarError} />
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

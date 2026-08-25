@@ -10,6 +10,7 @@ import { useAuthStore } from "@/store/useAuthStore";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { commentService } from "@/services/comment.service";
+import UserAvatar from "../common/UserAvatar";
 
 interface GigCommentProps {
   gigComments: ApiComment[];
@@ -103,22 +104,7 @@ const GigComment = ({ gigComments, gigId, gigCreatorId }: GigCommentProps) => {
       </div>
       <form onSubmit={handleSubmitComment} className="mt-6 rounded-2xl border border-border bg-card p-4">
         <div className="flex items-center gap-3">
-          {!!user?.avatar ? (
-            <div className="w-9 h-9 rounded-full overflow-hidden shrink-0 relative flex items-center justify-center">
-              <Image
-                loading="eager"
-                src={user.avatar}
-                alt="user-avatar"
-                width={36}
-                height={36}
-                className="object-cover h-full w-full"
-              />
-            </div>
-          ) : (
-            <div className="h-9 w-9 grid place-items-center rounded-full bg-linear-to-br from-primary to-accent text-xs font-bold text-primary-foreground">
-              <span>{user?.name[0].toUpperCase()}</span>
-            </div>
-          )}
+          <UserAvatar src={user?.avatar} name={user?.name} size={36} />
           <div className="flex flex-1 flex-col gap-3 lg:flex-row lg:items-center lg:gap-4">
             <div className="flex-1">
               <input
@@ -166,22 +152,7 @@ const GigComment = ({ gigComments, gigId, gigCreatorId }: GigCommentProps) => {
           <div key={c.id}>
             <div className="rounded-2xl border border-border bg-card p-5">
               <div className="flex items-center gap-3">
-                {!!c.avatar ? (
-                  <div className="w-9 h-9 rounded-full overflow-hidden shrink-0 relative flex items-center justify-center">
-                    <Image
-                      loading="eager"
-                      src={c.avatar}
-                      alt="user-avatar"
-                      width={36}
-                      height={36}
-                      className="object-cover h-full w-full"
-                    />
-                  </div>
-                ) : (
-                  <div className="h-9 w-9 grid place-items-center rounded-full bg-linear-to-br from-primary to-accent text-xs font-bold text-primary-foreground">
-                    <span>{c.tenNguoiBinhLuan[0].toUpperCase()}</span>
-                  </div>
-                )}
+                <UserAvatar src={c.avatar} name={c.tenNguoiBinhLuan} size={36} />
                 <div>
                   <p className="text-sm font-semibold">{c.tenNguoiBinhLuan}</p>
                   <p className="text-xs text-muted-foreground">{formatDate(c.ngayBinhLuan)}</p>

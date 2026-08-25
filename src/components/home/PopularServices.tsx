@@ -1,6 +1,8 @@
 import { gigService } from "@/services/gig.service";
 import Link from "next/link";
 import { FaStar } from "react-icons/fa6";
+import UserAvatar from "../common/UserAvatar";
+import Image from "next/image";
 
 const PopularServices = async () => {
   const response = await gigService.getTopGigs();
@@ -21,16 +23,17 @@ const PopularServices = async () => {
             href={`/gigs/${g.id}`}
             className="group overflow-hidden rounded-2xl border border-border bg-card transition hover:-translate-y-1 hover:border-accent hover:shadow-xl hover:shadow-accent/10"
           >
-            <div className="aspect-video overflow-hidden bg-muted">
-              <img src={g.hinhAnh} alt="" className="h-full w-full object-cover transition group-hover:scale-105" />
+            <div className="aspect-video overflow-hidden bg-muted relative">
+              <Image
+                src={g.hinhAnh}
+                alt={g.tenCongViec || "Popular service thumbnail"}
+                fill
+                className="object-cover transition group-hover:scale-105"
+              />
             </div>
             <div className="p-4">
               <div className="flex items-center gap-2">
-                {g.user?.avatar ? (
-                  <img src={g.user.avatar} alt={g.user.name} className="h-6 w-6 rounded-full object-cover" />
-                ) : (
-                  <div className="h-6 w-6 rounded-full bg-linear-to-br from-primary to-accent" />
-                )}
+                <UserAvatar src={g.user?.avatar} name={g.user?.name} size={24} />
                 <span className="text-xs font-medium truncate max-w-35">{g.user?.name || `User #${g.nguoiTao}`}</span>
               </div>
               <p className="mt-3 line-clamp-2 text-sm text-foreground group-hover:text-accent">{g.tenCongViec}</p>
