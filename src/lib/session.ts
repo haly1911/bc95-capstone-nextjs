@@ -12,6 +12,7 @@ export const setSession = (session: ApiSignInResponse) => {
 export const clearSession = (): void => {
   localStorage.removeItem("user");
   document.cookie = `token=; path=/; max-age=0`;
+  document.cookie = `userId=; path=/; max-age=0`;
 };
 
 export const getSession = (): ApiSignInResponse | null => {

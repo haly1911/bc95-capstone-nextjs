@@ -51,15 +51,6 @@ export const gigService = {
       },
     };
   },
-  getGigComment: async (gigId: number): Promise<BaseApiResponse<ApiComment[]>> => {
-    const { data } = await axiosClient.get(`/binh-luan/lay-binh-luan-theo-cong-viec/${gigId}`);
-    if (Array.isArray(data?.content)) {
-      data.content.sort(
-        (a: ApiComment, b: ApiComment) => parseDateToTimestamp(b.ngayBinhLuan) - parseDateToTimestamp(a.ngayBinhLuan),
-      );
-    }
-    return data;
-  },
   createGig: async (gigData: Partial<ApiGig>): Promise<BaseApiResponse<ApiGig>> => {
     const { data } = await axiosClient.post("/cong-viec", gigData);
     return data;
