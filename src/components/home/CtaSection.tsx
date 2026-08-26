@@ -5,7 +5,7 @@ import Link from "next/link";
 import { FaCheck } from "react-icons/fa6";
 
 const CtaSection = () => {
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, setAuthMode } = useAuthStore();
   if (isAuthenticated) return null;
   return (
     <section className="w-full wrapper pb-20">
@@ -18,6 +18,7 @@ const CtaSection = () => {
           <div className="pt-2">
             <Link
               href="/auth"
+              onClick={() => setAuthMode("signup")}
               className="inline-block rounded-full bg-background px-6 py-3 text-sm font-semibold text-foreground transition-transform hover:scale-105 hover:opacity-90"
             >
               Join Skillora

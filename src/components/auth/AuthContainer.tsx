@@ -3,15 +3,13 @@ import SignInForm from "./SignInForm";
 import SignUpForm from "./SignUpForm";
 import OverlayPanel from "./OverlayPanel";
 import { useEffect, useState } from "react";
-import type { AuthMode } from "@/types/auth";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/useAuthStore";
 
 const AuthContainer = () => {
   const router = useRouter();
-  const { isAuthenticated, initializeAuth } = useAuthStore();
+  const { isAuthenticated, initializeAuth, authMode, setAuthMode } = useAuthStore();
   const [isMounted, setIsMounted] = useState(false);
-  const [authMode, setAuthMode] = useState<AuthMode>("signin");
 
   useEffect(() => {
     (setIsMounted(true), initializeAuth());

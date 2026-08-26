@@ -22,7 +22,7 @@ const Header = ({ categories, subcategories }: HeaderProps) => {
   const [showCategory, setShowCategory] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
-  const { isAuthenticated, user, initializeAuth, signout } = useAuthStore();
+  const { isAuthenticated, user, initializeAuth, signout, setAuthMode } = useAuthStore();
   const [isMounted, setIsMounted] = useState(false);
   const isHome = pathname === "/";
 
@@ -86,9 +86,13 @@ const Header = ({ categories, subcategories }: HeaderProps) => {
               <Link href="/gigs" className="hover:text-accent">
                 Explore
               </Link>
-              {isMounted && isAuthenticated && user && (
+              {isMounted && isAuthenticated && user ? (
                 <Link href="/seller-dashboard" className="hover:text-accent">
                   Switch to Selling
+                </Link>
+              ) : (
+                <Link href="/become-a-seller" className="hover:text-accent">
+                  Become a Seller
                 </Link>
               )}
             </nav>
@@ -114,6 +118,7 @@ const Header = ({ categories, subcategories }: HeaderProps) => {
             ) : (
               <Link
                 href="/auth"
+                onClick={() => setAuthMode("signin")}
                 className="rounded-full bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground shadow shadow-accent/20 hover:opacity-90"
               >
                 Join

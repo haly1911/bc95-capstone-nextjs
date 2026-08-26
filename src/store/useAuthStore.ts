@@ -4,10 +4,12 @@ import { toast } from "react-toastify";
 import { create } from "zustand";
 
 type AuthState = {
-  user: ApiUser | null;
   token: string | null;
   isAuthenticated: boolean;
+  user: ApiUser | null;
   setUser: (user: ApiUser | null, token?: string | null) => void;
+  authMode: "signin" | "signup";
+  setAuthMode: (mode: "signin" | "signup") => void;
   initializeAuth: () => void;
   signout: () => void;
 };
@@ -27,6 +29,8 @@ export const useAuthStore = create<AuthState>((set) => ({
       token: token !== null ? token : state.token,
       isAuthenticated: !!user,
     })),
+  authMode: "signin",
+  setAuthMode: (mode) => set({ authMode: mode }),
   initializeAuth: () => {
     const hasToken = hasCookie("token");
     const session = getSession();

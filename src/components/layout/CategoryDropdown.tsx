@@ -19,7 +19,7 @@ const CategoryDropdown = ({ categories, subcategories }: CategoryDropdownProps) 
     : [];
   return (
     <div className="border-t border-border/60 relative" onMouseLeave={() => setActiveCategory(null)}>
-      <div className="wrapper flex items-center justify-between gap-6 overflow-x-auto py-2 text-xs font-medium text-muted-foreground">
+      <div className="wrapper flex items-center justify-between gap-6 overflow-x-auto scrollbar-thin scrollbar-thumb-accent py-2 text-xs font-medium text-muted-foreground">
         {categories.map((c) => {
           const slug = createSlug(c.tenLoaiCongViec);
           return (
