@@ -2,26 +2,10 @@
 import SignInForm from "./SignInForm";
 import SignUpForm from "./SignUpForm";
 import OverlayPanel from "./OverlayPanel";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/useAuthStore";
 
 const AuthContainer = () => {
-  const router = useRouter();
-  const { isAuthenticated, initializeAuth, authMode, setAuthMode } = useAuthStore();
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    (setIsMounted(true), initializeAuth());
-  }, [initializeAuth]);
-
-  useEffect(() => {
-    if (isMounted && isAuthenticated) {
-      router.replace("/");
-    }
-  }, [isMounted, isAuthenticated, router]);
-
-  if (!isMounted || isAuthenticated) return null;
+  const { authMode, setAuthMode } = useAuthStore();
 
   return (
     <main className={`relative w-screen h-screen overflow-hidden bg-card`}>
