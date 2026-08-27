@@ -8,13 +8,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import FormError from "../common/FormError";
+import FormError from "./FormError";
 import Image from "next/image";
 
 interface GigModalProps {
   isOpen: boolean;
   onClose: () => void;
-  initialData?: ApiGig | null;
+  gig?: ApiGig | null;
+  mode?: "view" | "edit" | "create";
   categories: ApiCategory[];
   subcategories: ApiCategoryDetailGroup[];
   userId: number;
@@ -26,7 +27,8 @@ const MAX_FILE_SIZE = 1 * 1024 * 1024;
 const GigModal = ({
   isOpen,
   onClose,
-  initialData,
+  gig: initialData,
+  mode = "create",
   categories,
   subcategories,
   userId,
@@ -37,7 +39,8 @@ const GigModal = ({
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState(initialData?.hinhAnh || "");
   const [imageError, setImageError] = useState<string>("");
-  const isEditMode = !!initialData;
+  const isEditMode = mode === "edit" || (!!initialData && mode !== "view");
+  const isViewMode = mode === "view";
 
   const {
     register,
@@ -100,6 +103,7 @@ const GigModal = ({
     : [];
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (isViewMode) return;
     const file = e.target.files?.[0];
     if (!file) return;
     if (!file.type.startsWith("image/")) {
@@ -116,6 +120,7 @@ const GigModal = ({
   };
 
   const onSubmit = async (data: GigFormData) => {
+    if (isViewMode) return;
     setLoading(true);
     let gigId: number | null = null;
     try {
@@ -153,7 +158,9 @@ const GigModal = ({
         className="w-full max-w-xl rounded-2xl bg-card border border-border p-6 shadow-xl my-8 max-h-[90vh] overflow-y-auto"
       >
         <div className="flex items-center justify-between border-b border-border pb-4">
-          <h3 className="text-lg font-bold text-foreground">{isEditMode ? "Edit Gig" : "Create New Gig"}</h3>
+          <h3 className="text-lg font-bold text-foreground">
+            {isViewMode ? "Gig Details" : isEditMode ? "Edit Gig" : "Create New Gig"}
+          </h3>
           <button
             type="button"
             onClick={onClose}
@@ -168,9 +175,10 @@ const GigModal = ({
             <label className="text-xs font-medium uppercase text-muted-foreground">Gig title</label>
             <input
               type="text"
+              disabled={isViewMode}
               {...register("tenCongViec")}
               placeholder="e.g. I will build a professional website using React"
-              className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-accent"
+              className={`mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-accent ${isViewMode ? "pointer-events-none" : ""}`}
             />
             <FormError message={errors.tenCongViec?.message} />
           </div>
@@ -179,9 +187,10 @@ const GigModal = ({
             <div>
               <label className="text-xs font-medium uppercase text-muted-foreground">Category</label>
               <select
+                disabled={isViewMode}
                 onChange={(e) => setSelectedCategoryId(Number(e.target.value))}
                 value={selectedCategoryId || ""}
-                className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-accent cursor-pointer"
+                className={`mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-accent cursor-pointer ${isViewMode ? "pointer-events-none" : ""}`}
               >
                 <option value="" disabled>
                   Select category
@@ -197,8 +206,8 @@ const GigModal = ({
               <label className="text-xs font-medium uppercase text-muted-foreground">Subcategory</label>
               <select
                 {...register("maChiTietLoaiCongViec", { valueAsNumber: true })}
-                disabled={!selectedCategoryId}
-                className={`mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-accent disabled:opacity-50 ${!selectedCategoryId ? "cursor-not-allowed" : "cursor-pointer"} `}
+                disabled={!selectedCategoryId || isViewMode}
+                className={`mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-accent ${!selectedCategoryId ? "cursor-not-allowed opacity-50" : "cursor-pointer"} ${isViewMode ? "pointer-events-none" : ""}`}
               >
                 <option value={0} disabled>
                   {selectedCategoryId ? "Select subcategory" : "Choose category first"}
@@ -218,9 +227,10 @@ const GigModal = ({
             <label className="text-xs font-medium uppercase text-muted-foreground">Price ($)</label>
             <input
               type="number"
+              disabled={isViewMode}
               placeholder="50"
               {...register("giaTien", { valueAsNumber: true })}
-              className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-accent"
+              className={`mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-accent ${isViewMode ? "pointer-events-none" : ""}`}
             />
             <FormError message={errors.giaTien?.message} />
           </div>
@@ -228,9 +238,10 @@ const GigModal = ({
             <label className="text-xs font-medium uppercase text-muted-foreground">Short Description</label>
             <input
               type="text"
+              disabled={isViewMode}
               {...register("moTaNgan")}
               placeholder="Briefly describe what you will do..."
-              className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-accent"
+              className={`mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-accent ${isViewMode ? "pointer-events-none" : ""}`}
             />
             <FormError message={errors.moTaNgan?.message} />
           </div>
@@ -238,20 +249,23 @@ const GigModal = ({
             <label className="text-xs font-medium uppercase text-muted-foreground">Description</label>
             <textarea
               rows={4}
+              disabled={isViewMode}
               {...register("moTa")}
               placeholder="Detailed description of your service..."
-              className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-accent"
+              className={`mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-accent ${isViewMode ? "pointer-events-none" : ""}`}
             />
             <FormError message={errors.moTa?.message} />
           </div>
           <div>
             <label className="text-xs font-medium uppercase text-muted-foreground">Gig Image (Max 1MB)</label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleFileChange}
-              className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground file:mr-4 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-accent file:text-accent-foreground hover:file:opacity-90 cursor-pointer"
-            />
+            {!isViewMode && (
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground file:mr-4 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-accent file:text-accent-foreground hover:file:opacity-90 cursor-pointer"
+              />
+            )}
             <FormError message={imageError} />
             {imagePreview && (
               <div className="mt-3 relative w-full h-80 rounded-lg border border-border overflow-hidden bg-muted/50 flex items-center justify-center">
@@ -271,15 +285,17 @@ const GigModal = ({
               onClick={onClose}
               className="rounded-lg border border-border px-4 py-2 text-sm font-semibold hover:bg-muted cursor-pointer"
             >
-              Cancel
+              {isViewMode ? "Close" : "Cancel"}
             </button>
-            <button
-              type="submit"
-              disabled={loading}
-              className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground hover:opacity-90 disabled:opacity-50 cursor-pointer"
-            >
-              {loading ? "Saving..." : isEditMode ? "Update Gig" : "Create Gig"}
-            </button>
+            {!isViewMode && (
+              <button
+                type="submit"
+                disabled={loading}
+                className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground hover:opacity-90 disabled:opacity-50 cursor-pointer"
+              >
+                {loading ? "Saving..." : isEditMode ? "Update Gig" : "Create Gig"}
+              </button>
+            )}
           </div>
         </form>
       </div>

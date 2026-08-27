@@ -40,7 +40,7 @@ const AdminSidebar = ({ isSidebarOpen, setIsSidebarOpen }: AdminSidebarProps) =>
 
       <aside
         className={`
-          fixed inset-y-0 left-0 z-50 w-64 shrink-0 bg-card border-r border-border flex flex-col backdrop-blur-xl
+          fixed inset-y-0 left-0 z-50 w-57 shrink-0 bg-card border-r border-border flex flex-col backdrop-blur-xl
           transition-transform duration-300 ease-in-out
           lg:static lg:translate-x-0
           ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}

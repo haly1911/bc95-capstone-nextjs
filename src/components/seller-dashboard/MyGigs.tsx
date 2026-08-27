@@ -3,7 +3,7 @@
 import { ApiGig } from "@/types/gig";
 import { useState } from "react";
 import { FaPen, FaStar, FaTrash } from "react-icons/fa6";
-import GigModal from "./GigModal";
+import GigModal from "../common/GigModal";
 import { ApiCategory, ApiCategoryDetailGroup } from "@/types/category";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
@@ -138,7 +138,7 @@ const MyGigs = ({ gigs, categories, subcategories, userId }: MyGigsProps) => {
       <GigModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        initialData={editingGig}
+        gig={editingGig}
         categories={categories}
         subcategories={subcategories}
         userId={userId}
