@@ -4,6 +4,15 @@ import { ApiOrder, ApiOrderHistory, ApiOrderWithDetails } from "@/types/order";
 import { attachDetailsToOrder } from "@/utils/attachDetailsToOrder";
 
 export const orderService = {
+  getAllOrders: async (): Promise<BaseApiResponse<ApiOrder[]>> => {
+    try {
+      const { data } = await axiosClient.get("thue-cong-viec");
+      return data;
+    } catch (error) {
+      console.error("Failed to fetch all orders:", error);
+      return { statusCode: 500, message: "Error", content: [] };
+    }
+  },
   getOrderHistory: async (token: string): Promise<BaseApiResponse<ApiOrderHistory[]>> => {
     try {
       const { data } = await axiosClient.get("/thue-cong-viec/lay-danh-sach-da-thue", {

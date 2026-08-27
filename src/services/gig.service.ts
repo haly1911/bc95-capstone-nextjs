@@ -23,9 +23,12 @@ export const gigService = {
   getTopGigs: async (): Promise<BaseApiResponse<ApiGigWithUser[]>> => {
     try {
       const [gigRes, userRes] = await Promise.all([axiosClient.get("/cong-viec"), axiosClient.get("/users")]);
-      const sortedGigs = gigRes.data.content.sort(
-        (a: ApiGigWithUser, b: ApiGigWithUser) => b.saoCongViec - a.saoCongViec,
-      );
+      const sortedGigs = gigRes.data.content.sort((a: ApiGigWithUser, b: ApiGigWithUser) => {
+        if (b.saoCongViec !== a.saoCongViec) {
+          return b.saoCongViec - a.saoCongViec;
+        }
+        return b.danhGia - a.danhGia;
+      });
       const topGigs = sortedGigs.slice(0, 8);
       const topGigsWithUser = attachUserToGig(topGigs, userRes.data.content);
       return {

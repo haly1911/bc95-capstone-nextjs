@@ -1,14 +1,51 @@
+import { categoryService } from "@/services/category.service";
+import { gigService } from "@/services/gig.service";
+import { orderService } from "@/services/order.service";
+import { userService } from "@/services/user.service";
+import { ApiCategory, ApiCategoryDetailGroup, ApiCategorySubDetailItem } from "@/types/category";
+import { ApiGig } from "@/types/gig";
+import Image from "next/image";
 import Link from "next/link";
-import UserAvatar from "@/components/common/UserAvatar";
 
-const AdminOverviewPage = () => {
-  const recentUsers = [
-    { name: "John Doe", email: "john@example.com", role: "ADMIN", avatar: "" },
-    { name: "Sarah Smith", email: "sarah@example.com", role: "USER", avatar: "" },
-    { name: "Michael Lee", email: "michael@example.com", role: "USER", avatar: "" },
-    { name: "Jessica Taylor", email: "jessica@example.com", role: "USER", avatar: "" },
-    { name: "David Brown", email: "david@example.com", role: "USER", avatar: "" },
-  ];
+const AdminOverviewPage = async () => {
+  const [gigRes, topGigsRes, usersRes, categoriesData, ordersRes] = await Promise.all([
+    gigService.getGigList(),
+    gigService.getTopGigs(),
+    userService.getUserList(),
+    categoryService.getCategoryWithDetailGroups(),
+    orderService.getAllOrders(),
+  ]);
+
+  const totalGigs = gigRes.content;
+  const topGigs = topGigsRes.content.slice(0, 5);
+  const totalUsers = usersRes.content;
+  const totalCategories = categoriesData.categories;
+  const totalOrders = ordersRes.content;
+  const subcategories = categoriesData.subcategories;
+
+  const categoryStats = totalCategories.map((cat: ApiCategory) => {
+    const matchingGroups = subcategories.filter((group: ApiCategoryDetailGroup) => group.maLoaiCongviec === cat.id);
+    const subDetailIds = matchingGroups.flatMap(
+      (group: ApiCategoryDetailGroup) => group.dsChiTietLoai?.map((sub: ApiCategorySubDetailItem) => sub.id) || [],
+    );
+    const count = totalGigs.filter(
+      (gig: ApiGig) => gig.maChiTietLoaiCongViec === cat.id || subDetailIds.includes(gig.maChiTietLoaiCongViec),
+    ).length;
+
+    return {
+      name: cat.tenLoaiCongViec,
+      count,
+    };
+  });
+  const categoryPercentages = categoryStats
+    .map((item: any) => ({
+      name: item.name,
+      percentage: Math.round((item.count / totalGigs.length) * 100),
+      count: item.count,
+    }))
+    .sort((a: any, b: any) => b.count - a.count)
+    .slice(0, 4);
+
   return (
     <div className="space-y-8">
       <div>
@@ -19,7 +56,7 @@ const AdminOverviewPage = () => {
         <div className="p-6 rounded-2xl border border-border bg-card shadow-xs space-y-1">
           <p className="text-xs uppercase tracking-wider text-muted-foreground font-medium">Total Users</p>
           <div className="flex items-baseline justify-between">
-            <p className="text-3xl font-extrabold text-foreground">--</p>
+            <p className="text-3xl font-extrabold text-foreground">{totalUsers.length}</p>
             <span className="text-xs text-accent font-semibold bg-accent/10 px-2 py-0.5 rounded-full">Database</span>
           </div>
         </div>
@@ -27,37 +64,35 @@ const AdminOverviewPage = () => {
         <div className="p-6 rounded-2xl border border-border bg-card shadow-xs space-y-1">
           <p className="text-xs uppercase tracking-wider text-muted-foreground font-medium">Total Gigs</p>
           <div className="flex items-baseline justify-between">
-            <p className="text-3xl font-extrabold text-foreground">--</p>
-            <span className="text-xs text-emerald-500 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded-full">
-              Published
-            </span>
+            <p className="text-3xl font-extrabold text-foreground">{totalGigs.length}</p>
+            <span className="text-xs text-chart-2 font-semibold bg-chart-2/10 px-2 py-0.5 rounded-full">Published</span>
           </div>
         </div>
 
         <div className="p-6 rounded-2xl border border-border bg-card shadow-xs space-y-1">
           <p className="text-xs uppercase tracking-wider text-muted-foreground font-medium">Categories</p>
           <div className="flex items-baseline justify-between">
-            <p className="text-3xl font-extrabold text-foreground">--</p>
-            <span className="text-xs text-blue-500 font-semibold bg-blue-500/10 px-2 py-0.5 rounded-full">Catalog</span>
+            <p className="text-3xl font-extrabold text-foreground">{totalCategories.length}</p>
+            <span className="text-xs text-chart-1 font-semibold bg-chart-1/10 px-2 py-0.5 rounded-full">Catalog</span>
           </div>
         </div>
 
         <div className="p-6 rounded-2xl border border-border bg-card shadow-xs space-y-1">
           <p className="text-xs uppercase tracking-wider text-muted-foreground font-medium">Total Orders</p>
           <div className="flex items-baseline justify-between">
-            <p className="text-3xl font-extrabold text-foreground">--</p>
-            <span className="text-xs text-purple-500 font-semibold bg-purple-500/10 px-2 py-0.5 rounded-full">
+            <p className="text-3xl font-extrabold text-foreground">{totalOrders.length}</p>
+            <span className="text-xs text-chart-4 font-semibold bg-chart-4/10 px-2 py-0.5 rounded-full">
               Transactions
             </span>
           </div>
         </div>
       </div>
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
-        <div className="space-y-6">
+      <div className="grid gap-6 lg:grid-cols-3">
+        <div className="space-y-6 lg:col-span-2">
           <div className="rounded-2xl border border-border bg-card p-6 shadow-xs">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-base font-bold">Recent Registered Users</h3>
-              <Link href="/admin/users" className="text-xs font-semibold text-accent hover:underline">
+              <h3 className="text-base font-bold">Most Popular Gigs</h3>
+              <Link href="/admin/gigs" className="text-xs font-semibold text-accent hover:underline">
                 View all →
               </Link>
             </div>
@@ -65,59 +100,72 @@ const AdminOverviewPage = () => {
               <table className="w-full text-left text-sm">
                 <thead>
                   <tr className="border-b border-border text-muted-foreground text-xs uppercase tracking-wider">
-                    <th className="pb-3 font-semibold">User</th>
-                    <th className="pb-3 font-semibold">Email</th>
-                    <th className="pb-3 font-semibold">Role</th>
+                    <th className="pb-3 font-semibold">Gig Title</th>
+                    <th className="pb-3 font-semibold">Price</th>
+                    <th className="pb-3 font-semibold">Rating</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border/50">
-                  {recentUsers.map((u, index) => (
-                    <tr key={index} className="hover:bg-muted/30 transition-colors">
+                  {topGigs.map((gig) => (
+                    <tr key={gig.id} className="hover:bg-muted/30 transition-colors">
                       <td className="py-3 flex items-center gap-3">
-                        <UserAvatar src={u.avatar} name={u.name} size={32} />
-                        <span className="font-medium text-foreground">{u.name}</span>
+                        <div className="relative w-10 h-8 rounded-lg overflow-hidden shrink-0 border border-border bg-muted">
+                          {gig.hinhAnh && (
+                            <Image
+                              src={gig.hinhAnh}
+                              alt={gig.tenCongViec}
+                              width={40}
+                              height={30}
+                              className="object-cover w-full h-full"
+                            />
+                          )}
+                        </div>
+                        <span className="font-medium text-foreground line-clamp-1 max-w-xs" title={gig.tenCongViec}>
+                          {gig.tenCongViec}
+                        </span>
                       </td>
-                      <td className="py-3 text-muted-foreground">{u.email}</td>
+                      <td className="py-3 font-bold text-accent">${gig.giaTien}</td>
                       <td className="py-3">
-                        <span
-                          className={`text-xs px-2 py-1 rounded-full font-semibold ${u.role === "ADMIN" ? "bg-primary/20 text-primary" : "bg-muted text-muted-foreground"}`}
-                        >
-                          {u.role}
+                        <span className="text-xs px-2 py-1 rounded-full font-semibold bg-accent/10 text-accent flex items-center w-fit gap-1">
+                          ⭐ {gig.saoCongViec}{" "}
+                          <span className="text-muted-foreground font-normal">({gig.danhGia})</span>
                         </span>
                       </td>
                     </tr>
                   ))}
+                  {topGigs.length === 0 && (
+                    <tr>
+                      <td colSpan={3} className="py-4 text-center text-muted-foreground">
+                        No gigs found.
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>
           </div>
         </div>
-        <div className="space-y-6">
-          <div className="rounded-2xl border border-border bg-card p-6 shadow-xs">
+        <div className="space-y-6 flex flex-col items-center justify-between">
+          <div className="rounded-2xl border border-border bg-card p-6 shadow-xs w-full h-full">
             <h3 className="text-sm font-bold">Top Categories Distribution</h3>
             <ul className="mt-4 space-y-4 text-sm">
-              {[
-                ["Graphics & Design", "31%"],
-                ["Programming & Tech", "24%"],
-                ["Digital Marketing", "17%"],
-                ["AI Services", "12%"],
-              ].map(([k, v]) => (
-                <li key={k}>
+              {categoryPercentages.map((item: any) => (
+                <li key={item.name}>
                   <div className="flex justify-between text-xs mb-1">
-                    <span className="text-muted-foreground font-medium">{k}</span>
-                    <span className="font-bold">{v}</span>
+                    <span className="text-muted-foreground font-medium">{item.name}</span>
+                    <span className="font-bold">{item.percentage}%</span>
                   </div>
                   <div className="h-1.5 rounded-full bg-muted overflow-hidden">
-                    <div className="h-full rounded-full bg-accent" style={{ width: v }} />
+                    <div className="h-full rounded-full bg-accent" style={{ width: `${item.percentage}%` }} />
                   </div>
                 </li>
               ))}
             </ul>
           </div>
-          <div className="rounded-2xl border border-border bg-linear-to-br from-primary to-accent p-6 text-primary-foreground shadow-lg shadow-accent/10">
+          <div className="rounded-2xl border border-border bg-linear-to-br from-primary to-accent p-4 text-primary-foreground shadow-lg shadow-accent/10 w-full h-full">
             <h3 className="text-sm font-semibold uppercase tracking-wider opacity-90">System Notice</h3>
-            <p className="mt-2 text-xl font-extrabold">Skillora Core V1.0</p>
-            <p className="mt-1 text-xs opacity-90 leading-relaxed">
+            <p className="mt-2 text-lg font-extrabold">Skillora Core V1.0</p>
+            <p className="mt-1 text-xs opacity-90">
               Platform status is operating normally. All security measures are active.
             </p>
           </div>
