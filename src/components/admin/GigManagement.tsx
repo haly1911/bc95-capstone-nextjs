@@ -99,7 +99,7 @@ const GigManagement = ({ initialGigs, categories, subcategories, userId }: GigMa
               setSearchTerm(keyword);
               resetPage();
             }}
-            className="w-full xl:w-72"
+            className="w-full xl:w-80"
           />
           <select
             value={sortBy}
@@ -193,7 +193,7 @@ const GigManagement = ({ initialGigs, categories, subcategories, userId }: GigMa
                           <div className="flex items-center justify-center gap-3">
                             <button
                               type="button"
-                              onClick={(e) => handleOpenViewModal(g)}
+                              onClick={() => handleOpenViewModal(g)}
                               className="rounded-lg text-muted-foreground hover:text-accent transition-colors cursor-pointer inline-flex items-center justify-center"
                               title="View Gig Details"
                             >

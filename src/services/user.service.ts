@@ -21,9 +21,31 @@ export const userService = {
       throw error;
     }
   },
+  createUser: async (userData: Partial<ApiUser>): Promise<BaseApiResponse<ApiUser>> => {
+    try {
+      const { data } = await axiosClient.post(`/users/`, userData);
+      return data;
+    } catch (error) {
+      console.error("Failed to create user:", error);
+      throw error;
+    }
+  },
   updateUser: async (userId: number, userData: Partial<ApiUser>): Promise<BaseApiResponse<ApiUser>> => {
     try {
       const { data } = await axiosClient.put(`/users/${userId}`, userData);
+      return data;
+    } catch (error) {
+      console.error("Failed to update user:", error);
+      throw error;
+    }
+  },
+  deleteUser: async (userId: number): Promise<BaseApiResponse<ApiUser>> => {
+    try {
+      const { data } = await axiosClient.delete("/users", {
+        params: {
+          id: userId,
+        },
+      });
       return data;
     } catch (error) {
       console.error("Failed to update user:", error);

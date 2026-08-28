@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaPenToSquare } from "react-icons/fa6";
-import UpdateProfileModal from "./UpdateProfileModal";
+import UserModal from "../common/UserModal";
 import { ApiSkill } from "@/types/skill";
 import UserAvatar from "../common/UserAvatar";
 
@@ -117,7 +117,7 @@ const UserInfo = ({ skills }: UserInfoProps) => {
           ) : null}
         </div>
       </div>
-      <UpdateProfileModal isOpen={isEditOpen} onClose={() => setIsEditOpen(false)} user={user} skills={skills} />
+      <UserModal isOpen={isEditOpen} onClose={() => setIsEditOpen(false)} user={user} skills={skills} />
     </div>
   );
 };

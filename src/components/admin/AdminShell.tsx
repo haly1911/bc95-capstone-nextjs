@@ -1,18 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AdminSidebar from "./AdminSidebar";
 import { FaBars, FaMoon, FaSun } from "react-icons/fa6";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useTheme } from "../layout/ThemeProvider";
+import UserAvatar from "../common/UserAvatar";
 
 export default function AdminShell({ children }: { children: React.ReactNode }) {
   const { theme, toggle } = useTheme();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const { signout, user } = useAuthStore();
+  const { signout, user, initializeAuth } = useAuthStore();
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+    initializeAuth();
+  }, [initializeAuth]);
 
   const displayName = user?.name || "Administrator";
-  const firstLetter = displayName.charAt(0).toUpperCase();
 
   return (
     <div className="min-h-screen flex bg-background text-foreground relative overflow-x-hidden">
@@ -37,9 +43,7 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
               <p className="text-foreground text-sm font-bold tracking-wide">{displayName}</p>
               <p className="text-accent text-xs font-medium opacity-90">Administrator</p>
             </div>
-            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-accent shadow-sm flex items-center justify-center text-accent-foreground font-black text-xs sm:text-sm shrink-0 border border-border">
-              {firstLetter}
-            </div>
+            <UserAvatar src={user?.avatar} name={user?.name} size={36} />
             <button
               onClick={toggle}
               aria-label="Toggle theme"
