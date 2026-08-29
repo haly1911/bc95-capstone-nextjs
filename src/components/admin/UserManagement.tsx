@@ -89,7 +89,7 @@ const UserManagement = ({ users, skills }: UserManagementProps) => {
           <h2 className="text-2xl font-bold tracking-tight">User Management</h2>
           <p className="text-sm text-muted-foreground mt-1">Manage platform accounts, user roles, and permissions.</p>
         </div>
-        <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+        <div className="flex flex-col lg:flex-row lg:items-center gap-4">
           <SearchInput
             placeholder="Search users by name or email..."
             onSearch={(keyword) => {

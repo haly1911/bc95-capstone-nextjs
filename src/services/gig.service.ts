@@ -4,7 +4,6 @@ import { BaseApiResponse } from "@/types/common";
 import { ApiGig, ApiGigWithUser } from "@/types/gig";
 import { ApiUser } from "@/types/user";
 import { attachUserToGig } from "@/utils/attachUserToGig";
-import { parseDateToTimestamp } from "@/utils/date";
 
 export const gigService = {
   getGigList: async (): Promise<BaseApiResponse<ApiGigWithUser[]>> => {

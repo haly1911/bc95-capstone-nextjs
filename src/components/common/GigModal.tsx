@@ -3,7 +3,7 @@
 import { GigFormData, gigSchema } from "@/lib/schemas";
 import { gigService } from "@/services/gig.service";
 import { ApiCategory, ApiCategoryDetailGroup } from "@/types/category";
-import { ApiGig } from "@/types/gig";
+import { ApiGig, ApiGigWithUser } from "@/types/gig";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -14,7 +14,7 @@ import Image from "next/image";
 interface GigModalProps {
   isOpen: boolean;
   onClose: () => void;
-  gig?: ApiGig | null;
+  gig?: ApiGigWithUser | null;
   mode?: "view" | "edit" | "create";
   categories: ApiCategory[];
   subcategories: ApiCategoryDetailGroup[];
@@ -171,6 +171,15 @@ const GigModal = ({
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="mt-4 space-y-4">
+          {isViewMode && initialData?.user && (
+            <div>
+              <label className="text-xs font-medium uppercase text-muted-foreground">Seller</label>
+              <div className="mt-1 w-full rounded-lg border border-border bg-muted px-3 py-2 text-sm text-foreground font-medium pointer-events-none">
+                @{initialData.user.name}{" "}
+                <span className="text-xs text-muted-foreground font-normal">(ID: {initialData.nguoiTao})</span>
+              </div>
+            </div>
+          )}
           <div>
             <label className="text-xs font-medium uppercase text-muted-foreground">Gig title</label>
             <input
@@ -178,7 +187,7 @@ const GigModal = ({
               disabled={isViewMode}
               {...register("tenCongViec")}
               placeholder="e.g. I will build a professional website using React"
-              className={`mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-accent ${isViewMode ? "pointer-events-none" : ""}`}
+              className={`mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-accent ${isViewMode ? "pointer-events-none bg-muted" : ""}`}
             />
             <FormError message={errors.tenCongViec?.message} />
           </div>
@@ -190,7 +199,7 @@ const GigModal = ({
                 disabled={isViewMode}
                 onChange={(e) => setSelectedCategoryId(Number(e.target.value))}
                 value={selectedCategoryId || ""}
-                className={`mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-accent cursor-pointer ${isViewMode ? "pointer-events-none" : ""}`}
+                className={`mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-accent cursor-pointer ${isViewMode ? "pointer-events-none bg-muted" : ""}`}
               >
                 <option value="" disabled>
                   Select category
@@ -207,7 +216,7 @@ const GigModal = ({
               <select
                 {...register("maChiTietLoaiCongViec", { valueAsNumber: true })}
                 disabled={!selectedCategoryId || isViewMode}
-                className={`mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-accent ${!selectedCategoryId ? "cursor-not-allowed opacity-50" : "cursor-pointer"} ${isViewMode ? "pointer-events-none" : ""}`}
+                className={`mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-accent ${!selectedCategoryId ? "cursor-not-allowed opacity-50" : "cursor-pointer"} ${isViewMode ? "pointer-events-none bg-muted" : ""}`}
               >
                 <option value={0} disabled>
                   {selectedCategoryId ? "Select subcategory" : "Choose category first"}
@@ -230,7 +239,7 @@ const GigModal = ({
               disabled={isViewMode}
               placeholder="50"
               {...register("giaTien", { valueAsNumber: true })}
-              className={`mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-accent ${isViewMode ? "pointer-events-none" : ""}`}
+              className={`mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-accent ${isViewMode ? "pointer-events-none bg-muted" : ""}`}
             />
             <FormError message={errors.giaTien?.message} />
           </div>
@@ -241,7 +250,7 @@ const GigModal = ({
               disabled={isViewMode}
               {...register("moTaNgan")}
               placeholder="Briefly describe what you will do..."
-              className={`mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-accent ${isViewMode ? "pointer-events-none" : ""}`}
+              className={`mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-accent ${isViewMode ? "pointer-events-none bg-muted" : ""}`}
             />
             <FormError message={errors.moTaNgan?.message} />
           </div>
@@ -252,7 +261,7 @@ const GigModal = ({
               disabled={isViewMode}
               {...register("moTa")}
               placeholder="Detailed description of your service..."
-              className={`mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-accent ${isViewMode ? "pointer-events-none" : ""}`}
+              className={`mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-accent ${isViewMode ? "pointer-events-none bg-muted" : ""}`}
             />
             <FormError message={errors.moTa?.message} />
           </div>
