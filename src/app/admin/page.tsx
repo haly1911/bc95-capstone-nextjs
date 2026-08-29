@@ -2,7 +2,7 @@ import { categoryService } from "@/services/category.service";
 import { gigService } from "@/services/gig.service";
 import { orderService } from "@/services/order.service";
 import { userService } from "@/services/user.service";
-import { ApiCategory, ApiCategoryDetailGroup, ApiCategorySubDetailItem } from "@/types/category";
+import { ApiCategory, ApiSubcategory, ApiSubcategoryItem } from "@/types/category";
 import { ApiGig } from "@/types/gig";
 import Image from "next/image";
 import Link from "next/link";
@@ -24,9 +24,9 @@ const AdminOverviewPage = async () => {
   const subcategories = categoriesData.subcategories;
 
   const categoryStats = totalCategories.map((cat: ApiCategory) => {
-    const matchingGroups = subcategories.filter((group: ApiCategoryDetailGroup) => group.maLoaiCongviec === cat.id);
+    const matchingGroups = subcategories.filter((group: ApiSubcategory) => group.maLoaiCongviec === cat.id);
     const subDetailIds = matchingGroups.flatMap(
-      (group: ApiCategoryDetailGroup) => group.dsChiTietLoai?.map((sub: ApiCategorySubDetailItem) => sub.id) || [],
+      (group: ApiSubcategory) => group.dsChiTietLoai?.map((sub: ApiSubcategoryItem) => sub.id) || [],
     );
     const count = totalGigs.filter(
       (gig: ApiGig) => gig.maChiTietLoaiCongViec === cat.id || subDetailIds.includes(gig.maChiTietLoaiCongViec),

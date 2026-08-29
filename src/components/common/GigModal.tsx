@@ -2,7 +2,7 @@
 
 import { GigFormData, gigSchema } from "@/lib/schemas";
 import { gigService } from "@/services/gig.service";
-import { ApiCategory, ApiCategoryDetailGroup } from "@/types/category";
+import { ApiCategory, ApiSubcategory } from "@/types/category";
 import { ApiGig, ApiGigWithUser } from "@/types/gig";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
@@ -17,7 +17,7 @@ interface GigModalProps {
   gig?: ApiGigWithUser | null;
   mode?: "view" | "edit" | "create";
   categories: ApiCategory[];
-  subcategories: ApiCategoryDetailGroup[];
+  subcategories: ApiSubcategory[];
   userId: number;
   onSuccess: () => void;
 }

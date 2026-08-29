@@ -58,8 +58,20 @@ export const gigSchema = z.object({
   hinhAnh: z.string().optional().or(z.literal("")),
 });
 
+export const categorySchema = z.object({
+  tenLoaiCongViec: z.string().min(1, "Category name is required"),
+  hinhAnh: z.string().optional().or(z.literal("")),
+  dsChiTietLoai: z.array(z.string()).optional(),
+});
+
+export const subcategorySchema = z.object({
+  tenNhom: z.string().min(1, "Group name is required"),
+});
+
 export type SignInFormData = z.infer<typeof signInSchema>;
 export type SignUpFormData = z.infer<typeof signUpSchema>;
 export type UserEditRoleFormData = z.infer<typeof userEditRoleSchema>;
 export type UserFormData = z.infer<typeof userSchema>;
 export type GigFormData = z.infer<typeof gigSchema>;
+export type CategoryFormData = z.infer<typeof categorySchema>;
+export type SubcategoryFormData = z.infer<typeof subcategorySchema>;

@@ -1,7 +1,7 @@
-import { ApiCategory, ApiCategoryDetailGroup } from "@/types/category";
+import { ApiCategory, ApiSubcategory } from "@/types/category";
 
 export const getCategoryBySubcategory = {
-  getCategoryNameBySubId: (subId: number, subcategories: ApiCategoryDetailGroup[], categories: ApiCategory[]) => {
+  getCategoryNameBySubId: (subId: number, subcategories: ApiSubcategory[], categories: ApiCategory[]) => {
     const foundGroup = subcategories.find((group) => group.dsChiTietLoai?.some((sub) => sub.id === subId));
     if (!foundGroup) return "Uncategorized";
 
@@ -9,7 +9,7 @@ export const getCategoryBySubcategory = {
     return foundCat ? foundCat.tenLoaiCongViec : "Uncategorized";
   },
 
-  getCategoryIdBySubId: (subId: number, subcategories: ApiCategoryDetailGroup[]) => {
+  getCategoryIdBySubId: (subId: number, subcategories: ApiSubcategory[]) => {
     const foundGroup = subcategories.find((group) => group.dsChiTietLoai?.some((sub) => sub.id === subId));
     return foundGroup ? foundGroup.maLoaiCongviec : null;
   },

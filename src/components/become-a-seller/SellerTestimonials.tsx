@@ -25,7 +25,7 @@ const SellerTestimonials = () => {
         <h2 className="text-3xl font-bold tracking-tight">Success stories from our community</h2>
         <p className="text-muted-foreground">See how everyday creators built profitable freelance careers.</p>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
         {testimonials.map((t, index) => (
           <div
             key={index}

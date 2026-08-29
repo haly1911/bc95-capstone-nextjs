@@ -24,7 +24,7 @@ const HowItWorks = () => {
           It's easy to get started and land your very first client in just 3 simple steps.
         </p>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
         {steps.map((item, index) => (
           <div
             key={index}

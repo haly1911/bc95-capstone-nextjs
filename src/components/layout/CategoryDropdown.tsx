@@ -1,14 +1,14 @@
 "use client";
 
 import { useCategoryStore } from "@/store/useCategoryStore";
-import { ApiCategory, ApiCategoryDetailGroup } from "@/types/category";
+import { ApiCategory, ApiSubcategory } from "@/types/category";
 import { createSlug } from "@/utils/slugify";
 import Link from "next/link";
 import { useState } from "react";
 
 interface CategoryDropdownProps {
   categories: ApiCategory[];
-  subcategories: ApiCategoryDetailGroup[];
+  subcategories: ApiSubcategory[];
 }
 
 const CategoryDropdown = ({ categories, subcategories }: CategoryDropdownProps) => {

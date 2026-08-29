@@ -9,11 +9,11 @@ import { useAuthStore } from "@/store/useAuthStore";
 import SearchInput from "../common/SearchInput";
 import UserAvatar from "../common/UserAvatar";
 import CategoryDropdown from "./CategoryDropdown";
-import { ApiCategory, ApiCategoryDetailGroup } from "@/types/category";
+import { ApiCategory, ApiSubcategory } from "@/types/category";
 
 interface HeaderProps {
   categories: ApiCategory[];
-  subcategories: ApiCategoryDetailGroup[];
+  subcategories: ApiSubcategory[];
 }
 
 const Header = ({ categories, subcategories }: HeaderProps) => {

@@ -1,18 +1,18 @@
-export interface ApiCategorySubDetailItem {
-  id: number;
+export interface ApiSubcategoryItem {
+  id?: number;
   tenChiTiet: string;
 }
 
-export interface ApiCategoryDetailGroup {
+export interface ApiSubcategory {
   id: number;
   tenNhom: string;
   hinhAnh: string;
   maLoaiCongviec: number;
-  dsChiTietLoai: ApiCategorySubDetailItem[];
+  dsChiTietLoai: ApiSubcategoryItem[];
 }
 
 export interface ApiCategory {
   id: number;
   tenLoaiCongViec: string;
-  dsNhomChiTietLoai?: ApiCategoryDetailGroup[];
+  dsNhomChiTietLoai?: ApiSubcategory[];
 }

@@ -28,7 +28,7 @@ const WhySell = () => {
             Everything you need to grow your freelance career smoothly and securely.
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
           {benefits.map((b, index) => (
             <div key={index} className="flex gap-4 p-6 rounded-xl border border-border bg-background">
               <div className="h-12 w-12 rounded-lg bg-accent/10 grid place-items-center shrink-0">{b.icon}</div>

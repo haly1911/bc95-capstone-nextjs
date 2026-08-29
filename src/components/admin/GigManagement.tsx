@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { gigService } from "@/services/gig.service";
 import { ApiGig, ApiGigWithUser } from "@/types/gig";
-import { ApiCategory, ApiCategoryDetailGroup } from "@/types/category";
+import { ApiCategory, ApiSubcategory } from "@/types/category";
 import GigModal from "@/components/common/GigModal";
 import ConfirmModal from "@/components/common/ConfirmModal";
 import SearchInput from "@/components/common/SearchInput";
@@ -19,7 +19,7 @@ import { getCategoryBySubcategory } from "@/utils/getCategoryBySubcategory";
 interface GigManagementProps {
   initialGigs: ApiGigWithUser[];
   categories: ApiCategory[];
-  subcategories: ApiCategoryDetailGroup[];
+  subcategories: ApiSubcategory[];
   userId: number;
 }
 
