@@ -5,6 +5,7 @@ export interface ApiComment {
   saoBinhLuan: number;
   tenNguoiBinhLuan: string;
   avatar: string;
+  maNguoiBinhLuan: number;
 }
 
 export interface CommentPayload {

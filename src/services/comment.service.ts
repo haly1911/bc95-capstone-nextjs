@@ -6,13 +6,34 @@ import { parseDateToTimestamp } from "@/utils/date";
 export const commentService = {
   getCommentsByGig: async (gigId: number): Promise<BaseApiResponse<ApiComment[]>> => {
     try {
-      const { data } = await axiosClient.get(`/binh-luan/lay-binh-luan-theo-cong-viec/${gigId}`);
-      if (Array.isArray(data?.content)) {
-        data.content.sort(
+      const [gigCommentsRes, allCommentsRes] = await Promise.all([
+        axiosClient.get(`/binh-luan/lay-binh-luan-theo-cong-viec/${gigId}`),
+        axiosClient.get(`/binh-luan`),
+      ]);
+
+      const gigComments = gigCommentsRes.data?.content || [];
+      const allComments = allCommentsRes.data?.content || [];
+
+      const commentUserMap = new Map<number, number>();
+      if (Array.isArray(allComments)) {
+        allComments.forEach((item: any) => {
+          commentUserMap.set(item.id, item.maNguoiBinhLuan);
+        });
+      }
+      const mergedComments = gigComments.map((c: any) => ({
+        ...c,
+        maNguoiBinhLuan: commentUserMap.get(c.id) || 0,
+      }));
+
+      if (Array.isArray(mergedComments)) {
+        mergedComments.sort(
           (a: ApiComment, b: ApiComment) => parseDateToTimestamp(b.ngayBinhLuan) - parseDateToTimestamp(a.ngayBinhLuan),
         );
       }
-      return data;
+      return {
+        ...gigCommentsRes.data,
+        content: mergedComments,
+      };
     } catch (error) {
       console.error("Failed to fetch comments for gig:", gigId, error);
       return { statusCode: 500, message: "Error", content: [] };
@@ -24,6 +45,15 @@ export const commentService = {
       return data;
     } catch (error) {
       console.error("Failed to create comment:", error);
+      throw error;
+    }
+  },
+  updateComment: async (commentId: number, payload: Partial<CommentPayload>): Promise<BaseApiResponse<ApiComment>> => {
+    try {
+      const { data } = await axiosClient.put(`/binh-luan/${commentId}`, payload);
+      return data;
+    } catch (error) {
+      console.error("Failed to update comment:", error);
       throw error;
     }
   },
