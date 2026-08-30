@@ -6,7 +6,7 @@ import { Navigation, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import { useState } from "react";
-import VideoPopupModal from "./VideoPopupModal";
+import VideoPopupModal from "../modals/VideoPopupModal";
 import Image from "next/image";
 
 const testimonials = [

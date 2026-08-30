@@ -12,8 +12,8 @@ import { toast } from "react-toastify";
 import SearchInput from "../common/SearchInput";
 import { FaEye, FaTrash } from "react-icons/fa6";
 import Pagination from "../common/Pagination";
-import ConfirmModal from "../common/ConfirmModal";
-import OrderModal from "../common/OrderModal";
+import ConfirmModal from "../modals/ConfirmModal";
+import OrderModal from "../modals/OrderModal";
 
 interface OrderManagementProps {
   orders: ApiOrderWithDetails[];

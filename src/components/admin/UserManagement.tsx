@@ -3,8 +3,8 @@
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import UserModal from "@/components/common/UserModal";
-import ConfirmModal from "@/components/common/ConfirmModal";
+import UserModal from "@/components/modals/UserModal";
+import ConfirmModal from "@/components/modals/ConfirmModal";
 import SearchInput from "@/components/common/SearchInput";
 import { FaPencil, FaTrash } from "react-icons/fa6";
 import { usePagination } from "@/hooks/usePagination";

@@ -3,12 +3,12 @@
 import { ApiGig } from "@/types/gig";
 import { useState } from "react";
 import { FaPen, FaStar, FaTrash } from "react-icons/fa6";
-import GigModal from "../common/GigModal";
+import GigModal from "../modals/GigModal";
 import { ApiCategory, ApiSubcategory } from "@/types/category";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { gigService } from "@/services/gig.service";
-import ConfirmModal from "../common/ConfirmModal";
+import ConfirmModal from "../modals/ConfirmModal";
 
 interface MyGigsProps {
   gigs: ApiGig[];

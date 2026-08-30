@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import FormError from "./FormError";
+import FormError from "../common/FormError";
 import Image from "next/image";
 
 interface GigModalProps {

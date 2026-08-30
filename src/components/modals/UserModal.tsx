@@ -12,8 +12,8 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaCamera, FaEye, FaEyeSlash } from "react-icons/fa6";
 import { toast } from "react-toastify";
-import FormError from "./FormError";
-import UserAvatar from "./UserAvatar";
+import FormError from "../common/FormError";
+import UserAvatar from "../common/UserAvatar";
 
 interface UpdateProfileModalProps {
   isOpen: boolean;

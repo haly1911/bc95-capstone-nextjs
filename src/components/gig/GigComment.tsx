@@ -11,7 +11,7 @@ import { toast } from "react-toastify";
 import { commentService } from "@/services/comment.service";
 import UserAvatar from "../common/UserAvatar";
 import { FaPencil, FaTrash } from "react-icons/fa6";
-import ConfirmModal from "../common/ConfirmModal";
+import ConfirmModal from "../modals/ConfirmModal";
 
 interface GigCommentProps {
   gigComments: ApiComment[];

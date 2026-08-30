@@ -7,10 +7,10 @@ import Image from "next/image";
 import { FaChevronDown, FaChevronRight, FaPlus, FaPencil, FaTrash } from "react-icons/fa6";
 import { ApiCategory, ApiSubcategory } from "@/types/category";
 import SearchInput from "@/components/common/SearchInput";
-import ConfirmModal from "@/components/common/ConfirmModal";
+import ConfirmModal from "@/components/modals/ConfirmModal";
 import { categoryService } from "@/services/category.service";
-import CategoryModal from "../common/CategoryModal";
-import SubcategoryModal from "../common/SubcategoryModal";
+import CategoryModal from "../modals/CategoryModal";
+import SubcategoryModal from "../modals/SubcategoryModal";
 
 interface CategoryManagementProps {
   categories: ApiCategory[];

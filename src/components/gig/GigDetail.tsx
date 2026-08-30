@@ -8,7 +8,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import ConfirmModal from "../common/ConfirmModal";
+import ConfirmModal from "../modals/ConfirmModal";
 import UserAvatar from "../common/UserAvatar";
 
 interface GigDetailProps {

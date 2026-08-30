@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import Image from "next/image";
 import { categoryService } from "@/services/category.service";
 import { ApiSubcategoryItem, ApiSubcategory } from "@/types/category";
-import FormError from "./FormError";
+import FormError from "../common/FormError";
 import { FaPlus, FaTrash } from "react-icons/fa6";
 import { SubcategoryFormData, subcategorySchema } from "@/lib/schemas";
 

@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaPenToSquare } from "react-icons/fa6";
-import UserModal from "../common/UserModal";
+import UserModal from "../modals/UserModal";
 import { ApiSkill } from "@/types/skill";
 import UserAvatar from "../common/UserAvatar";
 
