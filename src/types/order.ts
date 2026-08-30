@@ -1,4 +1,4 @@
-import { ApiGig } from "./gig";
+import { ApiGig, ApiGigWithUser } from "./gig";
 import { ApiUser } from "./user";
 
 export interface ApiOrder {
@@ -10,7 +10,7 @@ export interface ApiOrder {
 }
 
 export interface ApiOrderWithDetails extends ApiOrder {
-  congViec?: ApiGig;
+  congViec?: ApiGigWithUser;
   buyer?: ApiUser;
 }
 

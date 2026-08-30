@@ -1,6 +1,7 @@
 "use client";
 
 import { ApiOrderHistory } from "@/types/order";
+import { formatDate } from "@/utils/date";
 
 interface OrderHistoryProps {
   orders: ApiOrderHistory[];
@@ -61,7 +62,7 @@ const OrderHistory = ({ orders }: OrderHistoryProps) => {
                       <span className="font-mono text-xs text-muted-foreground">#{o.id}</span>
                     </td>
                     <td className="px-6 py-4 font-medium text-foreground truncate">{o.congViec?.tenCongViec}</td>
-                    <td className="px-6 py-4 text-muted-foreground whitespace-nowrap">{o.ngayThue}</td>
+                    <td className="px-6 py-4 text-muted-foreground whitespace-nowrap">{formatDate(o.ngayThue)}</td>
                     <td className="px-6 py-4">
                       <span
                         className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold ${

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FaLayerGroup, FaPhotoFilm, FaUsers } from "react-icons/fa6";
+import { FaLayerGroup, FaMoneyCheck, FaPhotoFilm, FaUsers } from "react-icons/fa6";
 
 interface AdminSidebarProps {
   isSidebarOpen: boolean;
@@ -24,6 +24,11 @@ const adminNavItems = [
     name: "Gigs",
     href: "/admin/gigs",
     icon: <FaPhotoFilm className="text-accent" />,
+  },
+  {
+    name: "Orders",
+    href: "/admin/orders",
+    icon: <FaMoneyCheck className="text-accent" />,
   },
 ];
 

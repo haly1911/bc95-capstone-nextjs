@@ -13,7 +13,7 @@ const AdminOverviewPage = async () => {
     gigService.getTopGigs(),
     userService.getUserList(),
     categoryService.getCategoryWithDetailGroups(),
-    orderService.getAllOrders(),
+    orderService.getAllOrdersWithDetails(),
   ]);
 
   const totalGigs = gigRes.content;
@@ -100,9 +100,10 @@ const AdminOverviewPage = async () => {
               <table className="w-full text-left text-sm">
                 <thead>
                   <tr className="border-b border-border text-muted-foreground text-xs uppercase tracking-wider">
-                    <th className="pb-3 font-semibold">Gig Title</th>
-                    <th className="pb-3 font-semibold">Price</th>
-                    <th className="pb-3 font-semibold">Rating</th>
+                    <th className="pb-3 font-semibold w-[64%]">Gig Title</th>
+                    <th className="pb-3 font-semibold w-[12%]">Price</th>
+                    <th className="pb-3 font-semibold w-[12%]">Rating</th>
+                    <th className="pb-3 font-semibold w-[12%]">Reviews</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border/50">
@@ -126,11 +127,11 @@ const AdminOverviewPage = async () => {
                       </td>
                       <td className="py-3 font-bold text-accent">${gig.giaTien}</td>
                       <td className="py-3">
-                        <span className="text-xs px-2 py-1 rounded-full font-semibold bg-accent/10 text-accent flex items-center w-fit gap-1">
-                          ⭐ {gig.saoCongViec}{" "}
-                          <span className="text-muted-foreground font-normal">({gig.danhGia})</span>
+                        <span className="text-xs px-2 py-1 rounded-full font-semibold bg-accent/10 text-accent flex items-center w-fit">
+                          ⭐ {gig.saoCongViec}
                         </span>
                       </td>
+                      <td className="py-3 text-xs text-muted-foreground font-normal">{gig.danhGia}</td>
                     </tr>
                   ))}
                   {topGigs.length === 0 && (
