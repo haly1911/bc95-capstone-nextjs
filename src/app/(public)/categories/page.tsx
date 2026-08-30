@@ -8,7 +8,7 @@ const CategoriesPage = async () => {
   const categories = response.content || [];
 
   return (
-    <main className="wrapper pt-10">
+    <main className="wrapper py-10">
       <div className="mb-8">
         <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl">All Categories</h1>
         <p className="mt-2 text-sm text-muted-foreground">Browse all available service categories.</p>
