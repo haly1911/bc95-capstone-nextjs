@@ -10,6 +10,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import ConfirmModal from "../modals/ConfirmModal";
 import UserAvatar from "../common/UserAvatar";
+import ChatModal from "../modals/ChatModal";
 
 interface GigDetailProps {
   gig: ApiGigWithUser;
@@ -20,11 +21,16 @@ const GigDetail = ({ gig }: GigDetailProps) => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   const handleOrder = () => {
     if (!isAuthenticated || !user) {
       toast.warning("Please sign in to continue ordering");
       router.push("/auth");
+      return;
+    }
+    if (user.id === gig.nguoiTao) {
+      toast.error("You cannot order your own gig!");
       return;
     }
     setIsOrderModalOpen(true);
@@ -47,6 +53,19 @@ const GigDetail = ({ gig }: GigDetailProps) => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleContactSeller = () => {
+    if (!isAuthenticated || !user) {
+      toast.warning("Please sign in to contact the seller");
+      router.push("/auth");
+      return;
+    }
+    if (user.id === gig.nguoiTao) {
+      toast.error("You cannot chat with yourself!");
+      return;
+    }
+    setIsChatOpen(true);
   };
   return (
     <main>
@@ -88,7 +107,11 @@ const GigDetail = ({ gig }: GigDetailProps) => {
                 >
                   {loading ? "Processing..." : `Continue ($${gig.giaTien})`}
                 </button>
-                <button className="mt-2 w-full rounded-xl border border-border px-5 py-3 text-sm font-semibold hover:border-accent cursor-pointer">
+                <button
+                  type="button"
+                  onClick={handleContactSeller}
+                  className="mt-2 w-full rounded-xl border border-border px-5 py-3 text-sm font-semibold hover:border-accent cursor-pointer"
+                >
                   Contact seller
                 </button>
               </div>
@@ -104,6 +127,13 @@ const GigDetail = ({ gig }: GigDetailProps) => {
         type="primary"
         onConfirm={executeOrder}
         onClose={() => setIsOrderModalOpen(false)}
+      />
+      <ChatModal
+        isOpen={isChatOpen}
+        onClose={() => setIsChatOpen(false)}
+        sellerName={gig.user?.name}
+        sellerAvatar={gig.user?.avatar}
+        gigTitle={gig.tenCongViec}
       />
     </main>
   );
