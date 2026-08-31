@@ -1,8 +1,6 @@
 import OrderManagement from "@/components/admin/OrderManagement";
 import { categoryService } from "@/services/category.service";
 import { orderService } from "@/services/order.service";
-import { attachUserToGig } from "@/utils/attachUserToGig";
-import { cookies } from "next/headers";
 
 const AdminOrdersPage = async () => {
   const [orderRes, categoryRes] = await Promise.all([

@@ -37,9 +37,9 @@ const UserInfo = ({ skills }: UserInfoProps) => {
   return (
     <div className="w-full wrapper pt-10">
       <div className="bg-card border border-border backdrop-blur-lg rounded-2xl p-10 mb-8">
-        <div className="flex items-center gap-6">
-          <UserAvatar src={user.avatar} name={user.name} size={72} className="text-3xl" />
-          <div className="flex-1 min-w-0">
+        <div className="flex flex-col sm:flex-row sm: items-center justify-between gap-6">
+          <div className="flex items-center gap-6">
+            <UserAvatar src={user.avatar} name={user.name} size={72} className="text-3xl" />
             <div className="flex flex-wrap items-center gap-3 mb-1">
               <h1 className="text-2xl font-bold tracking-wide">{user.name.toUpperCase()}</h1>
               <button
@@ -51,19 +51,17 @@ const UserInfo = ({ skills }: UserInfoProps) => {
               </button>
             </div>
           </div>
-          <div className="flex flex-wrap gap-2">
-            {user.role === "ADMIN" && (
-              <Link
-                href="/admin"
-                className="rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:opacity-90"
-              >
-                Admin dashboard
-              </Link>
-            )}
-          </div>
+          {user.role === "ADMIN" && (
+            <Link
+              href="/admin"
+              className="w-full sm:w-fit text-center rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:opacity-90"
+            >
+              Admin dashboard
+            </Link>
+          )}
         </div>
         <div>
-          <div className="w-full grid grid-cols-2 lg:grid-cols-4 gap-4 mt-6 pt-6 border-t border-border">
+          <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6 pt-6 border-t border-border">
             <div>
               <p className="text-muted-foreground text-xs uppercase tracking-wider mb-1">Email</p>
               <p className="text-sm font-medium truncate">{user.email}</p>
@@ -82,7 +80,7 @@ const UserInfo = ({ skills }: UserInfoProps) => {
             </div>
           </div>
           {user.skill?.length || user.certification?.length || user.bookingJob?.length ? (
-            <div className=" grid grid-cols-2 mt-6 pt-6 border-t border-border">
+            <div className=" grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6 pt-6 border-t border-border">
               {user.skill && user.skill.length > 0 && (
                 <div>
                   <p className="text-muted-foreground text-xs uppercase tracking-wider mb-2">Skills</p>

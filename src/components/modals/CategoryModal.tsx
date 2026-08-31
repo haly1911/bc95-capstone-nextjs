@@ -73,18 +73,18 @@ const CategoryModal = ({ isOpen, onClose, category, mode = "create", onSuccess }
   return (
     <div
       onClick={() => onClose()}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4 overflow-y-auto"
+      className="form-modal-bg"
     >
       <div
         onClick={(e) => e.stopPropagation()}
         className="w-full max-w-md rounded-2xl bg-card border border-border p-6 shadow-xl my-8 max-h-[90vh] overflow-y-auto"
       >
-        <div className="flex items-center justify-between border-b border-border pb-4">
-          <h3 className="text-lg font-bold text-foreground">{isEditMode ? "Edit Category" : "Create New Category"}</h3>
+        <div className="form-modal-header">
+          <h3 className="form-modal-title">{isEditMode ? "Edit Category" : "Create New Category"}</h3>
           <button
             type="button"
             onClick={onClose}
-            className="text-muted-foreground hover:text-foreground cursor-pointer"
+            className="form-modal-cancel-icon"
           >
             ✕
           </button>
@@ -92,12 +92,12 @@ const CategoryModal = ({ isOpen, onClose, category, mode = "create", onSuccess }
 
         <form onSubmit={handleSubmit(onSubmit)} className="mt-4 space-y-4">
           <div>
-            <label className="text-xs font-medium uppercase text-muted-foreground">Category Name</label>
+            <label className="form-modal-label">Category Name</label>
             <input
               type="text"
               {...register("tenLoaiCongViec")}
               placeholder="e.g. Graphics & Design"
-              className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-accent"
+              className="form-modal-input"
             />
             <FormError message={errors.tenLoaiCongViec?.message} />
           </div>
@@ -106,14 +106,14 @@ const CategoryModal = ({ isOpen, onClose, category, mode = "create", onSuccess }
             <button
               type="button"
               onClick={onClose}
-              className="rounded-lg border border-border px-4 py-2 text-sm font-semibold hover:bg-muted cursor-pointer"
+              className="form-modal-cancel-btn"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground hover:opacity-90 disabled:opacity-50 cursor-pointer"
+              className="form-modal-save-btn"
             >
               {loading ? "Saving..." : isEditMode ? "Update Category" : "Create Category"}
             </button>

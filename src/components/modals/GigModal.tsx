@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import FormError from "../common/FormError";
 import Image from "next/image";
+import { MAX_FILE_SIZE } from "@/utils/constants";
 
 interface GigModalProps {
   isOpen: boolean;
@@ -21,8 +22,6 @@ interface GigModalProps {
   userId: number;
   onSuccess: () => void;
 }
-
-const MAX_FILE_SIZE = 1 * 1024 * 1024;
 
 const GigModal = ({
   isOpen,
@@ -151,20 +150,20 @@ const GigModal = ({
   return (
     <div
       onClick={() => onClose()}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4 overflow-y-auto"
+      className="form-modal-bg"
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-xl rounded-2xl bg-card border border-border p-6 shadow-xl my-8 max-h-[90vh] overflow-y-auto"
+        className="form-modal"
       >
-        <div className="flex items-center justify-between border-b border-border pb-4">
-          <h3 className="text-lg font-bold text-foreground">
+        <div className="form-modal-header">
+          <h3 className="form-modal-title">
             {isViewMode ? "Gig Details" : isEditMode ? "Edit Gig" : "Create New Gig"}
           </h3>
           <button
             type="button"
             onClick={onClose}
-            className="text-muted-foreground hover:text-foreground cursor-pointer"
+            className="form-modal-cancel-icon"
           >
             ✕
           </button>
@@ -173,7 +172,7 @@ const GigModal = ({
         <form onSubmit={handleSubmit(onSubmit)} className="mt-4 space-y-4">
           {isViewMode && initialData?.user && (
             <div>
-              <label className="text-xs font-medium uppercase text-muted-foreground">Seller</label>
+              <label className="form-modal-label">Seller</label>
               <div className="mt-1 w-full rounded-lg border border-border bg-muted px-3 py-2 text-sm text-foreground font-medium pointer-events-none">
                 @{initialData.user.name}{" "}
                 <span className="text-xs text-muted-foreground font-normal">(ID: {initialData.nguoiTao})</span>
@@ -181,25 +180,25 @@ const GigModal = ({
             </div>
           )}
           <div>
-            <label className="text-xs font-medium uppercase text-muted-foreground">Gig title</label>
+            <label className="form-modal-label">Gig title</label>
             <input
               type="text"
               disabled={isViewMode}
               {...register("tenCongViec")}
               placeholder="e.g. I will build a professional website using React"
-              className={`mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-accent ${isViewMode ? "pointer-events-none bg-muted" : ""}`}
+              className={`form-modal-input ${isViewMode ? "pointer-events-none bg-muted" : ""}`}
             />
             <FormError message={errors.tenCongViec?.message} />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="text-xs font-medium uppercase text-muted-foreground">Category</label>
+              <label className="form-modal-label">Category</label>
               <select
                 disabled={isViewMode}
                 onChange={(e) => setSelectedCategoryId(Number(e.target.value))}
                 value={selectedCategoryId || ""}
-                className={`mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-accent cursor-pointer ${isViewMode ? "pointer-events-none bg-muted" : ""}`}
+                className={`form-modal-input cursor-pointer ${isViewMode ? "pointer-events-none bg-muted" : ""}`}
               >
                 <option value="" disabled>
                   Select category
@@ -212,11 +211,11 @@ const GigModal = ({
               </select>
             </div>
             <div>
-              <label className="text-xs font-medium uppercase text-muted-foreground">Subcategory</label>
+              <label className="form-modal-label">Subcategory</label>
               <select
                 {...register("maChiTietLoaiCongViec", { valueAsNumber: true })}
                 disabled={!selectedCategoryId || isViewMode}
-                className={`mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-accent ${!selectedCategoryId ? "cursor-not-allowed opacity-50" : "cursor-pointer"} ${isViewMode ? "pointer-events-none bg-muted" : ""}`}
+                className={`form-modal-input ${!selectedCategoryId ? "cursor-not-allowed opacity-50" : "cursor-pointer"} ${isViewMode ? "pointer-events-none bg-muted" : ""}`}
               >
                 <option value={0} disabled>
                   {selectedCategoryId ? "Select subcategory" : "Choose category first"}
@@ -233,40 +232,40 @@ const GigModal = ({
             </div>
           </div>
           <div>
-            <label className="text-xs font-medium uppercase text-muted-foreground">Price ($)</label>
+            <label className="form-modal-label">Price ($)</label>
             <input
               type="number"
               disabled={isViewMode}
               placeholder="50"
               {...register("giaTien", { valueAsNumber: true })}
-              className={`mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-accent ${isViewMode ? "pointer-events-none bg-muted" : ""}`}
+              className={`form-modal-input ${isViewMode ? "pointer-events-none bg-muted" : ""}`}
             />
             <FormError message={errors.giaTien?.message} />
           </div>
           <div>
-            <label className="text-xs font-medium uppercase text-muted-foreground">Short Description</label>
+            <label className="form-modal-label">Short Description</label>
             <input
               type="text"
               disabled={isViewMode}
               {...register("moTaNgan")}
               placeholder="Briefly describe what you will do..."
-              className={`mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-accent ${isViewMode ? "pointer-events-none bg-muted" : ""}`}
+              className={`form-modal-input ${isViewMode ? "pointer-events-none bg-muted" : ""}`}
             />
             <FormError message={errors.moTaNgan?.message} />
           </div>
           <div>
-            <label className="text-xs font-medium uppercase text-muted-foreground">Description</label>
+            <label className="form-modal-label">Description</label>
             <textarea
               rows={4}
               disabled={isViewMode}
               {...register("moTa")}
               placeholder="Detailed description of your service..."
-              className={`mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-accent ${isViewMode ? "pointer-events-none bg-muted" : ""}`}
+              className={`form-modal-input ${isViewMode ? "pointer-events-none bg-muted" : ""}`}
             />
             <FormError message={errors.moTa?.message} />
           </div>
           <div>
-            <label className="text-xs font-medium uppercase text-muted-foreground">Gig Image (Max 1MB)</label>
+            <label className="form-modal-label">{`Gig Image (Max ${MAX_FILE_SIZE / (1024 * 1024)}MB)`}</label>
             {!isViewMode && (
               <input
                 type="file"
@@ -292,7 +291,7 @@ const GigModal = ({
             <button
               type="button"
               onClick={onClose}
-              className="rounded-lg border border-border px-4 py-2 text-sm font-semibold hover:bg-muted cursor-pointer"
+              className="form-modal-cancel-btn"
             >
               {isViewMode ? "Close" : "Cancel"}
             </button>
@@ -300,7 +299,7 @@ const GigModal = ({
               <button
                 type="submit"
                 disabled={loading}
-                className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground hover:opacity-90 disabled:opacity-50 cursor-pointer"
+                className="form-modal-save-btn"
               >
                 {loading ? "Saving..." : isEditMode ? "Update Gig" : "Create Gig"}
               </button>

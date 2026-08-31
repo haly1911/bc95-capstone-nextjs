@@ -3,13 +3,14 @@
 import Link from "next/link";
 import { useTheme } from "./ThemeProvider";
 import { useState, useEffect } from "react";
-import { FaMoon, FaStackExchange, FaSun } from "react-icons/fa6";
+import { FaBars, FaMoon, FaStackExchange, FaSun } from "react-icons/fa6";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/useAuthStore";
 import SearchInput from "../common/SearchInput";
 import UserAvatar from "../common/UserAvatar";
 import CategoryDropdown from "./CategoryDropdown";
 import { ApiCategory, ApiSubcategory } from "@/types/category";
+import MobileSidebar from "./MobileSidebar";
 
 interface HeaderProps {
   categories: ApiCategory[];
@@ -20,6 +21,7 @@ const Header = ({ categories, subcategories }: HeaderProps) => {
   const { theme, toggle } = useTheme();
   const [showSearch, setShowSearch] = useState(false);
   const [showCategory, setShowCategory] = useState(false);
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
   const { isAuthenticated, user, initializeAuth, signout, setAuthMode } = useAuthStore();
@@ -57,8 +59,15 @@ const Header = ({ categories, subcategories }: HeaderProps) => {
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur">
       <div className="wrapper flex items-center gap-4 py-4">
+        <button
+          onClick={() => setIsMobileSidebarOpen(true)}
+          aria-label="Open Menu"
+          className="lg:hidden text-foreground bg-card border border-border p-2.5 rounded-xl hover:text-accent transition-colors cursor-pointer shrink-0"
+        >
+          <FaBars />
+        </button>
         <Link href="/" className="flex items-center gap-2 shrink-0">
-          <span className="grid h-9 w-9 place-items-center rounded-lg bg-linear-to-br from-primary to-accent text-primary-foreground shadow-lg shadow-accent/20">
+          <span className="logo-icon">
             <FaStackExchange />
           </span>
           <span className="text-xl font-extrabold tracking-tight">
@@ -81,8 +90,8 @@ const Header = ({ categories, subcategories }: HeaderProps) => {
               }}
             />
           </div>
-          <div className="flex items-center gap-8">
-            <nav className="flex items-center gap-8 text-sm font-medium">
+          <div className="flex items-center gap-2 lg:gap-8">
+            <nav className="hidden lg:flex items-center gap-2 lg:gap-8 text-sm font-medium">
               <Link href="/gigs" className="hover:text-accent">
                 Explore
               </Link>
@@ -99,18 +108,18 @@ const Header = ({ categories, subcategories }: HeaderProps) => {
             <button
               onClick={toggle}
               aria-label="Toggle theme"
-              className="grid h-9 w-9 place-items-center rounded-full border border-border bg-card text-foreground hover:border-accent hover:text-accent cursor-pointer"
+              className="dark-mode-icon"
             >
               {theme === "dark" ? <FaSun /> : <FaMoon />}
             </button>
             {isMounted && isAuthenticated && user ? (
-              <div className="flex items-center gap-6">
+              <div className="flex items-center gap-2 lg:gap-8">
                 <Link href="/profile">
                   <UserAvatar src={user.avatar} name={user.name} size={36} className="hover:scale-105" />
                 </Link>
                 <button
                   onClick={signout}
-                  className="rounded-full border border-border px-6 py-3 text-xs font-semibold bg-card text-foreground hover:border-accent hover:text-accent cursor-pointer"
+                  className="rounded-full border border-border px-4 py-2 sm:px-6 sm:py-3 text-xs font-semibold bg-card text-foreground hover:border-accent hover:text-accent cursor-pointer"
                 >
                   Sign out
                 </button>
@@ -136,6 +145,7 @@ const Header = ({ categories, subcategories }: HeaderProps) => {
       >
         <CategoryDropdown categories={categories} subcategories={subcategories} />
       </div>
+      <MobileSidebar isOpen={isMobileSidebarOpen} setIsOpen={setIsMobileSidebarOpen} />
     </header>
   );
 };

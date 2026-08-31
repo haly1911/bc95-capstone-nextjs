@@ -21,7 +21,7 @@ const WhySell = () => {
   ];
   return (
     <section className="py-20 bg-card/50 border-y border-border/60">
-      <div className="wrapper max-w-6xl mx-auto px-4">
+      <div className="wrapper">
         <div className="text-center max-w-2xl mx-auto space-y-4 mb-16">
           <h2 className="text-3xl font-bold tracking-tight">Why sell on Skillora?</h2>
           <p className="text-muted-foreground">

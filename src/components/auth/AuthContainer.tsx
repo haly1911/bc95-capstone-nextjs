@@ -9,7 +9,6 @@ const AuthContainer = () => {
 
   return (
     <main className={`relative w-screen h-screen overflow-hidden bg-card`}>
-      {/* Giao diện cho Mobile & Tablet */}
       <div className="w-full h-full flex flex-col justify-center items-center p-4 overflow-y-auto lg:hidden">
         <div className="w-full max-w-md">
           {authMode === "signin" ? <SignInForm /> : <SignUpForm onSwitchToSignIn={() => setAuthMode("signin")} />}
@@ -38,8 +37,6 @@ const AuthContainer = () => {
           </div>
         </div>
       </div>
-
-      {/* Giao diện Desktop */}
       <div className="hidden lg:grid grid-cols-2 w-full h-full relative">
         <SignInForm />
         <SignUpForm onSwitchToSignIn={() => setAuthMode("signin")} />

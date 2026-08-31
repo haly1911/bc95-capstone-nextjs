@@ -23,6 +23,13 @@ const AdminOverviewPage = async () => {
   const totalOrders = ordersRes.content;
   const subcategories = categoriesData.subcategories;
 
+  const overviewStats = [
+    { title: "Total Users", figure: totalUsers.length, badge: "Database", badgeColor: "accent" },
+    { title: "Total Gigs", figure: totalGigs.length, badge: "Published", badgeColor: "chart-1" },
+    { title: "Total Category", figure: totalCategories.length, badge: "Catalog", badgeColor: "chart-2" },
+    { title: "Total Orders", figure: totalOrders.length, badge: "Transactions", badgeColor: "chart-3" },
+  ];
+
   const categoryStats = totalCategories.map((cat: ApiCategory) => {
     const matchingGroups = subcategories.filter((group: ApiSubcategory) => group.maLoaiCongviec === cat.id);
     const subDetailIds = matchingGroups.flatMap(
@@ -53,39 +60,21 @@ const AdminOverviewPage = async () => {
         <p className="text-sm text-muted-foreground mt-1">Live health metrics and system summary across Skillora.</p>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="p-6 rounded-2xl border border-border bg-card shadow-xs space-y-1">
-          <p className="text-xs uppercase tracking-wider text-muted-foreground font-medium">Total Users</p>
-          <div className="flex items-baseline justify-between">
-            <p className="text-3xl font-extrabold text-foreground">{totalUsers.length}</p>
-            <span className="text-xs text-accent font-semibold bg-accent/10 px-2 py-0.5 rounded-full">Database</span>
+        {overviewStats.map((stat) => (
+          <div key={stat.title} className="p-6 rounded-2xl border border-border bg-card shadow-xs space-y-1">
+            <div className="flex flex-row lg:flex-col xl:flex-row items-end lg:items-start xl:items-end justify-between gap-2">
+              <div className=" flex flex-col gap-1">
+                <p className="text-xs uppercase tracking-wider text-muted-foreground font-medium">{stat.title}</p>
+                <p className="text-3xl font-extrabold text-foreground">{stat.figure}</p>
+              </div>
+              <span
+                className={`h-fit text-xs text-${stat.badgeColor} font-semibold bg-${stat.badgeColor}/10 px-2 py-0.5 rounded-full`}
+              >
+                {stat.badge}
+              </span>
+            </div>
           </div>
-        </div>
-
-        <div className="p-6 rounded-2xl border border-border bg-card shadow-xs space-y-1">
-          <p className="text-xs uppercase tracking-wider text-muted-foreground font-medium">Total Gigs</p>
-          <div className="flex items-baseline justify-between">
-            <p className="text-3xl font-extrabold text-foreground">{totalGigs.length}</p>
-            <span className="text-xs text-chart-2 font-semibold bg-chart-2/10 px-2 py-0.5 rounded-full">Published</span>
-          </div>
-        </div>
-
-        <div className="p-6 rounded-2xl border border-border bg-card shadow-xs space-y-1">
-          <p className="text-xs uppercase tracking-wider text-muted-foreground font-medium">Categories</p>
-          <div className="flex items-baseline justify-between">
-            <p className="text-3xl font-extrabold text-foreground">{totalCategories.length}</p>
-            <span className="text-xs text-chart-1 font-semibold bg-chart-1/10 px-2 py-0.5 rounded-full">Catalog</span>
-          </div>
-        </div>
-
-        <div className="p-6 rounded-2xl border border-border bg-card shadow-xs space-y-1">
-          <p className="text-xs uppercase tracking-wider text-muted-foreground font-medium">Total Orders</p>
-          <div className="flex items-baseline justify-between">
-            <p className="text-3xl font-extrabold text-foreground">{totalOrders.length}</p>
-            <span className="text-xs text-chart-4 font-semibold bg-chart-4/10 px-2 py-0.5 rounded-full">
-              Transactions
-            </span>
-          </div>
-        </div>
+        ))}
       </div>
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
@@ -96,12 +85,13 @@ const AdminOverviewPage = async () => {
                 View all →
               </Link>
             </div>
-            <div className="overflow-x-auto">
+            <div className="hidden sm:block overflow-x-auto">
               <table className="w-full text-left text-sm">
                 <thead>
                   <tr className="border-b border-border text-muted-foreground text-xs uppercase tracking-wider">
-                    <th className="pb-3 font-semibold w-[64%]">Gig Title</th>
-                    <th className="pb-3 font-semibold w-[12%]">Price</th>
+                    <th className="pb-3 font-semibold w-[52%]">Gig Title</th>
+                    <th className="pb-3 font-semibold w-[14%]">Seller</th>
+                    <th className="pb-3 font-semibold w-[10%]">Price</th>
                     <th className="pb-3 font-semibold w-[12%]">Rating</th>
                     <th className="pb-3 font-semibold w-[12%]">Reviews</th>
                   </tr>
@@ -125,6 +115,7 @@ const AdminOverviewPage = async () => {
                           {gig.tenCongViec}
                         </span>
                       </td>
+                      <td className="py-3 text-xs text-muted-foreground font-normal">@{gig.user?.name}</td>
                       <td className="py-3 font-bold text-accent">${gig.giaTien}</td>
                       <td className="py-3">
                         <span className="text-xs px-2 py-1 rounded-full font-semibold bg-accent/10 text-accent flex items-center w-fit">
@@ -134,16 +125,51 @@ const AdminOverviewPage = async () => {
                       <td className="py-3 text-xs text-muted-foreground font-normal">{gig.danhGia}</td>
                     </tr>
                   ))}
-                  {topGigs.length === 0 && (
-                    <tr>
-                      <td colSpan={3} className="py-4 text-center text-muted-foreground">
-                        No gigs found.
-                      </td>
-                    </tr>
-                  )}
                 </tbody>
               </table>
             </div>
+            <div className="sm:hidden space-y-3">
+              {topGigs.map((gig) => (
+                <div
+                  key={gig.id}
+                  className="p-3 rounded-xl border border-border/60 bg-background/50 flex flex-col gap-2.5 hover:bg-muted/30 transition-colors"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="relative w-14 h-12 rounded-lg overflow-hidden shrink-0 border border-border bg-muted">
+                      {gig.hinhAnh && (
+                        <Image
+                          src={gig.hinhAnh}
+                          alt={gig.tenCongViec}
+                          width={56}
+                          height={48}
+                          className="object-cover w-full h-full"
+                        />
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <span className="font-medium text-foreground text-sm line-clamp-2" title={gig.tenCongViec}>
+                        {gig.tenCongViec}
+                      </span>
+                    </div>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    Seller: @{gig.user?.name} (ID: {gig.user?.id})
+                  </p>
+                  <div className="flex items-center justify-between pt-2 border-t border-border/40 text-xs">
+                    <span className="font-bold text-accent text-sm">${gig.giaTien}</span>
+                    <div className="flex items-center gap-3">
+                      <span className="px-2 py-0.5 rounded-full font-semibold bg-accent/10 text-accent flex items-center gap-1">
+                        ⭐ {gig.saoCongViec}
+                      </span>
+                      <span className="text-muted-foreground">{gig.danhGia} reviews</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            {topGigs.length === 0 && (
+              <div className="py-8 text-center text-muted-foreground text-sm">No gigs found</div>
+            )}
           </div>
         </div>
         <div className="space-y-6 flex flex-col items-center justify-between">

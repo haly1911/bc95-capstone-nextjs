@@ -9,7 +9,7 @@ export const userService = {
       return data;
     } catch (error) {
       console.error("Failed to fetch user list:", error);
-      return { statusCode: 500, message: "Error", content: [] };
+      throw error;
     }
   },
   getUserDetail: async (userId: number): Promise<BaseApiResponse<ApiUser>> => {
@@ -48,7 +48,7 @@ export const userService = {
       });
       return data;
     } catch (error) {
-      console.error("Failed to update user:", error);
+      console.error("Failed to delete user:", error);
       throw error;
     }
   },

@@ -16,7 +16,6 @@ const SignInForm = () => {
   const router = useRouter();
   const setUser = useAuthStore((state) => state.setUser);
   const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
   const {
@@ -53,8 +52,8 @@ const SignInForm = () => {
     <div className="flex flex-col justify-center items-center">
       <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-md">
         <h1 className="text-3xl font-extrabold">Welcome back!</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Sign in to manage your gigs, orders, and messages on
+        <p className="mt-1 max-w-xs sm:max-w-max text-sm text-muted-foreground">
+          Sign in to manage your gigs, orders, and messages on{" "}
           <span className="text-lg">
             Skill<span className="text-accent">ora</span>
           </span>

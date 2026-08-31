@@ -1,5 +1,3 @@
-import { gigService } from "@/services/gig.service";
-import { categoryService } from "@/services/category.service";
 import UserManagement from "@/components/admin/UserManagement";
 import { userService } from "@/services/user.service";
 import { skillService } from "@/services/skill.service";

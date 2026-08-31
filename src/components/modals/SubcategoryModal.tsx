@@ -3,13 +3,11 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { toast } from "react-toastify";
 import Image from "next/image";
 import { categoryService } from "@/services/category.service";
 import { ApiSubcategoryItem, ApiSubcategory } from "@/types/category";
 import FormError from "../common/FormError";
-import { FaPlus, FaTrash } from "react-icons/fa6";
 import { SubcategoryFormData, subcategorySchema } from "@/lib/schemas";
 
 interface SubcategoryModalProps {
@@ -122,20 +120,20 @@ const SubcategoryModal = ({
   return (
     <div
       onClick={onClose}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4 overflow-y-auto"
+      className="form-modal-bg"
     >
       <div
         onClick={(e) => e.stopPropagation()}
         className="w-full max-w-md rounded-2xl bg-card border border-border p-6 shadow-xl my-8 max-h-[90vh] overflow-y-auto"
       >
-        <div className="flex items-center justify-between border-b border-border pb-4">
-          <h3 className="text-lg font-bold text-foreground">
+        <div className="form-modal-header">
+          <h3 className="form-modal-title">
             {isEditMode ? "Edit Subcategory" : "Add New Subcategory"}
           </h3>
           <button
             type="button"
             onClick={onClose}
-            className="text-muted-foreground hover:text-foreground cursor-pointer"
+            className="form-modal-cancel-icon"
           >
             ✕
           </button>
@@ -143,18 +141,18 @@ const SubcategoryModal = ({
 
         <form onSubmit={handleSubmit(onSubmit)} className="mt-4 space-y-4">
           <div>
-            <label className="text-xs font-medium uppercase text-muted-foreground">Group Name</label>
+            <label className="form-modal-label">Group Name</label>
             <input
               type="text"
               {...register("tenNhom")}
               placeholder="e.g. Logo & Brand Identity"
-              className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-accent"
+              className="form-modal-input"
             />
             <FormError message={errors.tenNhom?.message} />
           </div>
 
           <div>
-            <label className="text-xs font-medium uppercase text-muted-foreground">Group Image</label>
+            <label className="form-modal-label">Group Image</label>
             <div className="mt-1 flex items-center gap-4">
               {previewImage && (
                 <div className="relative w-24 h-16 rounded-lg overflow-hidden border border-border bg-muted shrink-0">
@@ -177,7 +175,7 @@ const SubcategoryModal = ({
           </div>
           {isEditMode && subcategoryItems.length > 0 && (
             <div className="space-y-2 pt-2 border-t border-border">
-              <label className="text-xs font-medium uppercase text-muted-foreground">
+              <label className="form-modal-label">
                 Subcategory Items ({subcategoryItems.length})
               </label>
               <div className="max-h-36 overflow-y-auto space-y-1.5 pr-1">
@@ -196,14 +194,14 @@ const SubcategoryModal = ({
             <button
               type="button"
               onClick={onClose}
-              className="rounded-lg border border-border px-4 py-2 text-sm font-semibold hover:bg-muted cursor-pointer"
+              className="form-modal-cancel-btn"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground hover:opacity-90 disabled:opacity-50 cursor-pointer"
+              className="form-modal-save-btn"
             >
               {loading ? "Saving..." : isEditMode ? "Update Group" : "Create Group"}
             </button>

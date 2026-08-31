@@ -9,7 +9,7 @@ export const skillService = {
       return data;
     } catch (error) {
       console.error("Failed to fetch skill list:", error);
-      return { statusCode: 500, message: "Error", content: [] };
+      throw error;
     }
   },
 };

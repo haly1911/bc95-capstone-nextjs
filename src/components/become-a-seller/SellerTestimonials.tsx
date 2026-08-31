@@ -20,7 +20,7 @@ const SellerTestimonials = () => {
     },
   ];
   return (
-    <section className="py-20 wrapper max-w-6xl mx-auto px-4">
+    <section className="py-20 wrapper">
       <div className="text-center max-w-2xl mx-auto space-y-4 mb-16">
         <h2 className="text-3xl font-bold tracking-tight">Success stories from our community</h2>
         <p className="text-muted-foreground">See how everyday creators built profitable freelance careers.</p>

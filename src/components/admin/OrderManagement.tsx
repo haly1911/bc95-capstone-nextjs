@@ -119,7 +119,7 @@ const OrderManagement = ({ orders, categories, subcategories }: OrderManagementP
                 setCategoryFilter(e.target.value);
                 resetPage();
               }}
-              className="rounded-full border border-border bg-card px-4 py-2 text-xs font-medium hover:border-accent focus:outline-none cursor-pointer"
+              className="filter-btn"
             >
               <option value="all">All Categories</option>
               {categories.map((cat) => (
@@ -134,7 +134,7 @@ const OrderManagement = ({ orders, categories, subcategories }: OrderManagementP
                 setStatusFilter(e.target.value);
                 resetPage();
               }}
-              className="rounded-full border border-border bg-card px-4 py-2 text-xs font-medium hover:border-accent focus:outline-none cursor-pointer"
+              className="filter-btn"
             >
               <option value="all">All Status</option>
               <option value="completed">Completed</option>
@@ -146,7 +146,7 @@ const OrderManagement = ({ orders, categories, subcategories }: OrderManagementP
                 setSortBy(e.target.value);
                 resetPage();
               }}
-              className="rounded-full border border-border bg-card px-4 py-2 text-xs font-medium hover:border-accent focus:outline-none cursor-pointer"
+              className="filter-btn"
             >
               <option value="none">Sort: None</option>
               <option value="latest">Latest ⏳</option>
@@ -157,9 +157,7 @@ const OrderManagement = ({ orders, categories, subcategories }: OrderManagementP
         </div>
       </div>
       {sortedOrders.length === 0 ? (
-        <div className="py-16 text-center text-sm text-muted-foreground border border-border rounded-xl bg-card">
-          No orders found matching your criteria.
-        </div>
+        <div className="admin-empty-state">No orders found matching your criteria.</div>
       ) : (
         <>
           <div className="hidden lg:block rounded-xl border bg-card text-card-foreground shadow overflow-hidden">
@@ -168,30 +166,14 @@ const OrderManagement = ({ orders, categories, subcategories }: OrderManagementP
                 <table className="w-full text-sm table-fixed">
                   <thead className="[&_tr]:border-b">
                     <tr className="border-b transition-colors hover:bg-muted/50">
-                      <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground w-[8%]">
-                        Order
-                      </th>
-                      <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground w-[20%]">
-                        Gig Title
-                      </th>
-                      <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground w-[10%]">
-                        Buyer
-                      </th>
-                      <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground w-[10%]">
-                        Seller
-                      </th>
-                      <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground w-[13%]">
-                        Date
-                      </th>
-                      <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground w-[10%]">
-                        Price
-                      </th>
-                      <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground w-[16%]">
-                        Status
-                      </th>
-                      <th className="h-12 px-4 text-center align-middle font-medium text-muted-foreground w-[13%]">
-                        Actions
-                      </th>
+                      <th className="table-th w-[8%]">Order</th>
+                      <th className="table-th w-[20%]">Gig Title</th>
+                      <th className="table-th w-[10%]">Buyer</th>
+                      <th className="table-th w-[10%]">Seller</th>
+                      <th className="table-th w-[13%]">Date</th>
+                      <th className="table-th w-[10%]">Price</th>
+                      <th className="table-th w-[16%]">Status</th>
+                      <th className="table-th text-center w-[13%]">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="[&_tr:last-child]:border-0">
@@ -203,17 +185,17 @@ const OrderManagement = ({ orders, categories, subcategories }: OrderManagementP
                       );
                       return (
                         <tr key={o.id} className="border-b transition-colors hover:bg-muted/50">
-                          <td className="p-4 align-middle">
+                          <td className="table-td">
                             <span className="font-mono text-xs text-muted-foreground">#{o.id}</span>
                           </td>
-                          <td className="p-4 align-middle">
+                          <td className="table-td">
                             <span className="line-clamp-2">{o.congViec?.tenCongViec}</span>
                           </td>
-                          <td className="p-4 align-middle">@{o.buyer?.name || "N/A"}</td>
-                          <td className="p-4 align-middle">@{o.congViec?.user?.name}</td>
-                          <td className="p-4 align-middle">{formatDate(o.ngayThue)}</td>
-                          <td className="p-4 align-middle">${o.congViec?.giaTien}</td>
-                          <td className="p-4 align-middle font-bold text-accent">
+                          <td className="table-td">@{o.buyer?.name || "N/A"}</td>
+                          <td className="table-td">@{o.congViec?.user?.name}</td>
+                          <td className="table-td">{formatDate(o.ngayThue)}</td>
+                          <td className="table-td">${o.congViec?.giaTien}</td>
+                          <td className="table-td font-bold text-accent">
                             <span
                               className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${
                                 o.hoanThanh ? "bg-muted text-muted-foreground" : "bg-primary/10 text-primary"
@@ -222,12 +204,12 @@ const OrderManagement = ({ orders, categories, subcategories }: OrderManagementP
                               {o.hoanThanh ? "Completed" : "In progress"}
                             </span>
                           </td>
-                          <td className="p-4 align-middle text-center">
+                          <td className="table-td text-center">
                             <div className="flex items-center justify-center gap-3">
                               <button
                                 type="button"
                                 onClick={() => handleOpenViewModal(o)}
-                                className="rounded-lg text-muted-foreground hover:text-accent transition-colors cursor-pointer inline-flex items-center justify-center"
+                                className="admin-edit-icon"
                                 title="View Order Details"
                               >
                                 <FaEye className="w-4 h-4" />
@@ -235,7 +217,7 @@ const OrderManagement = ({ orders, categories, subcategories }: OrderManagementP
                               <button
                                 type="button"
                                 onClick={(e) => confirmDeleteOrder(e, o.id)}
-                                className="rounded-lg text-muted-foreground hover:text-destructive transition-colors cursor-pointer inline-flex items-center justify-center"
+                                className="admin-trash-icon"
                                 title="Delete Order"
                               >
                                 <FaTrash className="w-4 h-4" />

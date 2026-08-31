@@ -17,7 +17,7 @@ const SellerFaq = () => {
   ];
   return (
     <section className="py-20 bg-card/50 border-t border-border/60">
-      <div className="wrapper max-w-4xl mx-auto px-4 space-y-12">
+      <div className="max-w-4xl mx-auto px-4 space-y-12">
         <div className="text-center space-y-4">
           <h2 className="text-3xl font-bold tracking-tight">Frequently Asked Questions</h2>
           <p className="text-muted-foreground">Got questions? We've got answers.</p>

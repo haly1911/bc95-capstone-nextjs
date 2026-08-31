@@ -19,7 +19,7 @@ const BecomeASellerLoading = () => {
           </div>
         </div>
       </section>
-      <section className="py-20 wrapper max-w-6xl mx-auto px-4">
+      <section className="py-20 wrapper">
         <div className="text-center max-w-2xl mx-auto space-y-4 mb-16">
           <Skeleton className="h-8 w-48 mx-auto" />
           <Skeleton className="h-4 w-96 mx-auto" />
@@ -35,7 +35,7 @@ const BecomeASellerLoading = () => {
         </div>
       </section>
       <section className="py-20 bg-card/50 border-y border-border/60">
-        <div className="wrapper max-w-6xl mx-auto px-4">
+        <div className="wrapper">
           <div className="text-center max-w-2xl mx-auto space-y-4 mb-16">
             <Skeleton className="h-8 w-56 mx-auto" />
             <Skeleton className="h-4 w-80 mx-auto" />

@@ -105,7 +105,7 @@ const UserManagement = ({ users, skills }: UserManagementProps) => {
                 setRoleFilter(e.target.value);
                 resetPage();
               }}
-              className="rounded-full border border-border bg-card px-4 py-2 text-xs font-medium hover:border-accent focus:outline-none cursor-pointer"
+              className="filter-btn"
             >
               <option value="all">All Roles</option>
               <option value="USER">USER</option>
@@ -117,26 +117,20 @@ const UserManagement = ({ users, skills }: UserManagementProps) => {
                 setGenderFilter(e.target.value);
                 resetPage();
               }}
-              className="rounded-full border border-border bg-card px-4 py-2 text-xs font-medium hover:border-accent focus:outline-none cursor-pointer"
+              className="filter-btn"
             >
               <option value="all">All Genders</option>
               <option value="male">Male</option>
               <option value="female">Female</option>
             </select>
           </div>
-          <button
-            type="button"
-            onClick={handleOpenCreateModal}
-            className="shrink-0 rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground hover:opacity-90 cursor-pointer text-center"
-          >
+          <button type="button" onClick={handleOpenCreateModal} className="admin-create-btn">
             + Add New User
           </button>
         </div>
       </div>
       {filteredUsers.length === 0 ? (
-        <div className="py-16 text-center text-sm text-muted-foreground border border-border rounded-xl bg-card">
-          No users found matching your criteria.
-        </div>
+        <div className="admin-empty-state">No users found matching your criteria.</div>
       ) : (
         <>
           <div className="hidden lg:block rounded-xl border bg-card text-card-foreground shadow overflow-hidden">
@@ -145,30 +139,18 @@ const UserManagement = ({ users, skills }: UserManagementProps) => {
                 <table className="w-full text-sm table-fixed">
                   <thead className="[&_tr]:border-b">
                     <tr className="border-b transition-colors hover:bg-muted/50">
-                      <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground w-[28%]">
-                        User
-                      </th>
-                      <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground w-[22%]">
-                        Email
-                      </th>
-                      <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground w-[15%]">
-                        Phone
-                      </th>
-                      <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground w-[12%]">
-                        Role
-                      </th>
-                      <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground w-[13%]">
-                        Birthday
-                      </th>
-                      <th className="h-12 px-4 text-right align-middle font-medium text-muted-foreground w-[10%]">
-                        Actions
-                      </th>
+                      <th className="table-th w-[22%]">User</th>
+                      <th className="table-th w-[22%]">Email</th>
+                      <th className="table-th w-[16%]">Phone</th>
+                      <th className="table-th w-[14%]">Role</th>
+                      <th className="table-th w-[13%]">Birthday</th>
+                      <th className="table-th text-right w-[13%]">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="[&_tr:last-child]:border-0">
                     {currentUsers.map((u) => (
                       <tr key={u.id} className="border-b transition-colors hover:bg-muted/50">
-                        <td className="p-4 align-middle">
+                        <td className="table-td">
                           <div className="flex items-center gap-3">
                             <UserAvatar src={u.avatar} name={u.name} size={36} />
                             <span className="font-medium truncate max-w-50" title={u.name}>
@@ -176,11 +158,11 @@ const UserManagement = ({ users, skills }: UserManagementProps) => {
                             </span>
                           </div>
                         </td>
-                        <td className="p-4 align-middle text-muted-foreground truncate" title={u.email}>
+                        <td className="table-td text-muted-foreground truncate" title={u.email}>
                           {u.email}
                         </td>
-                        <td className="p-4 align-middle text-muted-foreground">{u.phone || "N/A"}</td>
-                        <td className="p-4 align-middle">
+                        <td className="table-td text-muted-foreground">{u.phone || "N/A"}</td>
+                        <td className="table-td">
                           <span
                             className={`text-xs px-2.5 py-1 rounded-full font-semibold ${
                               u.role === "ADMIN"
@@ -191,13 +173,13 @@ const UserManagement = ({ users, skills }: UserManagementProps) => {
                             {u.role || "USER"}
                           </span>
                         </td>
-                        <td className="p-4 align-middle text-muted-foreground text-xs">{formatDate(u.birthday)}</td>
-                        <td className="p-4 align-middle text-center">
+                        <td className="table-td text-muted-foreground text-xs">{formatDate(u.birthday)}</td>
+                        <td className="table-td text-center">
                           <div className="flex items-center justify-center gap-3">
                             <button
                               type="button"
                               onClick={() => handleOpenEditRoleModal(u)}
-                              className="rounded-lg text-muted-foreground hover:text-accent transition-colors cursor-pointer inline-flex items-center justify-center"
+                              className="admin-edit-icon"
                               title="Edit User Role"
                             >
                               <FaPencil className="w-4 h-4" />
@@ -205,7 +187,7 @@ const UserManagement = ({ users, skills }: UserManagementProps) => {
                             <button
                               type="button"
                               onClick={(e) => confirmDeleteUser(e, u.id)}
-                              className="rounded-lg text-muted-foreground hover:text-destructive transition-colors cursor-pointer inline-flex items-center justify-center"
+                              className="admin-trash-icon"
                               title="Delete User"
                             >
                               <FaTrash className="w-4 h-4" />

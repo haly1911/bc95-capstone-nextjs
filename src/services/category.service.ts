@@ -11,7 +11,7 @@ export const categoryService = {
       return data;
     } catch (error) {
       console.error("Failed to fetch categories:", error);
-      return { statusCode: 500, message: "Error", content: [] };
+      throw error;
     }
   },
   getCategoryWithDetailGroups: async () => {
@@ -32,7 +32,7 @@ export const categoryService = {
       };
     } catch (error) {
       console.error("Failed to fetch subcategorys:", error);
-      return { categories: [], subcategories: [] };
+      throw error;
     }
   },
   getCategoryDetails: async (slug: string) => {
@@ -58,7 +58,7 @@ export const categoryService = {
       };
     } catch (error) {
       console.error("Failed to fetch category details for slug:", slug, error);
-      return null;
+      throw error;
     }
   },
   createCategory: async (categoryData: Partial<ApiCategory>): Promise<BaseApiResponse<ApiCategory>> => {

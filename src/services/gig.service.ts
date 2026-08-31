@@ -16,7 +16,7 @@ export const gigService = {
       };
     } catch (error) {
       console.error("Failed to fetch gig list:", error);
-      return { statusCode: 500, message: "Error", content: [] };
+      throw error;
     }
   },
   getTopGigs: async (): Promise<BaseApiResponse<ApiGigWithUser[]>> => {
@@ -36,7 +36,7 @@ export const gigService = {
       };
     } catch (error) {
       console.error("Failed to fetch top gigs:", error);
-      return { statusCode: 500, message: "Error", content: [] };
+      throw error;
     }
   },
   getGigByCreator: async (userId: number): Promise<BaseApiResponse<ApiGig[]>> => {
@@ -49,7 +49,7 @@ export const gigService = {
       };
     } catch (error) {
       console.error("Failed to fetch gigs by creator:", userId, error);
-      return { statusCode: 500, message: "Error", content: [] };
+      throw error;
     }
   },
   getGigDetail: async (gigId: number): Promise<BaseApiResponse<ApiGigWithUser>> => {

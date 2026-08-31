@@ -117,7 +117,7 @@ const GigManagement = ({ initialGigs, categories, subcategories, userId }: GigMa
                 setSelectedCategoryFilter(e.target.value);
                 resetPage();
               }}
-              className="rounded-full border border-border bg-card px-4 py-2 text-xs font-medium hover:border-accent focus:outline-none cursor-pointer"
+              className="filter-btn"
             >
               <option value="all">All Categories</option>
               {categories.map((cat) => (
@@ -132,7 +132,7 @@ const GigManagement = ({ initialGigs, categories, subcategories, userId }: GigMa
                 setSortBy(e.target.value);
                 resetPage();
               }}
-              className="rounded-full border border-border bg-card px-4 py-2 text-xs font-medium hover:border-accent focus:outline-none cursor-pointer"
+              className="filter-btn"
             >
               <option value="recommended">Sort: Recommended</option>
               <option value="rating">Highest Rated ⭐</option>
@@ -140,19 +140,13 @@ const GigManagement = ({ initialGigs, categories, subcategories, userId }: GigMa
               <option value="price-high">Price: High to Low 💲</option>
             </select>
           </div>
-          <button
-            type="button"
-            onClick={handleOpenCreateModal}
-            className="shrink-0 rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground hover:opacity-90 cursor-pointer text-center"
-          >
+          <button type="button" onClick={handleOpenCreateModal} className="admin-create-btn">
             + Add New Gig
           </button>
         </div>
       </div>
       {sortedGigs.length === 0 ? (
-        <div className="py-16 text-center text-sm text-muted-foreground border border-border rounded-xl bg-card">
-          No gigs found matching your criteria.
-        </div>
+        <div className="admin-empty-state">No gigs found matching your criteria.</div>
       ) : (
         <>
           <div className="hidden lg:block rounded-xl border bg-card text-card-foreground shadow overflow-hidden">
@@ -161,27 +155,13 @@ const GigManagement = ({ initialGigs, categories, subcategories, userId }: GigMa
                 <table className="w-full text-sm table-fixed">
                   <thead className="[&_tr]:border-b">
                     <tr className="border-b transition-colors hover:bg-muted/50">
-                      <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground w-[30%]">
-                        Gig
-                      </th>
-                      <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground w-[25%]">
-                        Description
-                      </th>
-                      <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground w-[10%]">
-                        Seller
-                      </th>
-                      <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground w-[9%]">
-                        Reviews
-                      </th>
-                      <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground w-[9%]">
-                        Rating
-                      </th>
-                      <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground w-[6%]">
-                        Price
-                      </th>
-                      <th className="h-12 px-4 text-right align-middle font-medium text-muted-foreground w-[10%]">
-                        Actions
-                      </th>
+                      <th className="table-th w-[30%]">Gig</th>
+                      <th className="table-th w-[25%]">Description</th>
+                      <th className="table-th w-[10%]">Seller</th>
+                      <th className="table-th w-[9%]">Reviews</th>
+                      <th className="table-th w-[9%]">Rating</th>
+                      <th className="table-th w-[6%]">Price</th>
+                      <th className="table-th text-right w-[10%]">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="[&_tr:last-child]:border-0">
@@ -193,7 +173,7 @@ const GigManagement = ({ initialGigs, categories, subcategories, userId }: GigMa
                       );
                       return (
                         <tr key={g.id} className="border-b transition-colors hover:bg-muted/50">
-                          <td className="p-4 align-middle">
+                          <td className="table-td">
                             <div className="flex items-center gap-3">
                               <div className="relative w-10 h-8 rounded-lg overflow-hidden shrink-0 border border-border bg-muted">
                                 {g.hinhAnh && (
@@ -216,26 +196,26 @@ const GigManagement = ({ initialGigs, categories, subcategories, userId }: GigMa
                               </div>
                             </div>
                           </td>
-                          <td className="p-3 align-middle text-muted-foreground">
+                          <td className="table-td text-muted-foreground">
                             <p className="line-clamp-3 max-w-xs text-sm" title={g.moTa}>
                               {g.moTa}
                             </p>
                           </td>
-                          <td className="p-4 align-middle">@{g.user?.name}</td>
-                          <td className="p-4 align-middle">{g.danhGia}</td>
-                          <td className="p-4 align-middle">
+                          <td className="table-td">@{g.user?.name}</td>
+                          <td className="table-td">{g.danhGia}</td>
+                          <td className="table-td">
                             <div className="flex items-center gap-1 font-semibold">
                               {g.saoCongViec}
                               <FaStar className="text-accent" />
                             </div>
                           </td>
-                          <td className="p-4 align-middle font-bold text-accent">${g.giaTien}</td>
-                          <td className="p-4 align-middle text-center">
+                          <td className="table-td font-bold text-accent">${g.giaTien}</td>
+                          <td className="table-td text-center">
                             <div className="flex items-center justify-center gap-3">
                               <button
                                 type="button"
                                 onClick={() => handleOpenViewModal(g)}
-                                className="rounded-lg text-muted-foreground hover:text-accent transition-colors cursor-pointer inline-flex items-center justify-center"
+                                className="admin-edit-icon"
                                 title="View Gig Details"
                               >
                                 <FaEye className="w-4 h-4" />
@@ -243,7 +223,7 @@ const GigManagement = ({ initialGigs, categories, subcategories, userId }: GigMa
                               <button
                                 type="button"
                                 onClick={(e) => confirmDeleteGig(e, g.id)}
-                                className="rounded-lg text-muted-foreground hover:text-destructive transition-colors cursor-pointer inline-flex items-center justify-center"
+                                className="admin-trash-icon"
                                 title="Delete Gig"
                               >
                                 <FaTrash className="w-4 h-4" />

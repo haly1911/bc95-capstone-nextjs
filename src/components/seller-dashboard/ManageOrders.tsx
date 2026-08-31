@@ -60,70 +60,109 @@ const ManageOrders = ({ orders }: ManageOrdersProps) => {
         ))}
       </div>
       <div className="rounded-xl border bg-card text-card-foreground shadow">
-        <div className="p-6 pb-4">
+        <div className="px-6 pt-6">
           <h3 className="font-semibold leading-none tracking-tight">Manage Orders</h3>
         </div>
-        <div className="p-6 pt-0">
-          <div className="relative w-full overflow-auto">
-            <table className="w-full caption-bottom text-sm">
-              <thead className="[&_tr]:border-b">
-                <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
-                  <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Order</th>
-                  <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Gig Title</th>
-                  <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Date</th>
-                  <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Price</th>
-                  <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Status</th>
-                  <th className="h-12 px-4 text-center align-middle font-medium text-muted-foreground">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="[&_tr:last-child]:border-0">
-                {orders && orders.length > 0 ? (
-                  orders.map((o) => (
-                    <tr
-                      key={o.id}
-                      className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
-                    >
-                      <td className="p-4 align-middle">
-                        <span className="font-mono text-xs text-muted-foreground">#{o.id}</span>
-                      </td>
-                      <td className="p-4 align-middle font-medium">{o.congViec ? o.congViec.tenCongViec : "N/A"}</td>
-                      <td className="p-4 align-middle text-muted-foreground">{formatDate(o.ngayThue)}</td>
-                      <td className="p-4 align-middle font-semibold">${o.congViec ? o.congViec.giaTien : 0}</td>
-                      <td className="p-4 align-middle">
-                        <span
-                          className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${
-                            o.hoanThanh ? "bg-muted text-muted-foreground" : "bg-primary/10 text-primary"
-                          }`}
-                        >
-                          {o.hoanThanh ? "Completed" : "In progress"}
-                        </span>
-                      </td>
-                      <td className="p-4 align-middle text-center">
+        <div className="p-6">
+          {orders && orders.length > 0 ? (
+            <>
+              <div className="hidden lg:block relative w-full overflow-auto">
+                <table className="w-full caption-bottom text-sm">
+                  <thead className="[&_tr]:border-b">
+                    <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+                      <th className="table-th">Order</th>
+                      <th className="table-th">Gig Title</th>
+                      <th className="table-th">Date</th>
+                      <th className="table-th">Price</th>
+                      <th className="table-th">Status</th>
+                      <th className="table-th text-center">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="[&_tr:last-child]:border-0">
+                    {orders.map((o) => (
+                      <tr
+                        key={o.id}
+                        className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+                      >
+                        <td className="table-td">
+                          <span className="font-mono text-xs text-muted-foreground">#{o.id}</span>
+                        </td>
+                        <td className="table-td font-medium">{o.congViec ? o.congViec.tenCongViec : "N/A"}</td>
+                        <td className="table-td text-muted-foreground">{formatDate(o.ngayThue)}</td>
+                        <td className="table-td font-semibold">${o.congViec ? o.congViec.giaTien : 0}</td>
+                        <td className="table-td">
+                          <span
+                            className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${
+                              o.hoanThanh ? "bg-muted text-muted-foreground" : "bg-primary/10 text-primary"
+                            }`}
+                          >
+                            {o.hoanThanh ? "Completed" : "In progress"}
+                          </span>
+                        </td>
+                        <td className="table-td text-center">
+                          {!o.hoanThanh ? (
+                            <button
+                              type="button"
+                              onClick={() => handleCompleteOrder(o.id)}
+                              disabled={loading === o.id}
+                              className={`inline-flex items-center justify-center rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground shadow hover:bg-primary/90 disabled:opacity-50 transition-colors ${loading ? "cursor-not-allowed" : "cursor-pointer"}`}
+                            >
+                              {loading === o.id ? "Processing..." : "Mark Complete"}
+                            </button>
+                          ) : (
+                            <span className="text-xs text-muted-foreground italic">Done</span>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:hidden">
+                {orders.map((o) => (
+                  <div key={o.id} className="rounded-lg border bg-background p-4 shadow-sm space-y-3">
+                    <div className="flex items-center justify-between text-xs text-muted-foreground">
+                      <span className="font-mono">#{o.id}</span>
+                      <span>{formatDate(o.ngayThue)}</span>
+                    </div>
+                    <div className="flex items-start justify-between gap-2">
+                      <h4 className="font-medium text-base line-clamp-2">
+                        {o.congViec ? o.congViec.tenCongViec : "N/A"}
+                      </h4>
+                      <span className="font-semibold text-accent shrink-0">
+                        ${o.congViec ? o.congViec.giaTien : 0}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between pt-2 border-t">
+                      <span
+                        className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${
+                          o.hoanThanh ? "bg-muted text-muted-foreground" : "bg-primary/10 text-primary"
+                        }`}
+                      >
+                        {o.hoanThanh ? "Completed" : "In progress"}
+                      </span>
+                      <div>
                         {!o.hoanThanh ? (
                           <button
                             type="button"
                             onClick={() => handleCompleteOrder(o.id)}
                             disabled={loading === o.id}
-                            className={`inline-flex items-center justify-center rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground shadow hover:bg-primary/90 disabled:opacity-50 transition-colors ${loading ? "cursor-not-allowed" : "cursor-pointer"}`}
+                            className="inline-flex items-center justify-center rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground shadow hover:bg-primary/90 disabled:opacity-50 cursor-pointer"
                           >
                             {loading === o.id ? "Processing..." : "Mark Complete"}
                           </button>
                         ) : (
                           <span className="text-xs text-muted-foreground italic">Done</span>
                         )}
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan={6} className="p-4 text-center text-muted-foreground">
-                      No orders found
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
+          ) : (
+            <div className="p-4 text-center text-muted-foreground">No orders found</div>
+          )}
         </div>
       </div>
     </div>

@@ -21,7 +21,7 @@ const PopularServices = async () => {
           <Link
             key={g.id}
             href={`/gigs/${g.id}`}
-            className="group overflow-hidden rounded-2xl border border-border bg-card transition hover:-translate-y-1 hover:border-accent hover:shadow-xl hover:shadow-accent/10"
+            className="card-thumbnail"
           >
             <div className="aspect-video overflow-hidden bg-muted relative">
               <Image

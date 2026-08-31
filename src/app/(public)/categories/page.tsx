@@ -22,7 +22,7 @@ const CategoriesPage = async () => {
             <Link
               key={c.id}
               href={`/categories/${slug}`}
-              className="group rounded-2xl border border-border bg-card p-6 transition hover:-translate-y-1 hover:border-accent hover:shadow-xl hover:shadow-accent/10"
+              className="card-thumbnail"
             >
               <div className="text-3xl group-hover:text-accent">
                 <IconComponent />

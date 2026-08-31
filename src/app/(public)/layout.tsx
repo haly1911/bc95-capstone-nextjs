@@ -12,7 +12,7 @@ export default async function PublicLayout({ children }: Readonly<{ children: Re
     <div className="flex min-h-screen flex-col">
       <Header categories={categories} subcategories={subcategories} />
       <main className="flex-1">{children}</main>
-      <Footer />
+      <Footer categories={categories}/>
     </div>
   );
 }

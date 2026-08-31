@@ -7,7 +7,7 @@ const SellerCta = () => {
   const { setAuthMode } = useAuthStore();
   return (
     <section className="py-20 bg-linear-to-br from-accent to-primary text-accent-foreground text-center">
-      <div className="wrapper max-w-3xl mx-auto px-4 space-y-6">
+      <div className="max-w-3xl mx-auto px-4 space-y-6">
         <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight">Ready to start earning?</h2>
         <p className="text-accent-foreground/90 max-w-xl mx-auto text-sm lg:text-base">
           Join thousands of successful sellers transforming their skills into revenue today.

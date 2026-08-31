@@ -23,7 +23,7 @@ export const orderService = {
       };
     } catch (error) {
       console.error("Failed to fetch all orders:", error);
-      return { statusCode: 500, message: "Error", content: [] };
+      throw error;
     }
   },
   getOrderHistory: async (token: string): Promise<BaseApiResponse<ApiOrderHistory[]>> => {
@@ -36,7 +36,7 @@ export const orderService = {
       return data;
     } catch (error) {
       console.error("Failed to fetch order history:", error);
-      return { statusCode: 500, message: "Error", content: [] };
+      throw error;
     }
   },
   getSellerOrders: async (sellerId: number): Promise<BaseApiResponse<ApiOrderWithDetails[]>> => {
@@ -53,7 +53,7 @@ export const orderService = {
       };
     } catch (error) {
       console.error("Failed to fetch seller orders:", error);
-      return { statusCode: 500, message: "Error", content: [] };
+      throw error;
     }
   },
   orderGig: async (payload: Partial<ApiOrder>): Promise<BaseApiResponse<ApiOrder>> => {

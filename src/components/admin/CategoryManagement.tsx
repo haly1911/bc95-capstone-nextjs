@@ -85,7 +85,7 @@ const CategoryManagement = ({ categories, subcategories }: CategoryManagementPro
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="flex flex-col xl:flex-row xl:items-end xl:justify-between gap-4">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Category Management</h2>
           <p className="text-sm text-muted-foreground mt-1">Manage marketplace categories, groups, and sub-details.</p>
@@ -94,7 +94,7 @@ const CategoryManagement = ({ categories, subcategories }: CategoryManagementPro
           <SearchInput
             placeholder="Search categories..."
             onSearch={(keyword) => setSearchTerm(keyword)}
-            className="w-full sm:w-80"
+            className="w-full"
           />
           <button
             type="button"
@@ -127,35 +127,35 @@ const CategoryManagement = ({ categories, subcategories }: CategoryManagementPro
                     <button className="text-muted-foreground hover:text-foreground">
                       {isExpanded ? <FaChevronDown className="w-4 h-4" /> : <FaChevronRight className="w-4 h-4" />}
                     </button>
-                    <span className="font-bold text-base text-foreground">{category.tenLoaiCongViec}</span>
-                    <span className="text-xs px-2 py-0.5 rounded-full bg-muted text-muted-foreground">
+                    <span className="font-bold text-sm sm:text-base text-foreground">{category.tenLoaiCongViec}</span>
+                    <span className="text-[10px] sm:text-xs px-2 py-0.5 rounded-full bg-muted text-muted-foreground">
                       {category.dsNhomChiTietLoai?.length || 0} groups
                     </span>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1 sm:gap-2">
                     <button
                       onClick={() => handleOpenAddSubcategory(category.id)}
-                      className="p-2 text-muted-foreground hover:text-accent transition-colors cursor-pointer"
+                      className="p-0.5 sm:p-2 text-muted-foreground hover:text-accent transition-colors cursor-pointer"
                       title="Add Subcategory"
                     >
-                      <FaPlus className="w-4 h-4" />
+                      <FaPlus className="w-3 h-3 sm:w-4 sm:h-4" />
                     </button>
                     <button
                       onClick={() => handleOpenEditModal(category)}
-                      className="p-2 text-muted-foreground hover:text-accent transition-colors cursor-pointer"
+                      className="p-0.5 sm:p-2 text-muted-foreground hover:text-accent transition-colors cursor-pointer"
                       title="Edit Category"
                     >
-                      <FaPencil className="w-4 h-4" />
+                      <FaPencil className="w-3 h-3 sm:w-4 sm:h-4" />
                     </button>
                     <button
                       onClick={() => {
                         setDeleteTarget({ type: "category", id: category.id });
                         setIsDeleteModalOpen(true);
                       }}
-                      className="p-2 text-muted-foreground hover:text-destructive transition-colors cursor-pointer"
+                      className="p-0.5 sm:p-2 text-muted-foreground hover:text-destructive transition-colors cursor-pointer"
                       title="Delete Category"
                     >
-                      <FaTrash className="w-4 h-4" />
+                      <FaTrash className="w-3 h-3 sm:w-4 sm:h-4" />
                     </button>
                   </div>
                 </div>
@@ -188,7 +188,7 @@ const CategoryManagement = ({ categories, subcategories }: CategoryManagementPro
                                   {group.dsChiTietLoai?.map((item) => (
                                     <span
                                       key={item.id}
-                                      className="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-md bg-muted text-muted-foreground border border-border"
+                                      className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-md bg-muted text-muted-foreground border border-border"
                                     >
                                       {item.tenChiTiet}
                                     </span>

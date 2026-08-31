@@ -12,6 +12,7 @@ import { commentService } from "@/services/comment.service";
 import UserAvatar from "../common/UserAvatar";
 import { FaPencil, FaTrash } from "react-icons/fa6";
 import ConfirmModal from "../modals/ConfirmModal";
+import { MAX_COMMENT_LENGTH } from "@/utils/constants";
 
 interface GigCommentProps {
   gigComments: ApiComment[];
@@ -19,8 +20,6 @@ interface GigCommentProps {
   gigCreatorId: number;
   userId: number;
 }
-
-const MAX_COMMENT_LENGTH = 150;
 
 const GigComment = ({ gigComments, gigId, gigCreatorId, userId }: GigCommentProps) => {
   const { isAuthenticated, user } = useAuthStore();
@@ -142,7 +141,7 @@ const GigComment = ({ gigComments, gigId, gigCreatorId, userId }: GigCommentProp
 
   return (
     <div ref={commentSectionRef} className="scroll-mt-10 pb-20">
-      <div className=" flex items-center justify-between">
+      <div className=" flex items-end justify-between">
         <h2 className="mt-10 text-lg font-bold">Reviews · {sortedComments.length}</h2>
         <select
           value={sortBy}
@@ -150,7 +149,7 @@ const GigComment = ({ gigComments, gigId, gigCreatorId, userId }: GigCommentProp
             setSortBy(e.target.value);
             resetPage();
           }}
-          className="rounded-full border border-border bg-card px-4 py-2 text-xs font-medium hover:border-accent focus:outline-none cursor-pointer"
+          className="filter-btn"
         >
           <option value="latest">Latest ⏳</option>
           <option value="rating-high">Highest Rated ⭐</option>
@@ -160,8 +159,8 @@ const GigComment = ({ gigComments, gigId, gigCreatorId, userId }: GigCommentProp
       <form onSubmit={handleSubmitComment} className="mt-6 rounded-2xl border border-border bg-card p-4">
         <div className="flex items-center gap-3">
           <UserAvatar src={user?.avatar} name={user?.name} size={36} />
-          <div className="flex flex-1 flex-col gap-3 lg:flex-row lg:items-center lg:gap-4">
-            <div className="flex-1 relative">
+          <div className="flex flex-1 min-w-0 flex-col gap-3 lg:flex-row lg:items-center lg:gap-4">
+            <div className="flex-1 min-w-0 relative">
               <input
                 type="text"
                 maxLength={MAX_COMMENT_LENGTH}
@@ -198,7 +197,7 @@ const GigComment = ({ gigComments, gigId, gigCreatorId, userId }: GigCommentProp
               <button
                 type="submit"
                 disabled={submitting}
-                className="rounded-full bg-accent px-5 py-2 text-xs font-semibold text-accent-foreground hover:opacity-90 disabled:opacity-50 cursor-pointer whitespace-nowrap"
+                className="rounded-full bg-accent px-2 py-1 sm:px-5 sm:py-2 text-xs font-semibold text-accent-foreground hover:opacity-90 disabled:opacity-50 cursor-pointer whitespace-nowrap"
               >
                 {submitting ? "Posting..." : "Post Review"}
               </button>
@@ -276,7 +275,7 @@ const GigComment = ({ gigComments, gigId, gigCreatorId, userId }: GigCommentProp
                       {canEdit && (
                         <button
                           onClick={() => handleStartEdit(c)}
-                          className="rounded-lg text-muted-foreground hover:text-accent transition-colors cursor-pointer inline-flex items-center justify-center"
+                          className="admin-edit-icon"
                           title="Edit review"
                         >
                           <FaPencil className="w-4 h-4" />
@@ -285,7 +284,7 @@ const GigComment = ({ gigComments, gigId, gigCreatorId, userId }: GigCommentProp
                       {canDelete && (
                         <button
                           onClick={(e) => confirmDeleteComment(e, c.id)}
-                          className="rounded-lg text-muted-foreground hover:text-destructive transition-colors cursor-pointer inline-flex items-center justify-center"
+                          className="admin-trash-icon"
                           title="Delete review"
                         >
                           <FaTrash className="w-4 h-4" />

@@ -1,48 +1,33 @@
+import { ApiCategory } from "@/types/category";
 import Link from "next/link";
 import { FaInstagram, FaLinkedin, FaStackExchange, FaXTwitter } from "react-icons/fa6";
+import FooterCategoryList from "./FooterCategoryList";
 
-const Footer = () => {
+interface FooterProps {
+  categories: ApiCategory[];
+}
+
+const Footer = ({ categories }: FooterProps) => {
   return (
     <footer className="border-t border-border/60 bg-card/40">
       <div className="wrapper py-14">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-5">
           <div>
-            <div className="flex items-center gap-2">
-              <span className="grid h-9 w-9 place-items-center rounded-lg bg-linear-to-br from-primary to-accent text-primary-foreground">
+            <Link href="/" className="flex items-center gap-2">
+              <span className="logo-icon">
                 <FaStackExchange />
               </span>
               <span className="text-lg font-extrabold">
                 Skill<span className="text-accent">ora</span>
               </span>
-            </div>
+            </Link>
             <p className="mt-4 text-sm text-muted-foreground">
               The freelance marketplace built for makers, teams, and everything in between.
             </p>
           </div>
           <div>
             <h4 className="text-sm font-semibold">Categories</h4>
-            <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
-              <li>
-                <Link href="/" className="hover:text-accent">
-                  Graphics & Design
-                </Link>
-              </li>
-              <li>
-                <Link href="/" className="hover:text-accent">
-                  Programming & Tech
-                </Link>
-              </li>
-              <li>
-                <Link href="/" className="hover:text-accent">
-                  Digital Marketing
-                </Link>
-              </li>
-              <li>
-                <Link href="/" className="hover:text-accent">
-                  Writing & Translation
-                </Link>
-              </li>
-            </ul>
+            <FooterCategoryList categories={categories} />
           </div>
           <div>
             <h4 className="text-sm font-semibold">About</h4>

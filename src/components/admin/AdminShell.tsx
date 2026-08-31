@@ -38,7 +38,7 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
               Administration System
             </h1>
           </div>
-          <div className="flex items-center gap-3 sm:gap-5">
+          <div className="flex items-center gap-2 sm:gap-6">
             <div className="text-right hidden sm:block">
               <p className="text-foreground text-sm font-bold tracking-wide">{displayName}</p>
               <p className="text-accent text-xs font-medium opacity-90">Administrator</p>
@@ -47,20 +47,20 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
             <button
               onClick={toggle}
               aria-label="Toggle theme"
-              className="grid h-9 w-9 place-items-center rounded-full border border-border bg-card text-foreground hover:border-accent hover:text-accent cursor-pointer"
+              className="dark-mode-icon"
             >
               {theme === "dark" ? <FaSun /> : <FaMoon />}
             </button>
             <button
               onClick={signout}
-              className="rounded-full border border-border px-4 py-1.5 sm:px-5 sm:py-2 text-xs sm:text-sm font-semibold bg-card text-foreground hover:border-accent hover:text-accent transition-colors cursor-pointer"
+              className="rounded-full border border-border px-2 py-1 sm:px-6 sm:py-3 text-xs sm:text-sm font-semibold bg-card text-foreground hover:border-accent hover:text-accent transition-colors cursor-pointer"
             >
               Sign out
             </button>
           </div>
         </header>
         <main className="flex-1 p-4 sm:p-8 overflow-auto bg-card/20">
-          <div className="max-w-7xl mx-auto">{children}</div>
+          <div className="wrapper">{children}</div>
         </main>
       </div>
     </div>

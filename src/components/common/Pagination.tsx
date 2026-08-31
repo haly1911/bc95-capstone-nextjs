@@ -30,15 +30,9 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
 
   return (
     <div className="flex items-center justify-center space-x-3">
-      <button
-        onClick={() => onPageChange(currentPage - 1)}
-        disabled={currentPage === 1}
-        className="p-3 text-sm font-medium bg-muted border border-border rounded-md hover:bg-background disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
-      >
+      <button onClick={() => onPageChange(currentPage - 1)} disabled={currentPage === 1} className="pagination-arrow">
         <FaArrowLeft />
       </button>
-
-      {/* Danh sách các số trang */}
       {getPaginationPages().map((page, index) => {
         if (page === "...") {
           return (
@@ -56,21 +50,17 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
             key={pageNumber}
             onClick={() => onPageChange(pageNumber)}
             className={`px-3.5 py-2 text-sm font-medium rounded-md transition-colors cursor-pointer ${
-              isActive
-                ? "bg-accent text-black border border-accent"
-                : "bg-background border border-border"
+              isActive ? "bg-accent text-black border border-accent" : "bg-background border border-border"
             }`}
           >
             {pageNumber}
           </button>
         );
       })}
-
-      {/* Nút Next */}
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="p-3 text-sm font-medium bg-muted border border-border rounded-md hover:bg-background disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+        className="pagination-arrow"
       >
         <FaArrowRight />
       </button>

@@ -96,7 +96,7 @@ const SignUpForm = ({ onSwitchToSignIn }: SignUpFormProps) => {
             />
             <FormError message={errors.email?.message} />
           </label>
-          <label className="block">
+          <label className="block col-span-2 lg:col-span-1 ">
             <span className="text-xs font-medium">Password</span>
             <div className="flex items-center mt-1 w-full rounded-lg border border-border bg-background px-3 py-3 text-sm focus-within:border-accent">
               <input
@@ -115,7 +115,7 @@ const SignUpForm = ({ onSwitchToSignIn }: SignUpFormProps) => {
             </div>
             <FormError message={errors.password?.message} />
           </label>
-          <label className="block">
+          <label className="block col-span-2 lg:col-span-1">
             <span className="text-xs font-medium">Phone number</span>
             <input
               type="tel"

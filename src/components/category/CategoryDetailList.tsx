@@ -80,7 +80,7 @@ const CategoryDetailList = ({ groups, gigList }: CategoryDetailListProps) => {
             setSortBy(e.target.value);
             resetPage();
           }}
-          className="rounded-full border border-border bg-card px-4 py-2 text-xs font-medium hover:border-accent focus:outline-none cursor-pointer"
+          className="filter-btn"
         >
           <option value="recommended">Sort: Recommended</option>
           <option value="rating">Highest Rated ⭐</option>

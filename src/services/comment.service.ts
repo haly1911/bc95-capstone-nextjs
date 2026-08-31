@@ -36,7 +36,7 @@ export const commentService = {
       };
     } catch (error) {
       console.error("Failed to fetch comments for gig:", gigId, error);
-      return { statusCode: 500, message: "Error", content: [] };
+      throw error;
     }
   },
   createComment: async (payload: CommentPayload): Promise<BaseApiResponse<ApiComment>> => {

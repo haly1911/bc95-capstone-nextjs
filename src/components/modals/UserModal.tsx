@@ -14,6 +14,7 @@ import { FaCamera, FaEye, FaEyeSlash } from "react-icons/fa6";
 import { toast } from "react-toastify";
 import FormError from "../common/FormError";
 import UserAvatar from "../common/UserAvatar";
+import { MAX_FILE_SIZE } from "@/utils/constants";
 
 interface UpdateProfileModalProps {
   isOpen: boolean;
@@ -24,8 +25,6 @@ interface UpdateProfileModalProps {
   mode?: "edit" | "create";
   onSuccess?: () => void;
 }
-
-const MAX_FILE_SIZE = 1 * 1024 * 1024; // 1MB
 
 const UpdateProfileModal = ({
   isOpen,
@@ -115,7 +114,7 @@ const UpdateProfileModal = ({
       return;
     }
     if (file.size > MAX_FILE_SIZE) {
-      setAvatarError("Image size must be less than 1MB");
+      setAvatarError(`Image size must be less than ${MAX_FILE_SIZE / (1024 * 1024)}MB`);
       return;
     }
     setAvatarError("");
@@ -226,20 +225,20 @@ const UpdateProfileModal = ({
   return (
     <div
       onClick={() => onClose()}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4 overflow-y-auto"
+      className="form-modal-bg"
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-xl rounded-2xl bg-card border border-border p-6 shadow-xl my-8 max-h-[90vh] overflow-y-auto"
+        className="form-modal"
       >
-        <div className="flex items-center justify-between border-b border-border pb-4">
-          <h3 className="text-lg font-bold text-foreground">
+        <div className="form-modal-header">
+          <h3 className="form-modal-title">
             {!isAdminMode ? "Edit Profile" : isCreateMode ? "Create New User" : "Edit User Role"}
           </h3>
           <button
             type="button"
             onClick={onClose}
-            className="text-muted-foreground hover:text-foreground cursor-pointer"
+            className="form-modal-cancel-icon"
           >
             ✕
           </button>
@@ -270,7 +269,7 @@ const UpdateProfileModal = ({
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="text-xs font-medium uppercase text-muted-foreground">Email</label>
+              <label className="form-modal-label">Email</label>
               <input
                 type="email"
                 disabled={!isCreateMode}
@@ -279,12 +278,12 @@ const UpdateProfileModal = ({
               />
             </div>
             <div>
-              <label className="text-xs font-medium uppercase text-muted-foreground">Full Name</label>
+              <label className="form-modal-label">Full Name</label>
               <input
                 type="text"
                 disabled={isEditRoleMode}
                 {...register("name")}
-                className={`mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-accent ${isEditRoleMode ? "cursor-not-allowed bg-muted" : ""}`}
+                className={`form-modal-input ${isEditRoleMode ? "cursor-not-allowed bg-muted" : ""}`}
               />
               <FormError message={errors.name?.message} />
             </div>
@@ -292,12 +291,12 @@ const UpdateProfileModal = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {!isEditRoleMode && (
               <div>
-                <label className="text-xs font-medium uppercase text-muted-foreground">Password</label>
+                <label className="form-modal-label">Password</label>
                 <div className="flex items-center mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm focus-within:border-accent">
                   <input
                     type={showPassword ? "text" : "password"}
                     {...register("password")}
-                    className="flex-1 outline-none"
+                    className="flex-1 min-w-0 outline-none"
                     placeholder={isCreateMode ? "Enter password" : "Leave blank to keep current"}
                   />
                   <button
@@ -312,21 +311,21 @@ const UpdateProfileModal = ({
               </div>
             )}
             <div>
-              <label className="text-xs font-medium uppercase text-muted-foreground">Phone Number</label>
+              <label className="form-modal-label">Phone Number</label>
               <input
                 type="text"
                 disabled={isEditRoleMode}
                 {...register("phone")}
-                className={`mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-accent ${isEditRoleMode ? "cursor-not-allowed bg-muted" : ""}`}
+                className={`form-modal-input ${isEditRoleMode ? "cursor-not-allowed bg-muted" : ""}`}
               />
               <FormError message={errors.phone?.message} />
             </div>
             {isAdminMode && (
-              <div className={isCreateMode ? "col-span-2" : ""}>
-                <label className="text-xs font-medium uppercase text-muted-foreground">Role</label>
+              <div className={isCreateMode ? "col-span-1 sm:col-span-2" : ""}>
+                <label className="form-modal-label">Role</label>
                 <select
                   {...register("role")}
-                  className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-accent cursor-pointer"
+                  className="form-modal-input cursor-pointer"
                 >
                   <option value="USER">USER</option>
                   <option value="ADMIN">ADMIN</option>
@@ -336,21 +335,21 @@ const UpdateProfileModal = ({
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="text-xs font-medium uppercase text-muted-foreground">Date of Birth</label>
+              <label className="form-modal-label">Date of Birth</label>
               <input
                 type="date"
                 disabled={isEditRoleMode}
                 {...register("birthday")}
-                className={`mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-accent ${isEditRoleMode ? "cursor-not-allowed bg-muted" : ""}`}
+                className={`form-modal-input ${isEditRoleMode ? "cursor-not-allowed bg-muted" : ""}`}
               />
               <FormError message={errors.birthday?.message} />
             </div>
             <div>
-              <label className="text-xs font-medium uppercase text-muted-foreground">Gender</label>
+              <label className="form-modal-label">Gender</label>
               <select
                 disabled={isEditRoleMode}
                 {...register("gender", { setValueAs: (v) => v === "true" || v === true })}
-                className={`mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-accent ${isEditRoleMode ? "cursor-not-allowed bg-muted" : ""}`}
+                className={`form-modal-input ${isEditRoleMode ? "cursor-not-allowed bg-muted" : ""}`}
               >
                 <option value="true">Male</option>
                 <option value="false">Female</option>
@@ -358,7 +357,7 @@ const UpdateProfileModal = ({
             </div>
           </div>
           <div>
-            <label className="text-xs font-medium uppercase text-muted-foreground block mb-2">
+            <label className="form-modal-label block mb-2">
               Skills ({selectedSkills.length} selected)
             </label>
             {isAdminMode && mode === "edit" ? (
@@ -403,27 +402,27 @@ const UpdateProfileModal = ({
             )}
           </div>
           <div>
-            <label className="text-xs font-medium uppercase text-muted-foreground">Certifications</label>
+            <label className="form-modal-label">Certifications</label>
             <input
               type="text"
               disabled={isEditRoleMode}
-              placeholder="AWS Certified, TOEIC 800"
+              placeholder={isEditRoleMode ? "" : "e.g. AWS Certified, TOEIC 800"}
               {...register("certification")}
-              className={`mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-accent ${isEditRoleMode ? "cursor-not-allowed bg-muted" : ""}`}
+              className={`form-modal-input ${isEditRoleMode ? "cursor-not-allowed bg-muted" : ""}`}
             />
           </div>
           <div className="flex justify-end gap-3 pt-4 border-t border-border">
             <button
               type="button"
               onClick={onClose}
-              className="rounded-lg border border-border px-4 py-2 text-sm font-semibold hover:bg-muted cursor-pointer"
+              className="form-modal-cancel-btn"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground hover:opacity-90 disabled:opacity-50 cursor-pointer"
+              className="form-modal-save-btn"
             >
               {loading ? "Saving..." : isAdminMode && isEditRoleMode ? "Update Role" : "Save Changes"}
             </button>
