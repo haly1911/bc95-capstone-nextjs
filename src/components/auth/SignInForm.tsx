@@ -2,7 +2,7 @@
 
 import { SignInFormData, signInSchema } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 
 const SignInForm = () => {
+  const searchParams = useSearchParams();
   const router = useRouter();
   const setUser = useAuthStore((state) => state.setUser);
   const [loading, setLoading] = useState(false);
@@ -39,7 +40,10 @@ const SignInForm = () => {
       setSession(res);
       setUser(res.content.user);
       toast.success("Signed in successfully!");
-      router.push("/");
+      const callbackUrl = searchParams.get("callbackUrl");
+      const redirectPath = callbackUrl ? decodeURIComponent(callbackUrl) : "/";
+      router.push(redirectPath);
+      router.refresh();
     } catch (error: any) {
       const errorMsg = error?.response?.data?.message || "Sign in failed. Please check your information!";
       toast.error(errorMsg);

@@ -71,6 +71,7 @@ const Testimonial = () => {
                   src={item.img}
                   alt={`testimonial-pic-${item.id}`}
                   fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
                   className="absolute inset-0 rounded-2xl object-cover"
                 />
                 <span className="absolute p-6 bg-accent/70 rounded-full opacity-0 group-hover:opacity-100 group-hover:animate-ping transition" />
@@ -83,7 +84,13 @@ const Testimonial = () => {
                   <span className="text-sm">{item.name}</span>
                   <span>|</span>
                   <span className="relative inline-block w-24 h-8">
-                    <Image src={item.logo} alt={`testimonial-logo-${item.id}`} fill className="object-contain" />
+                    <Image
+                      src={item.logo}
+                      alt={`testimonial-logo-${item.id}`}
+                      fill
+                      sizes="96px"
+                      className="object-contain"
+                    />
                   </span>
                 </p>
                 <p className="relative py-6 px-4">

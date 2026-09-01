@@ -12,7 +12,14 @@ const OverlayPanel = ({ authMode, onAuthModeChange }: OverlayPanelProps) => {
     <aside
       className={`absolute top-0 w-1/2 h-full bg-linear-120 from-primary to-foreground text-background p-16 hidden lg:flex flex-col justify-center items-center text-center transition-all duration-700 ease-in-out z-10 shadow-2xl ${authMode === "signup" ? "left-0 translate-x-0" : "left-1/2 translate-x-0"}`}
     >
-      <Image loading="eager" src="/authLogo.png" alt="authlogo" width={320} height={320} className="mx-auto" />
+      <Image
+        loading="eager"
+        src="/authLogo.png"
+        alt="authlogo"
+        width={320}
+        height={320}
+        className="mx-auto w-auto h-auto"
+      />
       <div className="transition-opacity duration-500 max-w-md">
         <h2 className="text-4xl font-bold">
           {authMode === "signin" ? (

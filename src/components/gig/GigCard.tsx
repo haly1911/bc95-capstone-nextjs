@@ -13,17 +13,18 @@ const GigCard = ({ gig }: GigCardProps) => {
     <Link
       key={gig.id}
       href={`/gigs/${gig.id}`}
-      className="card-thumbnail"
+      className="group rounded-2xl border border-border bg-card p-6 transition hover:-translate-y-1 hover:border-accent hover:shadow-lg hover:shadow-accent/10"
     >
       <div className="aspect-video overflow-hidden bg-muted relative">
         <Image
           src={gig.hinhAnh}
           alt={gig.tenCongViec || "Gig thumbnail"}
           fill
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           className="object-cover transition group-hover:scale-105"
         />
       </div>
-      <div className="p-4">
+      <div className="px-4 pt-4">
         <div className="flex items-center gap-2">
           <UserAvatar src={gig.user?.avatar} name={gig.user?.name} size={24} />
           <span className="text-xs font-medium truncate max-w-35">{gig.user?.name || `User #${gig.nguoiTao}`}</span>

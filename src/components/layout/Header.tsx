@@ -10,14 +10,14 @@ import SearchInput from "../common/SearchInput";
 import UserAvatar from "../common/UserAvatar";
 import CategoryDropdown from "./CategoryDropdown";
 import { ApiCategory, ApiSubcategory } from "@/types/category";
-import MobileSidebar from "./MobileSidebar";
 
 interface HeaderProps {
   categories: ApiCategory[];
   subcategories: ApiSubcategory[];
+  onOpenMobileSidebar: () => void;
 }
 
-const Header = ({ categories, subcategories }: HeaderProps) => {
+const Header = ({ categories, subcategories, onOpenMobileSidebar }: HeaderProps) => {
   const { theme, toggle } = useTheme();
   const [showSearch, setShowSearch] = useState(false);
   const [showCategory, setShowCategory] = useState(false);
@@ -60,7 +60,7 @@ const Header = ({ categories, subcategories }: HeaderProps) => {
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur">
       <div className="wrapper flex items-center gap-4 py-4">
         <button
-          onClick={() => setIsMobileSidebarOpen(true)}
+          onClick={onOpenMobileSidebar}
           aria-label="Open Menu"
           className="lg:hidden text-foreground bg-card border border-border p-2.5 rounded-xl hover:text-accent transition-colors cursor-pointer shrink-0"
         >
@@ -105,11 +105,7 @@ const Header = ({ categories, subcategories }: HeaderProps) => {
                 </Link>
               )}
             </nav>
-            <button
-              onClick={toggle}
-              aria-label="Toggle theme"
-              className="dark-mode-icon"
-            >
+            <button onClick={toggle} aria-label="Toggle theme" className="dark-mode-icon">
               {theme === "dark" ? <FaSun /> : <FaMoon />}
             </button>
             {isMounted && isAuthenticated && user ? (
@@ -145,7 +141,6 @@ const Header = ({ categories, subcategories }: HeaderProps) => {
       >
         <CategoryDropdown categories={categories} subcategories={subcategories} />
       </div>
-      <MobileSidebar isOpen={isMobileSidebarOpen} setIsOpen={setIsMobileSidebarOpen} />
     </header>
   );
 };

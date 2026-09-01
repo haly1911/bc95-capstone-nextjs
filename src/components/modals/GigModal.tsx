@@ -134,11 +134,12 @@ const GigModal = ({
         gigId = res?.content?.id;
         toast.success("Gig created successfully!");
       }
-      if (selectedFile && gigId) {
-        await gigService.uploadGigImage(gigId, selectedFile);
-      }
       onSuccess();
       onClose();
+      if (selectedFile && gigId) {
+        await gigService.uploadGigImage(gigId, selectedFile);
+        onSuccess();
+      }
     } catch (error: any) {
       console.error("Failed to save gig:", error);
       toast.error(error?.response?.data?.message || "Failed to save gig. Please try again!");
@@ -148,23 +149,13 @@ const GigModal = ({
   };
 
   return (
-    <div
-      onClick={() => onClose()}
-      className="form-modal-bg"
-    >
-      <div
-        onClick={(e) => e.stopPropagation()}
-        className="form-modal"
-      >
+    <div onClick={() => onClose()} className="form-modal-bg">
+      <div onClick={(e) => e.stopPropagation()} className="form-modal">
         <div className="form-modal-header">
           <h3 className="form-modal-title">
             {isViewMode ? "Gig Details" : isEditMode ? "Edit Gig" : "Create New Gig"}
           </h3>
-          <button
-            type="button"
-            onClick={onClose}
-            className="form-modal-cancel-icon"
-          >
+          <button type="button" onClick={onClose} className="form-modal-cancel-icon">
             ✕
           </button>
         </div>
@@ -288,19 +279,11 @@ const GigModal = ({
             )}
           </div>
           <div className="flex justify-end gap-3 pt-4 border-t border-border">
-            <button
-              type="button"
-              onClick={onClose}
-              className="form-modal-cancel-btn"
-            >
+            <button type="button" onClick={onClose} className="form-modal-cancel-btn">
               {isViewMode ? "Close" : "Cancel"}
             </button>
             {!isViewMode && (
-              <button
-                type="submit"
-                disabled={loading}
-                className="form-modal-save-btn"
-              >
+              <button type="submit" disabled={loading} className="form-modal-save-btn">
                 {loading ? "Saving..." : isEditMode ? "Update Gig" : "Create Gig"}
               </button>
             )}

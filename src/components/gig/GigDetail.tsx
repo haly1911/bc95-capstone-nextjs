@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import ConfirmModal from "../modals/ConfirmModal";
 import UserAvatar from "../common/UserAvatar";
 import ChatModal from "../modals/ChatModal";
+import { redirectToAuth } from "@/utils/redirectToAuth";
 
 interface GigDetailProps {
   gig: ApiGigWithUser;
@@ -26,7 +27,7 @@ const GigDetail = ({ gig }: GigDetailProps) => {
   const handleOrder = () => {
     if (!isAuthenticated || !user) {
       toast.warning("Please sign in to continue ordering");
-      router.push("/auth");
+      redirectToAuth(router);
       return;
     }
     if (user.id === gig.nguoiTao) {
@@ -58,7 +59,7 @@ const GigDetail = ({ gig }: GigDetailProps) => {
   const handleContactSeller = () => {
     if (!isAuthenticated || !user) {
       toast.warning("Please sign in to contact the seller");
-      router.push("/auth");
+      redirectToAuth(router);
       return;
     }
     if (user.id === gig.nguoiTao) {

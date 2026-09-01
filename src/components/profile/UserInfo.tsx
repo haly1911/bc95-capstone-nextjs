@@ -9,6 +9,7 @@ import { FaPenToSquare } from "react-icons/fa6";
 import UserModal from "../modals/UserModal";
 import { ApiSkill } from "@/types/skill";
 import UserAvatar from "../common/UserAvatar";
+import { redirectToAuth } from "@/utils/redirectToAuth";
 
 interface UserInfoProps {
   skills: ApiSkill[];
@@ -26,7 +27,7 @@ const UserInfo = ({ skills }: UserInfoProps) => {
 
   useEffect(() => {
     if (isMounted && !user) {
-      router.push("/auth");
+      redirectToAuth(router);
     }
   }, [user, isMounted, router]);
 

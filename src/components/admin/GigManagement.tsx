@@ -171,6 +171,7 @@ const GigManagement = ({ initialGigs, categories, subcategories, userId }: GigMa
                         subcategories,
                         categories,
                       );
+                      const isOwner = g.nguoiTao === userId;
                       return (
                         <tr key={g.id} className="border-b transition-colors hover:bg-muted/50">
                           <td className="table-td">
@@ -220,14 +221,16 @@ const GigManagement = ({ initialGigs, categories, subcategories, userId }: GigMa
                               >
                                 <FaEye className="w-4 h-4" />
                               </button>
-                              <button
-                                type="button"
-                                onClick={(e) => confirmDeleteGig(e, g.id)}
-                                className="admin-trash-icon"
-                                title="Delete Gig"
-                              >
-                                <FaTrash className="w-4 h-4" />
-                              </button>
+                              {isOwner && (
+                                <button
+                                  type="button"
+                                  onClick={(e) => confirmDeleteGig(e, g.id)}
+                                  className="admin-trash-icon"
+                                  title="Delete Gig"
+                                >
+                                  <FaTrash className="w-4 h-4" />
+                                </button>
+                              )}
                             </div>
                           </td>
                         </tr>
@@ -246,6 +249,7 @@ const GigManagement = ({ initialGigs, categories, subcategories, userId }: GigMa
                 subcategories,
                 categories,
               );
+              const isOwner = g.nguoiTao === userId;
               return (
                 <div
                   key={g.id}
@@ -255,7 +259,13 @@ const GigManagement = ({ initialGigs, categories, subcategories, userId }: GigMa
                   <div className="space-y-3">
                     <div className="relative w-full h-40 rounded-lg overflow-hidden border border-border bg-muted">
                       {g.hinhAnh && (
-                        <Image src={g.hinhAnh} alt={g.tenCongViec} fill className="object-cover w-full h-full" />
+                        <Image
+                          src={g.hinhAnh}
+                          alt={g.tenCongViec}
+                          fill
+                          sizes="(max-width: 640px) 100vw, 50vw"
+                          className="object-cover w-full h-full"
+                        />
                       )}
                     </div>
                     <div>
@@ -283,14 +293,16 @@ const GigManagement = ({ initialGigs, categories, subcategories, userId }: GigMa
                       <span className="text-xs font-semibold px-2 py-1 rounded-md bg-muted flex items-center gap-1">
                         {g.saoCongViec} <FaStar className="text-accent text-xs" /> ({g.danhGia})
                       </span>
-                      <button
-                        type="button"
-                        onClick={(e) => confirmDeleteGig(e, g.id)}
-                        className="rounded-lg bg-destructive/10 text-destructive p-2 hover:bg-destructive/20 transition-colors cursor-pointer"
-                        title="Delete Gig"
-                      >
-                        <FaTrash className="w-4 h-4" />
-                      </button>
+                      {isOwner && (
+                        <button
+                          type="button"
+                          onClick={(e) => confirmDeleteGig(e, g.id)}
+                          className="rounded-lg bg-destructive/10 text-destructive p-2 hover:bg-destructive/20 transition-colors cursor-pointer"
+                          title="Delete Gig"
+                        >
+                          <FaTrash className="w-4 h-4" />
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>

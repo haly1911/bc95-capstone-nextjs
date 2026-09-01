@@ -13,6 +13,7 @@ import UserAvatar from "../common/UserAvatar";
 import { FaPencil, FaTrash } from "react-icons/fa6";
 import ConfirmModal from "../modals/ConfirmModal";
 import { MAX_COMMENT_LENGTH } from "@/utils/constants";
+import { redirectToAuth } from "@/utils/redirectToAuth";
 
 interface GigCommentProps {
   gigComments: ApiComment[];
@@ -63,7 +64,7 @@ const GigComment = ({ gigComments, gigId, gigCreatorId, userId }: GigCommentProp
     e.preventDefault();
     if (!isAuthenticated || !userId) {
       toast("Please sign in to leave a review");
-      router.push("/auth");
+      redirectToAuth(router);
       return;
     }
     if (isOwner) {
@@ -273,11 +274,7 @@ const GigComment = ({ gigComments, gigId, gigCreatorId, userId }: GigCommentProp
                   {(canEdit || canDelete) && (
                     <div className="absolute bottom-4 right-5 flex items-center gap-2">
                       {canEdit && (
-                        <button
-                          onClick={() => handleStartEdit(c)}
-                          className="admin-edit-icon"
-                          title="Edit review"
-                        >
+                        <button onClick={() => handleStartEdit(c)} className="admin-edit-icon" title="Edit review">
                           <FaPencil className="w-4 h-4" />
                         </button>
                       )}

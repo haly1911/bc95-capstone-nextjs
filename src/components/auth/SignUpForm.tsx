@@ -56,7 +56,7 @@ const SignUpForm = ({ onSwitchToSignIn }: SignUpFormProps) => {
         certification: data.certification,
       };
       await authService.signUp(payload);
-      toast.success("Account created successfully!");
+      toast.success("Account created successfully! Please sign in with your new account");
       reset();
       onSwitchToSignIn();
     } catch (error: any) {

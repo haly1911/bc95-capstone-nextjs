@@ -22,10 +22,11 @@ const MobileSidebar = ({ isOpen, setIsOpen }: MobileSidebarProps) => {
   return (
     <div
       onClick={() => setIsOpen(false)}
-      className={`sidebar-bg ${isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
+      className={`fixed inset-0 z-50 bg-black/50 lg:hidden backdrop-blur-xs transition-opacity ${isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
     >
       <aside
-        className={`sidebar lg:translate-x-0 w-72 max-w-[80vw] h-dvh ${isOpen ? "translate-x-0" : "-translate-x-full"}`}
+        onClick={(e) => e.stopPropagation()}
+        className={`fixed inset-y-0 left-0 z-50 shrink-0 bg-card border-r border-border flex flex-col backdrop-blur-xl transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 w-72 max-w-[80vw] h-dvh ${isOpen ? "translate-x-0" : "-translate-x-full"}`}
       >
         <div className="flex items-center justify-between px-6 py-4 border-b border-border">
           <Link href="/" onClick={() => setIsOpen(false)} className="text-2xl font-extrabold tracking-tight">

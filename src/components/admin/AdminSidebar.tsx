@@ -36,11 +36,10 @@ const AdminSidebar = ({ isSidebarOpen, setIsSidebarOpen }: AdminSidebarProps) =>
   const pathname = usePathname();
   return (
     <>
-      {isSidebarOpen && <div onClick={() => setIsSidebarOpen(false)} className="sidebar-bg" />}
+      {isSidebarOpen && <div onClick={() => setIsSidebarOpen(false)} className="fixed inset-0 z-50 bg-black/50 lg:hidden backdrop-blur-xs transition-opacity" />}
 
       <aside
-        className={`sidebar lg:translate-x-0 w-57 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}
-        `}
+        className={`fixed inset-y-0 left-0 z-50 w-57 shrink-0 bg-card border-r border-border flex flex-col backdrop-blur-xl transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
       >
         <div className="px-8 py-4.75 border-b border-border">
           <Link
